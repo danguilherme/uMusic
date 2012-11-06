@@ -22,6 +22,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ventura.lyricsfinder.lyrics.Lyric;
@@ -36,7 +37,7 @@ public class MainActivity extends Activity {
 
 	private EditText mMusicTextField;
 	private EditText mArtistTextField;
-	private EditText mLyricTextField;
+	private TextView mLyricTextView;
 	private Button mFindButton;
 
 	@Override
@@ -44,11 +45,11 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		this.mMusicTextField = (EditText) findViewById(R.id.musicTextField);
-		this.mArtistTextField = (EditText) findViewById(R.id.singerTextField);
-		this.mLyricTextField = (EditText) findViewById(R.id.lyricsTextField);
+		this.mMusicTextField = (EditText) findViewById(R.id.music_text_field);
+		this.mArtistTextField = (EditText) findViewById(R.id.artist_text_field);
+		this.mLyricTextView = (TextView) findViewById(R.id.lyrics_text_view);
 		this.mFindButton = (Button) findViewById(R.id.button_find_lyrics);
-
+		
 		this.mProvidersDbHelper = new ProvidersDbAdapter(this);
 		this.mProvidersDbHelper.open();
 
@@ -89,7 +90,7 @@ public class MainActivity extends Activity {
 		}
 
 		if (!Intent.ACTION_MAIN.equals(action)) {
-			mLyricTextField.setText("Retrieving your music.\n"
+			mLyricTextView.setText("Retrieving your music.\n"
 					+ "Don't click the \"" + getString(R.string.btn_find_lyric)
 					+ "\" button.\n"
 					+ "Loading dialog still under development... :)");
@@ -152,7 +153,7 @@ public class MainActivity extends Activity {
 			// this.getLyrics();
 
 			mLyricDownloadTask = new LyricDownloadTask(mActualProvider,
-					this.mLyricTextField, null);
+					this.mLyricTextView, null);
 			mLyricDownloadTask.execute(this.mActualLyric);
 		}
 	}
@@ -214,7 +215,7 @@ public class MainActivity extends Activity {
 			// progDialog.setCancelable(true);
 
 			mLyricDownloadTask = new LyricDownloadTask(mActualProvider,
-					this.mLyricTextField, progDialog);
+					this.mLyricTextView, progDialog);
 			mLyricDownloadTask.execute(lyric);
 		}
 	}
