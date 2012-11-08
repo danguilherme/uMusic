@@ -20,7 +20,8 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/title_activity_main" >
-            <!-- 
+
+            <!--
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -39,13 +40,12 @@
                 <category android:name="android.intent.category.DEFAULT" />
 
                 <data android:mimeType="audio/*" />
-            </intent-filter>
+            </intent-filter>
             -->
         </activity>
         <activity
             android:name=".activities.MusicInfoActivity"
             android:label="@string/title_activity_music_info" >
-            
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -64,6 +64,25 @@
                 <category android:name="android.intent.category.DEFAULT" />
 
                 <data android:mimeType="audio/*" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activities.LoginActivity"
+            android:label="@string/title_activity_music_info" >
+        </activity>
+        <activity
+            android:name=".oauth.PrepareRequestTokenActivity"
+            android:launchMode="singleTask" >
+>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="callback"
+                    android:scheme="lyricsfinder-app" />
             </intent-filter>
         </activity>
     </application>

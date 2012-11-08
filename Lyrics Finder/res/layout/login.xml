@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:stretchColumns="0" >
+
+    <TableRow>
+
+        <Button
+            android:id="@+id/btn_request_permission"
+            android:text="@string/btn_find_lyric" />
+    </TableRow>
+
+    <TableRow android:layout_marginTop="5dip">
+
+        <TextView
+            android:id="@+id/status"
+            android:text="Not authenticated" />
+    </TableRow>
+
+</TableLayout>
