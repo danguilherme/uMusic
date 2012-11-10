@@ -1,9 +1,6 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <style name="AppTheme" parent="android:Theme.Light" >
-        <item name="android:textSize">20sp</item>
-        <item name="android:background">#000</item>
-        <item name="android:textColor">#FFF</item>
     </style>
     
     <style name="LyricFilter" parent="android:Theme.Light">

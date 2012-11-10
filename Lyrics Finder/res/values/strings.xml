@@ -1,6 +1,7 @@
 <resources>
+
     <string name="app_name">Lyrics Finder</string>
-    
+
     <!-- Song Properties [START] -->
     <string name="song_artist">Artist</string>
     <string name="song_title">Music</string>
@@ -18,30 +19,34 @@
     <string name="song_year">Year</string>
     <!-- Song Properties [END] -->
 
+
     <!-- Main Activity [START] -->
     <string name="title_activity_main">Lyrics Finder</string>
     <string name="menu_settings">Settings</string>
-    
     <string name="btn_find_lyric">Find Lyrics</string>
     <!-- Main Activity [END] -->
-    
+
+
     <!-- Music Info Activity [START] -->
     <string name="title_activity_music_info">Music information</string>
     <!-- Music Info Activity [END] -->
-    
+
     <string name="menu_see_providers">See available providers</string>
-    
     <string name="message_lyric_not_found">Sorry, lyric not found</string>
     <string name="message_no_internet_connection">No internet connection.</string>
     <string name="message_fetching_lyric_title">Fetching Lyric...</string>
     <string name="message_fetching_lyric_body">I am retrieving the lyric to you, please wait.</string>
     <string name="message_no_music_metadata_found">The music you are trying to load has no metadata.</string>
-    
     <string name="provider_terra_name">Terra Letras</string>
     <string name="provider_terra_url">http://letras.mus.br/winamp.php?artista=%1$s%26musica=%2$s</string>
     <string name="provider_lyrster_name">Lyrster</string>
     <string name="provider_lyrster_url">http://www.lyrster.com/lyrics/%2$s-lyrics-%1$s.html</string>
     <string name="provider_azlyrics_name">A-Z Lyrics Universe</string>
     <string name="provider_azlyrics_url">http://www.azlyrics.com/lyrics/%1$s/%2$s.html</string>
+
+    <!-- Discogs [START] -->
+    <string name="discogs_url_search" formatted="false">/database/search?type=%1$s%26q=%2$s</string>
+    <string name="discogs_url_artists" formatted="false">/artists/%1$s</string>
+    <!-- Discogs [END] -->
 
 </resources>

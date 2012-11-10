@@ -7,23 +7,23 @@ import org.cmc.music.metadata.IMusicMetadata;
 import org.cmc.music.metadata.MusicMetadataSet;
 import org.cmc.music.myid3.MyID3;
 
-import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.provider.MediaStore.Audio.Artists;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.ventura.lyricsfinder.LyricDownloadTask;
 import com.ventura.lyricsfinder.MainActivity;
 import com.ventura.lyricsfinder.R;
+import com.ventura.lyricsfinder.discogs.DiscogsConstants;
 
-public class MusicInfoActivity extends Activity {
+public class MusicInfoActivity extends BaseActivity {
 	private EditText mTitleTextField;
 	private EditText mArtistTextField;
 	private EditText mAlbumTextField;
@@ -38,6 +38,7 @@ public class MusicInfoActivity extends Activity {
 	private EditText mProducerArtistTextField;
 	private EditText mTrackNumberTextField;
 	private EditText mYearTextField;
+	private Uri mActualLyricPath;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -47,13 +48,49 @@ public class MusicInfoActivity extends Activity {
 		this.defineVariables();
 
 		Intent intent = this.getIntent();
+		this.loadMusicTags(intent);
+
+		Button button = (Button) this.findViewById(R.id.btn_open_main_activity);
+		Button btnViewArtistInfo = (Button) this
+				.findViewById(R.id.btn_view_artist_info);
+
+		/*
+		 * button.setOnClickListener(new View.OnClickListener() {
+		 * 
+		 * public void onClick(View view) { Intent intent = new
+		 * Intent(view.getContext(), MainActivity.class);
+		 * intent.setAction(Intent.ACTION_SEND); if (mActualLyricPath != null) {
+		 * Bundle parameters = new Bundle();
+		 * parameters.putString(Intent.EXTRA_STREAM,
+		 * mActualLyricPath.getPath()); intent.setType("audio/mpeg");
+		 * intent.putExtras(parameters); } startActivity(intent); } });
+		 */
+
+		btnViewArtistInfo.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View view) {
+				String artist = mArtistTextField.getText().toString();
+				if (artist != null && !artist.equals("")) {
+					Intent intent = new Intent(view.getContext(),
+							ListArtistsActivity.class);
+					intent.setAction(Intent.ACTION_SEND);
+					intent.putExtra(DiscogsConstants.KEY_QUERY_TYPE,
+							DiscogsConstants.QUERY_TYPE_ARTIST);
+					intent.putExtra(DiscogsConstants.KEY_QUERY_TEXT, artist);
+					startActivity(intent);
+				}
+			}
+		});
+	}
+
+	private void loadMusicTags(Intent intent) {
 		String action = intent.getAction();
 		String type = intent.getType();
 		Uri sharedPath = intent.getData();
-		if (sharedPath == null) {
+		if (sharedPath == null && intent.getExtras() != null) {
 			sharedPath = (Uri) intent.getExtras().get(Intent.EXTRA_STREAM);
 		}
-		File song = getMusicFile(sharedPath);
+		mActualLyricPath = sharedPath;
+		File song = getMusicFile(mActualLyricPath);
 
 		if (action != null && !action.equals(Intent.ACTION_MAIN)) {
 			MusicMetadataSet musicMetadataSet = null;
@@ -77,19 +114,6 @@ public class MusicInfoActivity extends Activity {
 				this.bindData(musicMetadataSet);
 			}
 		}
-
-		Button button = (Button) this.findViewById(R.id.Button01);
-
-		button.setOnClickListener(new View.OnClickListener() {
-
-			public void onClick(View view) {
-				Intent intent = new Intent(view.getContext(),
-						MainActivity.class);
-				intent.setAction(Intent.ACTION_SEND);
-				// intent.putExtra(Intent.EXTRA_STREAM, null);
-				startActivity(intent);
-			}
-		});
 	}
 
 	private void defineVariables() {
@@ -155,7 +179,7 @@ public class MusicInfoActivity extends Activity {
 				composer = metadata.getComposer();
 				composer2 = metadata.getComposer2();
 				duration = metadata.getDurationSeconds();
-//				featuringList = metadata.getFeaturingList();
+				// featuringList = metadata.getFeaturingList();
 				genre = metadata.getGenre();
 				producer = metadata.getProducer();
 				producerArtist = metadata.getProducerArtist();
@@ -165,20 +189,20 @@ public class MusicInfoActivity extends Activity {
 				e.printStackTrace();
 			}
 
-			 mTitleTextField.setText(songTitle);
-			 mArtistTextField.setText(artist);
-			 mAlbumTextField.setText(album);
-			 mCommentTextField.setText(comment);
-			 mCompilationTextField.setText(compilation);
-			 mComposerTextField.setText(composer);
-			 mComposer2TextField.setText(composer2);
-			 mDurationTextField.setText(duration);
-			 mFeaturingListTextField.setText(featuringList);
-			 mGenreTextField.setText(genre);
-			 mProducerTextField.setText(producer);
-			 mProducerArtistTextField.setText(producerArtist);
-			 mTrackNumberTextField.setText(trackNumber);
-			 mYearTextField.setText(year);
+			mTitleTextField.setText(songTitle);
+			mArtistTextField.setText(artist);
+			mAlbumTextField.setText(album);
+			mCommentTextField.setText(comment);
+			mCompilationTextField.setText(compilation);
+			mComposerTextField.setText(composer);
+			mComposer2TextField.setText(composer2);
+			mDurationTextField.setText(duration);
+			mFeaturingListTextField.setText(featuringList);
+			mGenreTextField.setText(genre);
+			mProducerTextField.setText(producer);
+			mProducerArtistTextField.setText(producerArtist);
+			mTrackNumberTextField.setText(trackNumber);
+			mYearTextField.setText(year);
 		}
 	}
 

@@ -85,8 +85,7 @@ public class MainActivity extends Activity {
 				sharedUri = (Uri) intent.getExtras().get(Intent.EXTRA_STREAM);
 			}
 
-			this.loadMusicTags(getFilePathFromContentUri(sharedUri,
-					getContentResolver()));
+			this.loadMusicTags(sharedUri.getPath());
 		}
 
 		if (!Intent.ACTION_MAIN.equals(action)) {

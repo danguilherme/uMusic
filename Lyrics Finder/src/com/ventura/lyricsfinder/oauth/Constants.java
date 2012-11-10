@@ -10,7 +10,7 @@ public class Constants {
 	public static final String ACCESS_URL = "http://api.discogs.com/oauth/access_token";
 	public static final String AUTHORIZE_URL = "http://www.discogs.com/oauth/authorize";
 
-	public static final String API_REQUEST = "https://www.google.com/m8/feeds/contacts/default/full?alt=json";
+	public static final String API_REQUEST = "http://api.discogs.com";
 
 	public static final String ENCODING = "UTF-8";
 

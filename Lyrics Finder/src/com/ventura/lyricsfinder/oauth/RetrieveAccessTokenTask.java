@@ -1,6 +1,6 @@
 package com.ventura.lyricsfinder.oauth;
 
-import com.ventura.lyricsfinder.activities.LoginActivity;
+import com.ventura.lyricsfinder.activities.ArtistViewerActivity;
 import oauth.signpost.OAuth;
 import oauth.signpost.OAuthConsumer;
 import oauth.signpost.OAuthProvider;
@@ -35,7 +35,8 @@ public class RetrieveAccessTokenTask extends AsyncTask<Uri, Void, Void> {
 	 */
 	@Override
 	protected Void doInBackground(Uri...params) {
-		final Uri uri = params[0];
+		Uri tempUri = params[0];
+		final Uri uri = Uri.parse(tempUri.decode(tempUri.toString()));
 		
 		
 		final String oauth_verifier = uri.getQueryParameter(OAuth.OAUTH_VERIFIER);
@@ -52,7 +53,7 @@ public class RetrieveAccessTokenTask extends AsyncTask<Uri, Void, Void> {
 			String secret = prefs.getString(OAuth.OAUTH_TOKEN_SECRET, "");
 			
 			consumer.setTokenWithSecret(token, secret);
-			context.startActivity(new Intent(context, LoginActivity.class));
+			context.startActivity(new Intent(context, ArtistViewerActivity.class));
 
 			Log.i(TAG, "OAuth - Access Token Retrieved");
 			

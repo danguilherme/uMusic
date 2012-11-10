@@ -5,18 +5,23 @@
     android:orientation="vertical" >
 
     <Button
-        android:id="@+id/Button01"
+        android:id="@+id/btn_open_main_activity"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_span="2"
         android:text="Open MainActivity" >
+    </Button>
+
+    <Button
+        android:id="@+id/btn_view_artist_info"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="View artist info" >
     </Button>
 
     <ScrollView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="3dip"
-        android:paddingRight="3dip" >
+        android:paddingLeft="3dip" >
 
         <TableLayout
             xmlns:android="http://schemas.android.com/apk/res/android"
