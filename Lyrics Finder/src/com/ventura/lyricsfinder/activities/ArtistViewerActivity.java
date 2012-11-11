@@ -1,15 +1,12 @@
 package com.ventura.lyricsfinder.activities;
 
-import oauth.signpost.OAuthConsumer;
-
-import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
+
+import oauth.signpost.OAuthConsumer;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -17,6 +14,7 @@ import com.ventura.lyricsfinder.R;
 import com.ventura.lyricsfinder.activities.util.ImageLoader;
 import com.ventura.lyricsfinder.discogs.DiscogsConstants;
 import com.ventura.lyricsfinder.discogs.DiscogsService;
+import com.ventura.lyricsfinder.discogs.entities.Artist;
 
 public class ArtistViewerActivity extends BaseActivity {
 
@@ -33,43 +31,29 @@ public class ArtistViewerActivity extends BaseActivity {
 
 		ImageView artistImage = (ImageView) findViewById(R.id.artist_image);
 		TextView artistBio = (TextView) findViewById(R.id.artist_bio);
-		WebView artistBioWebView = (WebView) findViewById(R.id.webview);
 
+		Artist artist = new Artist();
 		try {
-			JSONObject artistInfo = new DiscogsService(this).getArtistInfo(
-					artistId, consumer);
-			
-			JSONArray images = artistInfo.optJSONArray("images");
-			if (images != null && images.length() > 0) {
-				JSONObject firstImage = images.getJSONObject(0);
-				new ImageLoader(this)
-						.DisplayImage(firstImage
-								.getString(DiscogsConstants.KEY_RESOURCE_URL),
-								artistImage);
-			} else {
-				artistImage.setVisibility(View.INVISIBLE);
-			}
-			String profile = artistInfo.optString("profile");
-
-			if (profile != null && !profile.equals("")) {
-				String text = "<html><body>" + "<p align=\"justify\">"
-						+ profile + "</p> " + "</body></html>";
-				artistBioWebView.loadData(text, "text/html", "utf-8");
-				artistBio.setText(profile);
-			} else {
-				artistBio.setText("This artist has no Bio. Add one!");
-			}
+			artist = new DiscogsService(this).getArtistInfo(artistId,
+					consumer);
 		} catch (JSONException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}
 
-	private Object getJSONValue(JSONObject target, String key)
-			throws JSONException {
-		if (!target.isNull(key)) {
-			return target.get(key);
+		if (artist.getImages().size() > 0) {
+			new ImageLoader(this).DisplayImage(artist.getImages().get(0)
+					.getUri().toString(), artistImage);
+		} else {
+			artistImage.setVisibility(View.INVISIBLE);
 		}
-		return null;
+		String profile = artist.getProfile();
+
+		if (profile != null && !profile.equals("")) {
+			artistBio.setText(profile);
+		} else {
+			artistBio.setText("This artist has no Bio. Add one!");
+		}
 	}
 
 	public void onActivityResult(int reqCode, int resultCode, Intent data) {

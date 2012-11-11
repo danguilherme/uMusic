@@ -26,9 +26,10 @@ public final class R {
     public static final class id {
         public static final int album_text_field=0x7f070011;
         public static final int artist=0x7f07000d;
-        public static final int artist_bio=0x7f070008;
-        public static final int artist_image=0x7f070007;
+        public static final int artist_bio=0x7f070009;
+        public static final int artist_image=0x7f070008;
         public static final int artist_info_container=0x7f070000;
+        public static final int artist_name=0x7f070007;
         public static final int artist_text_field=0x7f070002;
         public static final int btn_open_main_activity=0x7f07000f;
         public static final int btn_view_artist_info=0x7f070010;
@@ -58,7 +59,6 @@ public final class R {
         public static final int thumbnail=0x7f07000a;
         public static final int title=0x7f07000c;
         public static final int track_number_text_field=0x7f07001b;
-        public static final int webview=0x7f070009;
         public static final int year_text_field=0x7f07001c;
     }
     public static final class layout {
@@ -120,6 +120,9 @@ public final class R {
     }
     public static final class style {
         public static final int AppTheme=0x7f050000;
+        /**  Artist Info 
+         */
+        public static final int ArtistName=0x7f050007;
         public static final int Labels=0x7f050003;
         public static final int Lyric=0x7f050002;
         public static final int LyricFilter=0x7f050001;

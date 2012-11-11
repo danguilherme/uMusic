@@ -24,6 +24,7 @@ import android.content.res.Resources;
 import android.util.Log;
 
 import com.ventura.lyricsfinder.R;
+import com.ventura.lyricsfinder.discogs.entities.Artist;
 import com.ventura.lyricsfinder.oauth.Constants;
 
 public class DiscogsService {
@@ -49,15 +50,16 @@ public class DiscogsService {
 		return searchResultsArray;
 	}
 	
-	public JSONObject getArtistInfo(String artistId, OAuthConsumer consumer)
+	public Artist getArtistInfo(String artistId, OAuthConsumer consumer)
 			throws JSONException {
 		Resources res = this.mContext.getResources();
 		String url = res.getString(R.string.discogs_url_artists);
 		url = String.format(Constants.API_REQUEST + url, artistId);
 
 		String artistInfo = this.doGet(url, consumer);
-		JSONObject artistInfoObject = new JSONObject(artistInfo);
-		return artistInfoObject;
+		Artist artist = new Artist();
+		artist.fill(new JSONObject(artistInfo));
+		return artist;
 	}
 
 	private String doGet(String url, OAuthConsumer consumer) {
