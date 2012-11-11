@@ -1,10 +1,16 @@
 package com.ventura.lyricsfinder.activities;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+
 import oauth.signpost.OAuthConsumer;
 
 import org.json.JSONException;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -14,6 +20,7 @@ import com.ventura.lyricsfinder.R;
 import com.ventura.lyricsfinder.activities.util.ImageLoader;
 import com.ventura.lyricsfinder.discogs.DiscogsConstants;
 import com.ventura.lyricsfinder.discogs.DiscogsService;
+import com.ventura.lyricsfinder.discogs.ImageLoaderTask;
 import com.ventura.lyricsfinder.discogs.entities.Artist;
 import com.ventura.lyricsfinder.discogs.entities.Image;
 
@@ -44,8 +51,11 @@ public class ArtistViewerActivity extends BaseActivity {
 
 		if (artist.getImages().size() > 0) {
 			Image firstImage = artist.getImages().get(0);
-			new ImageLoader(this).DisplayImage(firstImage.getUri().toString(),
-					artistImage);
+			try {
+				new ImageLoaderTask(artistImage).execute(new URL(firstImage.getUri().toString()));
+			} catch (MalformedURLException e) {
+				e.printStackTrace();
+			}
 			if (firstImage.getHeight() > 0 && firstImage.getWidth() > 0) {
 				artistImage.setMinimumHeight(firstImage.getHeight());
 				artistImage.setMinimumWidth(firstImage.getWidth());
