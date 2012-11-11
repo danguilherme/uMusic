@@ -23,6 +23,9 @@ import com.ventura.lyricsfinder.R;
 import com.ventura.lyricsfinder.activities.util.LazyAdapter;
 import com.ventura.lyricsfinder.discogs.DiscogsConstants;
 import com.ventura.lyricsfinder.discogs.DiscogsService;
+import com.ventura.lyricsfinder.discogs.entities.SearchItem;
+import com.ventura.lyricsfinder.discogs.entities.SearchResult;
+import com.ventura.lyricsfinder.discogs.entities.QueryType;
 
 public class ListArtistsActivity extends ListActivity {
 	private SharedPreferences prefs;
@@ -44,8 +47,8 @@ public class ListArtistsActivity extends ListActivity {
 		mProgDialog.show();
 
 		Intent intent = this.getIntent();
-		String queryType = intent
-				.getStringExtra(DiscogsConstants.KEY_QUERY_TYPE);
+		QueryType queryType = Enum.valueOf(QueryType.class,
+				intent.getStringExtra(DiscogsConstants.KEY_QUERY_TYPE));
 		String queryText = intent
 				.getStringExtra(DiscogsConstants.KEY_QUERY_TEXT);
 
@@ -55,34 +58,30 @@ public class ListArtistsActivity extends ListActivity {
 		ArrayList<HashMap<String, String>> songsList = new ArrayList<HashMap<String, String>>();
 
 		try {
-			JSONArray search = new DiscogsService(this).search(queryType,
+			SearchResult search = new DiscogsService(this).search(queryType,
 					queryText,
 					new ArtistViewerActivity().getConsumer(this.prefs));
-			if (search.length() <= 0) {
-				Toast.makeText(this, "None singer found", Toast.LENGTH_SHORT)
+			if (search.getCount() <= 0) {
+				Toast.makeText(this, "No singer was found", Toast.LENGTH_SHORT)
 						.show();
 				this.finish();
 			} else {
-				for (int i = 0; i < search.length(); i++) {
+				for (int i = 0; i < search.getCount(); i++) {
 
 					HashMap<String, String> map = new HashMap<String, String>();
-					JSONObject obj = search.getJSONObject(i);
+					SearchItem item = search.getResults().get(i);
 					map.put(DiscogsConstants.KEY_ID,
-							obj.getString(DiscogsConstants.KEY_ID));
-					map.put(DiscogsConstants.KEY_TITLE,
-							obj.getString(DiscogsConstants.KEY_TITLE)); // Song
-																		// title
-					map.put(DiscogsConstants.KEY_TITLE,
-							obj.getString(DiscogsConstants.KEY_TITLE)); // Song
-																		// artist
+							String.valueOf(item.getArtist().getId()));
+					map.put(DiscogsConstants.KEY_TITLE, item.getArtist()
+							.getName()); // Song
+					// title
+					map.put(DiscogsConstants.KEY_TITLE, item.getArtist()
+							.getName()); // Song
+											// artist
 					map.put(DiscogsConstants.KEY_ID,
-							obj.getString(DiscogsConstants.KEY_ID));
-					map.put(DiscogsConstants.KEY_THUMB,
-							obj.getString(DiscogsConstants.KEY_THUMB));
-
-					String singerId = obj.getString(DiscogsConstants.KEY_ID);
-					String singerName = obj
-							.getString(DiscogsConstants.KEY_TITLE);
+							String.valueOf(item.getArtist().getId()));
+					map.put(DiscogsConstants.KEY_THUMB, item.getArtist()
+							.getImages().get(0).getUri().toString());
 
 					songsList.add(map);
 				}

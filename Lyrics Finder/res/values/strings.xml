@@ -45,7 +45,7 @@
     <string name="provider_azlyrics_url">http://www.azlyrics.com/lyrics/%1$s/%2$s.html</string>
 
     <!-- Discogs [START] -->
-    <string name="discogs_url_search" formatted="false">/database/search?type=%1$s%26q=%2$s</string>
+    <string name="discogs_url_search" formatted="false">/database/search?q=%2$s%26type=%1$s</string>
     <string name="discogs_url_artists" formatted="false">/artists/%1$s</string>
     <!-- Discogs [END] -->
 

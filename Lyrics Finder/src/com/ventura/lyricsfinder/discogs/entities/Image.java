@@ -19,6 +19,10 @@ public class Image {
 		this.height = height;
 		this.type = type;
 	}
+	
+	public Image(Uri thumbUri) {
+		this.uri = thumbUri;
+	}
 
 	public int getHeight() {
 		return height;

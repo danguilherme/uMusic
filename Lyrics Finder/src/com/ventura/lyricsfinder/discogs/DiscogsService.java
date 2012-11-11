@@ -25,6 +25,8 @@ import android.util.Log;
 
 import com.ventura.lyricsfinder.R;
 import com.ventura.lyricsfinder.discogs.entities.Artist;
+import com.ventura.lyricsfinder.discogs.entities.SearchResult;
+import com.ventura.lyricsfinder.discogs.entities.QueryType;
 import com.ventura.lyricsfinder.oauth.Constants;
 
 public class DiscogsService {
@@ -35,21 +37,21 @@ public class DiscogsService {
 		this.mContext = context;
 	}
 
-	public JSONArray search(String type, String query, OAuthConsumer consumer)
-			throws JSONException {
+	public SearchResult search(QueryType type, String query,
+			OAuthConsumer consumer) throws JSONException {
 		if (query != null)
 			query = URLEncoder.encode(query);
 		Resources res = this.mContext.getResources();
 		String url = res.getString(R.string.discogs_url_search);
-		url = String.format(Constants.API_REQUEST + url.replace("%26", "&"), type, query);
+		url = String.format(Constants.API_REQUEST + url.replace("%26", "&"),
+				type, query).toLowerCase();
 
 		String searchResults = this.doGet(url, consumer);
-		JSONObject searchResultsObject = new JSONObject(searchResults);
-		JSONArray searchResultsArray = searchResultsObject
-				.getJSONArray(DiscogsConstants.KEY_RESULTS);
-		return searchResultsArray;
+		SearchResult searchResult = new SearchResult(type, new JSONObject(
+				searchResults));
+		return searchResult;
 	}
-	
+
 	public Artist getArtistInfo(String artistId, OAuthConsumer consumer)
 			throws JSONException {
 		Resources res = this.mContext.getResources();
@@ -57,8 +59,7 @@ public class DiscogsService {
 		url = String.format(Constants.API_REQUEST + url, artistId);
 
 		String artistInfo = this.doGet(url, consumer);
-		Artist artist = new Artist();
-		artist.fill(new JSONObject(artistInfo));
+		Artist artist = new Artist(new JSONObject(artistInfo));
 		return artist;
 	}
 

@@ -38,8 +38,6 @@
                 <EditText
                     android:id="@+id/music_text_field"
                     style="@style/MusicInfoTextField" >
-
-                    <requestFocus />
                 </EditText>
             </TableRow>
 

@@ -140,6 +140,10 @@ public class Artist {
 		this.discogsUrl = discogsUrl;
 	}
 
+	public Artist(JSONObject config) {
+		this.fill(config);
+	}
+
 	public Artist() {
 	}
 

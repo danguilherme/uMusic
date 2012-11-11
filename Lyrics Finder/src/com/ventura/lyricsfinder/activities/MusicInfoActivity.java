@@ -13,15 +13,14 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.provider.MediaStore.Audio.Artists;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.ventura.lyricsfinder.MainActivity;
 import com.ventura.lyricsfinder.R;
 import com.ventura.lyricsfinder.discogs.DiscogsConstants;
+import com.ventura.lyricsfinder.discogs.entities.QueryType;
 
 public class MusicInfoActivity extends BaseActivity {
 	private EditText mTitleTextField;
@@ -74,7 +73,7 @@ public class MusicInfoActivity extends BaseActivity {
 							ListArtistsActivity.class);
 					intent.setAction(Intent.ACTION_SEND);
 					intent.putExtra(DiscogsConstants.KEY_QUERY_TYPE,
-							DiscogsConstants.QUERY_TYPE_ARTIST);
+							QueryType.Artist.toString());
 					intent.putExtra(DiscogsConstants.KEY_QUERY_TEXT, artist);
 					startActivity(intent);
 				}
