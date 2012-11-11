@@ -1,8 +1,8 @@
 package com.ventura.lyricsfinder.activities;
 
-import org.json.JSONException;
-
 import oauth.signpost.OAuthConsumer;
+
+import org.json.JSONException;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,6 +15,7 @@ import com.ventura.lyricsfinder.activities.util.ImageLoader;
 import com.ventura.lyricsfinder.discogs.DiscogsConstants;
 import com.ventura.lyricsfinder.discogs.DiscogsService;
 import com.ventura.lyricsfinder.discogs.entities.Artist;
+import com.ventura.lyricsfinder.discogs.entities.Image;
 
 public class ArtistViewerActivity extends BaseActivity {
 
@@ -31,22 +32,28 @@ public class ArtistViewerActivity extends BaseActivity {
 
 		ImageView artistImage = (ImageView) findViewById(R.id.artist_image);
 		TextView artistBio = (TextView) findViewById(R.id.artist_bio);
+		TextView artistName = (TextView) findViewById(R.id.artist_name);
 
 		Artist artist = new Artist();
 		try {
-			artist = new DiscogsService(this).getArtistInfo(artistId,
-					consumer);
+			artist = new DiscogsService(this).getArtistInfo(artistId, consumer);
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
 		if (artist.getImages().size() > 0) {
-			new ImageLoader(this).DisplayImage(artist.getImages().get(0)
-					.getUri().toString(), artistImage);
+			Image firstImage = artist.getImages().get(0);
+			new ImageLoader(this).DisplayImage(firstImage.getUri().toString(),
+					artistImage);
+			if (firstImage.getHeight() > 0 && firstImage.getWidth() > 0) {
+				artistImage.setMinimumHeight(firstImage.getHeight());
+				artistImage.setMinimumWidth(firstImage.getWidth());
+			}
 		} else {
 			artistImage.setVisibility(View.INVISIBLE);
 		}
+		artistName.setText(artist.getName());
 		String profile = artist.getProfile();
 
 		if (profile != null && !profile.equals("")) {

@@ -8,8 +8,8 @@ public class Image {
 	public static final String KEY_WIDTH = "width";
 	public static final String KEY_TYPE = "type";
 	
-	private int height;
-	private int width;
+	private int height = 0;
+	private int width = 0;
 	private Uri uri;
 	private String type;
 	

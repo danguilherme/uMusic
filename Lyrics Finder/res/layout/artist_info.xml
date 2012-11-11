@@ -10,16 +10,17 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dip"
-        android:layout_marginRight="5dip" />
+        android:layout_marginRight="5dip"
+        android:text="Teste" />
 
     <ScrollView
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content" >
-
-        <RelativeLayout
+        android:layout_height="fill_parent" >
+
+        <LinearLayout
             xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
             android:orientation="vertical" >
 
             <ImageView
@@ -27,24 +28,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:src="@drawable/no_image"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentRight="true"
-                android:layout_centerHorizontal="true"
-                android:contentDescription="Artist name" />
+                android:scaleType="fitXY"
+                android:src="@drawable/no_image" />
 
             <TextView
                 android:id="@+id/artist_bio"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:layout_centerInParent="true"
-                android:layout_below="@id/artist_image"
                 android:layout_marginLeft="5dip"
-                android:layout_marginRight="5dip"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentBottom="true" />
-        </RelativeLayout>
+                android:layout_marginRight="5dip" />
+        </LinearLayout>
     </ScrollView>
 
 </LinearLayout>
