@@ -51,15 +51,7 @@ public class ArtistViewerActivity extends BaseActivity {
 
 		if (artist.getImages().size() > 0) {
 			Image firstImage = artist.getImages().get(0);
-			try {
-				new ImageLoaderTask(artistImage).execute(new URL(firstImage.getUri().toString()));
-			} catch (MalformedURLException e) {
-				e.printStackTrace();
-			}
-			if (firstImage.getHeight() > 0 && firstImage.getWidth() > 0) {
-				artistImage.setMinimumHeight(firstImage.getHeight());
-				artistImage.setMinimumWidth(firstImage.getWidth());
-			}
+			new ImageLoaderTask(artistImage, firstImage).execute();
 		} else {
 			artistImage.setVisibility(View.INVISIBLE);
 		}
