@@ -18,12 +18,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.ventura.lyricsfinder.GlobalConstants;
 import com.ventura.lyricsfinder.R;
 import com.ventura.lyricsfinder.discogs.DiscogsConstants;
 import com.ventura.lyricsfinder.discogs.entities.QueryType;
 
 public class MusicInfoActivity extends BaseActivity {
-	private EditText mTitleTextField;
+	private EditText mMusicTitleTextField;
 	private EditText mArtistTextField;
 	private EditText mAlbumTextField;
 	private EditText mCommentTextField;
@@ -53,17 +54,20 @@ public class MusicInfoActivity extends BaseActivity {
 		Button btnViewArtistInfo = (Button) this
 				.findViewById(R.id.btn_view_artist_info);
 
-		/*
-		 * button.setOnClickListener(new View.OnClickListener() {
-		 * 
-		 * public void onClick(View view) { Intent intent = new
-		 * Intent(view.getContext(), MainActivity.class);
-		 * intent.setAction(Intent.ACTION_SEND); if (mActualLyricPath != null) {
-		 * Bundle parameters = new Bundle();
-		 * parameters.putString(Intent.EXTRA_STREAM,
-		 * mActualLyricPath.getPath()); intent.setType("audio/mpeg");
-		 * intent.putExtras(parameters); } startActivity(intent); } });
-		 */
+		button.setOnClickListener(new View.OnClickListener() {
+
+			public void onClick(View view) {
+				String artist = mArtistTextField.getText().toString();
+				String song = mMusicTitleTextField.getText().toString();
+				if (!song.equals("") && !artist.equals("")) {
+					Intent intent = new Intent(view.getContext(),
+							LyricsViewerActivity.class);
+					intent.putExtra(GlobalConstants.EXTRA_ARTIST_NAME, artist);
+					intent.putExtra(GlobalConstants.EXTRA_TRACK_NAME, song);
+					startActivity(intent);
+				}
+			}
+		});
 
 		btnViewArtistInfo.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
@@ -116,7 +120,7 @@ public class MusicInfoActivity extends BaseActivity {
 	}
 
 	private void defineVariables() {
-		this.mTitleTextField = (EditText) this
+		this.mMusicTitleTextField = (EditText) this
 				.findViewById(R.id.music_text_field);
 		this.mArtistTextField = (EditText) this
 				.findViewById(R.id.artist_text_field);
@@ -188,7 +192,7 @@ public class MusicInfoActivity extends BaseActivity {
 				e.printStackTrace();
 			}
 
-			mTitleTextField.setText(songTitle);
+			mMusicTitleTextField.setText(songTitle);
 			mArtistTextField.setText(artist);
 			mAlbumTextField.setText(album);
 			mCommentTextField.setText(comment);

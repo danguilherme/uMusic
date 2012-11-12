@@ -23,11 +23,9 @@ public class ImageLoaderTask extends AsyncTask<Void, Void, Bitmap> {
 
 	@Override
 	protected Bitmap doInBackground(Void... nothing) {
-		URL url;
 		Bitmap bmp = null;
 		try {
-			url = new URL(this.mImage.getUri().toString());
-			bmp = BitmapFactory.decodeStream(url.openConnection()
+			bmp = BitmapFactory.decodeStream(this.mImage.getUrl().openConnection()
 					.getInputStream());
 		} catch (IOException e) {
 			e.printStackTrace();

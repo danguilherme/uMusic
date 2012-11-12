@@ -44,9 +44,19 @@
     <string name="provider_azlyrics_name">A-Z Lyrics Universe</string>
     <string name="provider_azlyrics_url">http://www.azlyrics.com/lyrics/%1$s/%2$s.html</string>
 
+    <!-- Artist Viewer [START] -->
+    <string name="discogs_view_artist_profile">View artist profile on Discogs</string>
+    <!-- Artist Viewer [END] -->
+    
     <!-- Discogs [START] -->
     <string name="discogs_url_search" formatted="false">/database/search?q=%2$s%26type=%1$s</string>
     <string name="discogs_url_artists" formatted="false">/artists/%1$s</string>
     <!-- Discogs [END] -->
+    
+    <!-- LyrDB [START] -->
+    <string name="lyrdb_url_base" formatted="false">http://webservices.lyrdb.com</string>
+    <string name="lyrdb_url_search" formatted="false">/lookup.php?q=%1$s+%2$s%26for=%3$s</string>
+    <string name="lyrdb_url_lyrics" formatted="false">/getlyr.php?q=%1$s</string>
+    <!-- LyrDB [END] -->
 
 </resources>

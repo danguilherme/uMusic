@@ -93,6 +93,10 @@
             android:name=".activities.ListArtistsActivity"
             android:launchMode="singleTask" >
         </activity>
+        <activity
+            android:name=".activities.LyricsViewerActivity"
+            android:launchMode="singleTask" >
+        </activity>
     </application>
 
 </manifest>

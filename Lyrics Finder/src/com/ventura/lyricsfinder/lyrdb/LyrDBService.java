@@ -1,20 +1,20 @@
-package com.ventura.lyricsfinder.discogs;
+package com.ventura.lyricsfinder.lyrdb;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
 
-import oauth.signpost.OAuthConsumer;
-import oauth.signpost.exception.OAuthCommunicationException;
-import oauth.signpost.exception.OAuthExpectationFailedException;
-import oauth.signpost.exception.OAuthMessageSignerException;
-
+import org.apache.http.Header;
+import org.apache.http.HeaderElement;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.HeaderGroup;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -23,58 +23,54 @@ import android.content.res.Resources;
 import android.util.Log;
 
 import com.ventura.lyricsfinder.R;
-import com.ventura.lyricsfinder.discogs.entities.Artist;
 import com.ventura.lyricsfinder.discogs.entities.QueryType;
-import com.ventura.lyricsfinder.discogs.entities.SearchResult;
-import com.ventura.lyricsfinder.oauth.Constants;
+import com.ventura.lyricsfinder.lyrdb.entities.Lyric;
 
-public class DiscogsService {
+public class LyrDBService {
+
 	final String TAG = getClass().getName();
 	private Context mContext;
 
-	public DiscogsService(Context context) {
+	public LyrDBService(Context context) {
 		this.mContext = context;
 	}
 
-	public SearchResult search(QueryType type, String query,
-			OAuthConsumer consumer) throws JSONException {
-		if (query != null)
-			query = URLEncoder.encode(query);
+	public String getLyric(String id) {
 		Resources res = this.mContext.getResources();
-		String url = res.getString(R.string.discogs_url_search);
-		url = String.format(Constants.API_REQUEST + url.replace("%26", "&"),
-				type, query).toLowerCase();
+		String url = String.format(
+				res.getString(R.string.lyrdb_url_base)
+						+ res.getString(R.string.lyrdb_url_lyrics), id);
 
-		String searchResults = this.doGet(url, consumer);
-		SearchResult searchResult = new SearchResult(type, new JSONObject(
-				searchResults));
-		return searchResult;
+		String lyric = this.doGet(url);
+		return lyric;
 	}
 
-	public Artist getArtistInfo(String artistId, OAuthConsumer consumer)
-			throws JSONException {
+	public List<Lyric> search(String type, String artistName, String musicName) {
+		artistName = URLEncoder.encode(artistName);
+		musicName = URLEncoder.encode(musicName);
 		Resources res = this.mContext.getResources();
-		String url = res.getString(R.string.discogs_url_artists);
-		url = String.format(Constants.API_REQUEST + url, artistId);
+		String url = String.format(res.getString(R.string.lyrdb_url_base)
+				+ res.getString(R.string.lyrdb_url_search).replace("%26", "&"),
+				artistName, musicName, type);
 
-		String artistInfo = this.doGet(url, consumer);
-		Artist artist = new Artist(new JSONObject(artistInfo));
-		return artist;
+		String searchResults = this.doGet(url);
+		String[] foundLyricsLines = searchResults.split("\r\n");
+		List<Lyric> foundLyrics = new ArrayList<Lyric>();
+		for (int i = 0; i < foundLyricsLines.length; i++) {
+			foundLyricsLines[i] = foundLyricsLines[i].replace("\\", "~");
+			String[] prop = foundLyricsLines[i].split("~");
+			foundLyrics.add(new Lyric(prop[0].toString(), prop[1].toString(),
+					prop[2].toString()));
+		}
+		return foundLyrics;
+
 	}
 
-	private String doGet(String url, OAuthConsumer consumer) {
+	private String doGet(String url) {
 		DefaultHttpClient httpclient = new DefaultHttpClient();
 		HttpGet request = new HttpGet(url);
+		request.addHeader("Accept", "text/txt");
 		Log.i(TAG, "Requesting URL : " + url);
-		try {
-			consumer.sign(request);
-		} catch (OAuthMessageSignerException e) {
-			e.printStackTrace();
-		} catch (OAuthExpectationFailedException e) {
-			e.printStackTrace();
-		} catch (OAuthCommunicationException e) {
-			e.printStackTrace();
-		}
 
 		HttpResponse response = null;
 		try {
@@ -106,6 +102,7 @@ public class DiscogsService {
 			responseBuilder = new StringBuilder();
 			while ((responeLine = bufferedReader.readLine()) != null) {
 				responseBuilder.append(responeLine);
+				responseBuilder.append("\r\n");
 			}
 			Log.i(TAG, "Response : " + responseBuilder.toString());
 		} catch (IllegalStateException e) {

@@ -8,6 +8,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.ListActivity;
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -39,7 +41,7 @@ public class ListArtistsActivity extends ListActivity {
 		super.onCreate(savedInstanceState);
 		this.setContentView(R.layout.artists_list);
 		this.prefs = PreferenceManager.getDefaultSharedPreferences(this);
-
+		
 		mProgDialog = new ProgressDialog(this);
 		mProgDialog.setTitle(getString(R.string.message_fetching_lyric_title));
 		mProgDialog.setMessage(getString(R.string.message_fetching_lyric_body));
@@ -81,7 +83,7 @@ public class ListArtistsActivity extends ListActivity {
 					map.put(DiscogsConstants.KEY_ID,
 							String.valueOf(item.getArtist().getId()));
 					map.put(DiscogsConstants.KEY_THUMB, item.getArtist()
-							.getImages().get(0).getUri().toString());
+							.getImages().get(0).getUrl().toString());
 
 					songsList.add(map);
 				}

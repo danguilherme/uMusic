@@ -28,7 +28,7 @@ public class SearchItem {
 				artist.setName(config.getString(KEY_TITLE));
 				artist.setProfileUrl(new URL(config.getString(KEY_RESOURCE_URL)));
 				artist.getImages().add(
-						new Image(Uri.parse(config
+						new Image(new URL(config
 								.getString(KEY_THUMB))));
 			} catch (JSONException e) {
 				e.printStackTrace();

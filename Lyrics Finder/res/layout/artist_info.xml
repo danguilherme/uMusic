@@ -12,32 +12,43 @@
         android:layout_marginLeft="5dip"
         android:layout_marginRight="5dip"
         android:text="Teste" />
-
-    <ScrollView
+    
+    <TextView
+        android:id="@+id/artist_discogs_url"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent" >
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dip"
+        android:layout_marginRight="5dip"
+        android:layout_marginTop="0dip"
+        android:gravity="right"
+        android:text="@string/discogs_view_artist_profile" />
+    
 
-        <LinearLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
+        <ScrollView
+            android:id="@+id/artist_scrollview"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:orientation="vertical" >
+            android:layout_height="fill_parent" >
 
-            <ImageView
-                android:id="@+id/artist_image"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:scaleType="fitXY"
-                android:src="@drawable/no_image" />
-
-            <TextView
-                android:id="@+id/artist_bio"
+            <LinearLayout
+                xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_marginLeft="5dip"
-                android:layout_marginRight="5dip" />
-        </LinearLayout>
-    </ScrollView>
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
 
+                <ImageView
+                    android:id="@+id/artist_image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/no_image" />
+
+                <TextView
+                    android:id="@+id/artist_bio"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_marginLeft="5dip"
+                    android:layout_marginRight="5dip" />
+            </LinearLayout>
+        </ScrollView>
 </LinearLayout>

@@ -1,17 +1,13 @@
 package com.ventura.lyricsfinder.activities;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-
 import oauth.signpost.OAuthConsumer;
 
 import org.json.JSONException;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -40,6 +36,7 @@ public class ArtistViewerActivity extends BaseActivity {
 		ImageView artistImage = (ImageView) findViewById(R.id.artist_image);
 		TextView artistBio = (TextView) findViewById(R.id.artist_bio);
 		TextView artistName = (TextView) findViewById(R.id.artist_name);
+		TextView artistDiscogsLink = (TextView) findViewById(R.id.artist_discogs_url);
 
 		Artist artist = new Artist();
 		try {
@@ -52,10 +49,20 @@ public class ArtistViewerActivity extends BaseActivity {
 		if (artist.getImages().size() > 0) {
 			Image firstImage = artist.getImages().get(0);
 			new ImageLoaderTask(artistImage, firstImage).execute();
+			new ImageLoader(this).DisplayImage(firstImage.getUrl().toString(),
+					artistImage);
+			if (firstImage.getHeight() > 0 && firstImage.getWidth() > 0) {
+				artistImage.setMinimumHeight(firstImage.getHeight());
+				artistImage.setMinimumWidth(firstImage.getWidth());
+			}
 		} else {
 			artistImage.setVisibility(View.INVISIBLE);
 		}
 		artistName.setText(artist.getName());
+		artistDiscogsLink.setText(Html.fromHtml("<a href=\""
+				+ artist.getDiscogsUrl().toString() + "\">"
+				+ getString(R.string.discogs_view_artist_profile) + "</a>"));
+		artistDiscogsLink.setMovementMethod(LinkMovementMethod.getInstance());
 		String profile = artist.getProfile();
 
 		if (profile != null && !profile.equals("")) {

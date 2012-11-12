@@ -1,5 +1,7 @@
 package com.ventura.lyricsfinder.discogs.entities;
 
+import java.net.URL;
+
 import android.net.Uri;
 
 public class Image {
@@ -10,18 +12,18 @@ public class Image {
 	
 	private int height = 0;
 	private int width = 0;
-	private Uri uri;
+	private URL url;
 	private String type;
 	
-	public Image(Uri uri, int width, int height, String type) {
-		this.uri = uri;
+	public Image(URL uri, int width, int height, String type) {
+		this.setUrl(uri);
 		this.width = width;
 		this.height = height;
 		this.type = type;
 	}
 	
-	public Image(Uri thumbUri) {
-		this.uri = thumbUri;
+	public Image(URL thumbUri) {
+		this.setUrl(thumbUri);
 	}
 
 	public int getHeight() {
@@ -40,12 +42,12 @@ public class Image {
 		this.width = width;
 	}
 
-	public Uri getUri() {
-		return uri;
+	public URL getUrl() {
+		return url;
 	}
 
-	public void setUri(Uri uri) {
-		this.uri = uri;
+	public void setUrl(URL url) {
+		this.url = url;
 	}
 
 	public String getType() {

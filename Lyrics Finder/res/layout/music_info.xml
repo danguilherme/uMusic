@@ -8,7 +8,7 @@
         android:id="@+id/btn_open_main_activity"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Open MainActivity" >
+        android:text="@string/btn_find_lyric" >
     </Button>
 
     <Button
