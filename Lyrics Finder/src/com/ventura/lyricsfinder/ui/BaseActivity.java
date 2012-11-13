@@ -1,4 +1,4 @@
-package com.ventura.lyricsfinder.activities;
+package com.ventura.lyricsfinder.ui;
 
 import oauth.signpost.OAuth;
 import oauth.signpost.OAuthConsumer;

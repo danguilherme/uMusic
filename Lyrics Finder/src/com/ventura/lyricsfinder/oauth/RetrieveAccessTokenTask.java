@@ -1,6 +1,7 @@
 package com.ventura.lyricsfinder.oauth;
 
-import com.ventura.lyricsfinder.activities.ArtistViewerActivity;
+import com.ventura.lyricsfinder.discogs.ui.ArtistViewerActivity;
+
 import oauth.signpost.OAuth;
 import oauth.signpost.OAuthConsumer;
 import oauth.signpost.OAuthProvider;

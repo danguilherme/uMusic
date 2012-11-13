@@ -1,4 +1,4 @@
-package com.ventura.lyricsfinder.activities;
+package com.ventura.lyricsfinder.lyrdb.ui;
 
 import android.app.Activity;
 import android.content.Intent;

@@ -68,7 +68,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.ArtistViewerActivity"
+            android:name=".discogs.ui.ArtistViewerActivity"
             android:label="@string/title_activity_music_info" >
         </activity>
         <activity
@@ -90,11 +90,11 @@
         
         
         <activity
-            android:name=".activities.ListArtistsActivity"
+            android:name=".discogs.ui.ListArtistsActivity"
             android:launchMode="singleTask" >
         </activity>
         <activity
-            android:name=".activities.LyricsViewerActivity"
+            android:name=".lyrdb.ui.LyricsViewerActivity"
             android:launchMode="singleTask" >
         </activity>
     </application>

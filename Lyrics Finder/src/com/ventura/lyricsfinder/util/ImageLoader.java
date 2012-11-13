@@ -1,4 +1,4 @@
-package com.ventura.lyricsfinder.activities.util;
+package com.ventura.lyricsfinder.util;
 
 import java.io.File;
 import java.io.FileInputStream;

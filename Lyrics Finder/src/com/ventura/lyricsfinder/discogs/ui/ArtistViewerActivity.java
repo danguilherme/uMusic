@@ -1,4 +1,4 @@
-package com.ventura.lyricsfinder.activities;
+package com.ventura.lyricsfinder.discogs.ui;
 
 import oauth.signpost.OAuthConsumer;
 
@@ -13,12 +13,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ventura.lyricsfinder.R;
-import com.ventura.lyricsfinder.activities.util.ImageLoader;
 import com.ventura.lyricsfinder.discogs.DiscogsConstants;
 import com.ventura.lyricsfinder.discogs.DiscogsService;
 import com.ventura.lyricsfinder.discogs.ImageLoaderTask;
 import com.ventura.lyricsfinder.discogs.entities.Artist;
 import com.ventura.lyricsfinder.discogs.entities.Image;
+import com.ventura.lyricsfinder.ui.BaseActivity;
+import com.ventura.lyricsfinder.util.ImageLoader;
 
 public class ArtistViewerActivity extends BaseActivity {
 

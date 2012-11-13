@@ -1,4 +1,4 @@
-package com.ventura.lyricsfinder.activities.util;
+package com.ventura.lyricsfinder.util;
 
 import java.lang.ref.SoftReference;
 import java.util.Collections;

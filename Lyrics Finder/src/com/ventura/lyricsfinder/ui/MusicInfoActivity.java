@@ -1,4 +1,4 @@
-package com.ventura.lyricsfinder.activities;
+package com.ventura.lyricsfinder.ui;
 
 import java.io.File;
 import java.io.IOException;
@@ -22,6 +22,8 @@ import com.ventura.lyricsfinder.GlobalConstants;
 import com.ventura.lyricsfinder.R;
 import com.ventura.lyricsfinder.discogs.DiscogsConstants;
 import com.ventura.lyricsfinder.discogs.entities.QueryType;
+import com.ventura.lyricsfinder.discogs.ui.ListArtistsActivity;
+import com.ventura.lyricsfinder.lyrdb.ui.LyricsViewerActivity;
 
 public class MusicInfoActivity extends BaseActivity {
 	private EditText mMusicTitleTextField;

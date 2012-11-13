@@ -1,4 +1,4 @@
-package com.ventura.lyricsfinder.activities;
+package com.ventura.lyricsfinder.discogs.ui;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,9 +22,9 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.ventura.lyricsfinder.R;
-import com.ventura.lyricsfinder.activities.util.LazyAdapter;
 import com.ventura.lyricsfinder.discogs.DiscogsConstants;
 import com.ventura.lyricsfinder.discogs.DiscogsService;
+import com.ventura.lyricsfinder.discogs.LazyAdapter;
 import com.ventura.lyricsfinder.discogs.entities.SearchItem;
 import com.ventura.lyricsfinder.discogs.entities.SearchResult;
 import com.ventura.lyricsfinder.discogs.entities.QueryType;
