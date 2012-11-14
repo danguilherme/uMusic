@@ -23,6 +23,7 @@ import com.ventura.lyricsfinder.R;
 import com.ventura.lyricsfinder.discogs.DiscogsConstants;
 import com.ventura.lyricsfinder.discogs.entities.QueryType;
 import com.ventura.lyricsfinder.discogs.ui.ListArtistsActivity;
+import com.ventura.lyricsfinder.lyrdb.ui.ListLyricsActivity;
 import com.ventura.lyricsfinder.lyrdb.ui.LyricsViewerActivity;
 
 public class MusicInfoActivity extends BaseActivity {
@@ -63,7 +64,7 @@ public class MusicInfoActivity extends BaseActivity {
 				String song = mMusicTitleTextField.getText().toString();
 				if (!song.equals("") && !artist.equals("")) {
 					Intent intent = new Intent(view.getContext(),
-							LyricsViewerActivity.class);
+							ListLyricsActivity.class);
 					intent.putExtra(GlobalConstants.EXTRA_ARTIST_NAME, artist);
 					intent.putExtra(GlobalConstants.EXTRA_TRACK_NAME, song);
 					startActivity(intent);

@@ -45,7 +45,7 @@
             -->
         </activity>
         <activity
-            android:name=".activities.MusicInfoActivity"
+            android:name=".ui.MusicInfoActivity"
             android:label="@string/title_activity_music_info" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -91,6 +91,12 @@
         
         <activity
             android:name=".discogs.ui.ListArtistsActivity"
+            android:launchMode="singleTask" >
+        </activity>
+        
+        <!-- LyrDB-related activities -->
+        <activity
+            android:name=".lyrdb.ui.ListLyricsActivity"
             android:launchMode="singleTask" >
         </activity>
         <activity

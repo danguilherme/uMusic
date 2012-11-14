@@ -14,16 +14,20 @@ public class LyricsViewerActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		this.setContentView(R.layout.lyric_view);
-
+		
 		Intent intent = this.getIntent();
-		String artist = intent
-				.getStringExtra(GlobalConstants.EXTRA_ARTIST_NAME);
-		String music = intent.getStringExtra(GlobalConstants.EXTRA_TRACK_NAME);
-		TextView lyricText = (TextView) this.findViewById(R.id.lyric_text_view);
-
+		String lyricId = intent.getStringExtra(GlobalConstants.EXTRA_LYRIC_ID);
+		
+		TextView lyricsTextView = (TextView) this.findViewById(R.id.lyrics_text_view);
+		TextView artistNameTextView = (TextView) this.findViewById(R.id.artist_text_view);
+		TextView musicNameTextView = (TextView) this.findViewById(R.id.music_text_view);
+		
 		LyrDBService lyricsService = new LyrDBService(this);
 
-		lyricText.setText(lyricsService.getLyric(lyricsService
-				.search("fullt", artist, music).get(0).getId()));
+		lyricsTextView.setText(lyricsService.getLyric(lyricId));
+		artistNameTextView.setText(intent.getStringExtra(GlobalConstants.EXTRA_ARTIST_NAME));
+		musicNameTextView.setText(intent.getStringExtra(GlobalConstants.EXTRA_TRACK_NAME));
+		
+		
 	}
 }

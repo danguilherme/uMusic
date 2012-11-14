@@ -1,6 +1,6 @@
 package com.ventura.lyricsfinder.lyrdb;
 
-public enum QueryTypes {
+public enum QueryType {
 	/**
 	 * Query represents the exact name of the song name or the exact beginning
 	 * of the song name. Matched results will be returned.

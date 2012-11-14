@@ -8,22 +8,20 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.http.Header;
-import org.apache.http.HeaderElement;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.HeaderGroup;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
 import android.content.res.Resources;
 import android.util.Log;
+import android.webkit.DownloadListener;
 
+import com.ventura.lyricsfinder.LyricDownloadTask;
 import com.ventura.lyricsfinder.R;
-import com.ventura.lyricsfinder.discogs.entities.QueryType;
 import com.ventura.lyricsfinder.lyrdb.entities.Lyric;
 
 public class LyrDBService {
@@ -41,19 +39,31 @@ public class LyrDBService {
 				res.getString(R.string.lyrdb_url_base)
 						+ res.getString(R.string.lyrdb_url_lyrics), id);
 
-		String lyric = this.doGet(url);
+		String lyric = null;
+		try {
+			lyric = this.doGet(url);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return lyric;
 	}
 
-	public List<Lyric> search(String type, String artistName, String musicName) {
+	public List<Lyric> search(QueryType type, String artistName,
+			String musicName) {
 		artistName = URLEncoder.encode(artistName);
 		musicName = URLEncoder.encode(musicName);
 		Resources res = this.mContext.getResources();
 		String url = String.format(res.getString(R.string.lyrdb_url_base)
 				+ res.getString(R.string.lyrdb_url_search).replace("%26", "&"),
-				artistName, musicName, type);
+				artistName, musicName, type.toString().toLowerCase());
 
-		String searchResults = this.doGet(url);
+		String searchResults = null;
+		try {
+			searchResults = this.doGet(url);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		String[] foundLyricsLines = searchResults.split("\r\n");
 		List<Lyric> foundLyrics = new ArrayList<Lyric>();
 		for (int i = 0; i < foundLyricsLines.length; i++) {
@@ -63,10 +73,9 @@ public class LyrDBService {
 					prop[2].toString()));
 		}
 		return foundLyrics;
-
 	}
 
-	private String doGet(String url) {
+	private String doGet(String url) throws Exception {
 		DefaultHttpClient httpclient = new DefaultHttpClient();
 		HttpGet request = new HttpGet(url);
 		request.addHeader("Accept", "text/txt");
@@ -98,10 +107,21 @@ public class LyrDBService {
 
 			BufferedReader bufferedReader = new BufferedReader(
 					new InputStreamReader(data));
-			String responeLine;
+			String responseLine;
 			responseBuilder = new StringBuilder();
-			while ((responeLine = bufferedReader.readLine()) != null) {
-				responseBuilder.append(responeLine);
+			boolean firstLine = true;
+			boolean wasError = false;
+
+			while ((responseLine = bufferedReader.readLine()) != null) {
+				if (wasError) {
+					throw new Exception(responseLine);
+				}
+				if (firstLine && responseLine.toLowerCase().equals("error")) {
+					wasError = true;
+				}
+				firstLine = false;
+
+				responseBuilder.append(responseLine);
 				responseBuilder.append("\r\n");
 			}
 			Log.i(TAG, "Response : " + responseBuilder.toString());
