@@ -120,9 +120,9 @@ public class ListArtistsActivity extends ListActivity {
 
 			this.mProgressDialog = new ProgressDialog(context);
 			this.mProgressDialog
-					.setTitle(getString(R.string.message_fetching_lyric_title));
+					.setTitle(getString(R.string.message_fetching_artists_list_title));
 			this.mProgressDialog
-					.setMessage(getString(R.string.message_fetching_lyric_body));
+					.setMessage(getString(R.string.message_fetching_artists_list_body));
 			this.mProgressDialog.setCancelable(true);
 			this.mContext = context;
 			this.mConsumer = consumer;

@@ -31,12 +31,24 @@
     <string name="title_activity_music_info">Music information</string>
     <!-- Music Info Activity [END] -->
 
-    <string name="menu_see_providers">See available providers</string>
-    <string name="message_lyric_not_found">Sorry, lyric not found</string>
+	<string name="menu_see_providers">See available providers</string>
+	
+	<!-- Messages [START] -->
     <string name="message_no_internet_connection">No internet connection.</string>
-    <string name="message_fetching_lyric_title">Fetching Lyric...</string>
-    <string name="message_fetching_lyric_body">I am retrieving the lyric to you, please wait.</string>
+    
+    <string name="message_fetching_lyrics_list_title">Fetching artists...</string>
+    <string name="message_fetching_lyrics_list_body">I am retrieving the lyrics to you, please wait.</string>
+    <string name="message_fetching_lyric_title">Loading lyric...</string>
+    <string name="message_fetching_lyric_body">Bringing the lyric\'s text, it may take a while.</string>
+    <string name="message_lyric_not_found">Sorry, lyric not found.</string>
+    
+    <string name="message_fetching_artists_list_title">Fetching artists...</string>
+    <string name="message_fetching_artists_list_body">I am retrieving mathcing artists to you, please wait.</string>
+    <string name="message_artist_not_found">Sorry, artist not found</string>
+    
     <string name="message_no_music_metadata_found">The music you are trying to load has no metadata.</string>
+    <!-- Messages [END] -->
+    
     <string name="provider_terra_name">Terra Letras</string>
     <string name="provider_terra_url">http://letras.mus.br/winamp.php?artista=%1$s%26musica=%2$s</string>
     <string name="provider_lyrster_name">Lyrster</string>

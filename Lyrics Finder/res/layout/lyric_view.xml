@@ -6,24 +6,24 @@
 
     <TextView
         android:id="@+id/music_text_view"
+        style="@style/Title"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Music"
-        style="@style/Title"/>
+        android:text="Music" />
 
     <TextView
         android:id="@+id/artist_text_view"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="Artist"
-        android:textStyle="bold"
-        android:textSize="20sp" />
-    
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
     <TextView
         android:id="@+id/artist_text_view"
         android:layout_width="fill_parent"
         android:layout_height="2dp"
-        android:background="#000"/>
+        android:background="#000" />
 
     <ScrollView
         android:layout_width="fill_parent"
@@ -35,5 +35,29 @@
             android:layout_height="wrap_content"
             android:textStyle="italic" />
     </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/progress_bar_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|center_horizontal"
+        android:orientation="horizontal" >
+
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            style="@android:style/Widget.ProgressBar.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|center_horizontal"
+            android:layout_marginRight="5dp"
+            android:indeterminate="true" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|center_horizontal"
+            android:text="Loading..."
+            android:textStyle="italic" />
+    </LinearLayout>
 
 </LinearLayout>

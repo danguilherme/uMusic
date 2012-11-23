@@ -97,11 +97,18 @@
         <!-- LyrDB-related activities -->
         <activity
             android:name=".lyrdb.ui.ListLyricsActivity"
-            android:launchMode="singleTask" >
+            android:launchMode="singleTask"
+            android:configChanges="orientation" >
         </activity>
         <activity
             android:name=".lyrdb.ui.LyricsViewerActivity"
-            android:launchMode="singleTask" >
+            android:launchMode="singleTask"
+            android:configChanges="orientation" >
+        </activity>
+        <activity
+            android:name=".musixmatch.ui.LyricsViewerActivity"
+            android:launchMode="singleTask"
+            android:configChanges="orientation" >
         </activity>
     </application>
 

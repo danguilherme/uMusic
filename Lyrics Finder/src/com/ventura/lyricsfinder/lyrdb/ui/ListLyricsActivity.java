@@ -9,11 +9,14 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
@@ -25,11 +28,52 @@ import com.ventura.lyricsfinder.lyrdb.QueryType;
 import com.ventura.lyricsfinder.lyrdb.entities.Lyric;
 
 public class ListLyricsActivity extends ListActivity {
-	
+	final String TAG = getClass().getName();
+
 	private SharedPreferences prefs;
 	ListView list;
 	CustomAdapter adapter;
 	List<Lyric> mListItems;
+
+	private class ListLyricsTask extends AsyncTask<Lyric, Void, List<Lyric>> {
+
+		private Context mContext;
+		private QueryType mQueryTyoe;
+		private ProgressDialog mProgressDialog;
+
+		public ListLyricsTask(Context context, QueryType queryType) {
+			this.mProgressDialog = new ProgressDialog(context);
+			this.mProgressDialog
+					.setTitle(getString(R.string.message_fetching_lyrics_list_body));
+			this.mProgressDialog
+					.setMessage(getString(R.string.message_fetching_lyrics_list_body));
+			this.mProgressDialog.setCancelable(true);
+
+			this.mContext = context;
+			this.mQueryTyoe = queryType;
+		}
+
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			this.mProgressDialog.show();
+		}
+
+		@Override
+		protected List<Lyric> doInBackground(Lyric... params) {
+			Lyric target = params[0];
+			LyrDBService lyricsService = new LyrDBService(this.mContext);
+			return lyricsService.search(this.mQueryTyoe,
+					target.getArtistName(), target.getMusicName());
+		}
+
+		@Override
+		protected void onPostExecute(List<Lyric> result) {
+			super.onPostExecute(result);
+			fillListView(result);
+			this.mProgressDialog.dismiss();
+		}
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -57,16 +101,21 @@ public class ListLyricsActivity extends ListActivity {
 				intent.setAction(Intent.ACTION_SEND);
 				intent.putExtra(GlobalConstants.EXTRA_LYRIC_ID,
 						mListItems.get(position).getId());
-				intent.putExtra(GlobalConstants.EXTRA_ARTIST_NAME,
-						mListItems.get(position).getArtistName());
-				intent.putExtra(GlobalConstants.EXTRA_TRACK_NAME,
-						mListItems.get(position).getMusicName());
+				intent.putExtra(GlobalConstants.EXTRA_ARTIST_NAME, mListItems
+						.get(position).getArtistName());
+				intent.putExtra(GlobalConstants.EXTRA_TRACK_NAME, mListItems
+						.get(position).getMusicName());
 				startActivity(intent);
 			}
 		});
 	}
 
 	private void fillListView(List<Lyric> lyrics) {
+		if (lyrics.size() <= 0) {
+			Toast.makeText(this, "No lyrics were found", Toast.LENGTH_SHORT).show();
+			this.finish();
+		}
+		
 		ArrayList<HashMap<String, String>> lyricsList = new ArrayList<HashMap<String, String>>();
 
 		for (int i = 0; i < lyrics.size(); i++) {
@@ -84,43 +133,13 @@ public class ListLyricsActivity extends ListActivity {
 		this.mListItems = lyrics;
 	}
 
-	private class ListLyricsTask extends AsyncTask<Lyric, Void, List<Lyric>> {
-
-		private Context mContext;
-		private QueryType mQueryTyoe;
-		private ProgressDialog mProgressDialog;
-
-		public ListLyricsTask(Context context, QueryType queryType) {
-			this.mProgressDialog = new ProgressDialog(context);
-			this.mProgressDialog
-					.setTitle(getString(R.string.message_fetching_lyric_title));
-			this.mProgressDialog
-					.setMessage(getString(R.string.message_fetching_lyric_body));
-			this.mProgressDialog.setCancelable(true);
-
-			this.mContext = context;
-			this.mQueryTyoe = queryType;
-		}
-
-		@Override
-		protected void onPreExecute() {
-			super.onPreExecute();
-			this.mProgressDialog.show();
-		}
-
-		@Override
-		protected List<Lyric> doInBackground(Lyric... params) {
-			Lyric target = params[0];
-			LyrDBService lyricsService = new LyrDBService(this.mContext);
-			return lyricsService.search(this.mQueryTyoe,
-					target.getArtistName(), target.getMusicName());
-		}
-
-		@Override
-		protected void onPostExecute(List<Lyric> result) {
-			super.onPostExecute(result);
-			fillListView(result);
-			this.mProgressDialog.dismiss();
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
+		if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+			Log.i(TAG, "LANDSCAPE");
+		} else {
+			Log.i(TAG, "PORTRAIT");
 		}
 	}
 }

@@ -1,10 +1,16 @@
 package com.ventura.lyricsfinder.discogs.ui;
 
+import java.net.URL;
+import java.util.List;
+
 import oauth.signpost.OAuthConsumer;
 
 import org.json.JSONException;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
@@ -18,10 +24,52 @@ import com.ventura.lyricsfinder.discogs.DiscogsService;
 import com.ventura.lyricsfinder.discogs.ImageLoaderTask;
 import com.ventura.lyricsfinder.discogs.entities.Artist;
 import com.ventura.lyricsfinder.discogs.entities.Image;
+import com.ventura.lyricsfinder.lyrdb.LyrDBService;
+import com.ventura.lyricsfinder.lyrdb.QueryType;
+import com.ventura.lyricsfinder.lyrdb.entities.Lyric;
 import com.ventura.lyricsfinder.ui.BaseActivity;
 import com.ventura.lyricsfinder.util.ImageLoader;
 
 public class ArtistViewerActivity extends BaseActivity {
+	/*
+	private class ArtistInfoDownloadTask extends AsyncTask<URL, Void, Artist>
+	{
+		private Context mContext;
+		private QueryType mQueryTyoe;
+		private ProgressDialog mProgressDialog;
+
+		public ListLyricsTask(Context context, QueryType queryType) {
+			this.mProgressDialog = new ProgressDialog(context);
+			this.mProgressDialog
+					.setTitle(getString(R.string.message_fetching_lyrics_list_body));
+			this.mProgressDialog
+					.setMessage(getString(R.string.message_fetching_lyrics_list_body));
+			this.mProgressDialog.setCancelable(true);
+
+			this.mContext = context;
+			this.mQueryTyoe = queryType;
+		}
+
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			this.mProgressDialog.show();
+		}
+
+		@Override
+		protected Artist doInBackground(URL... params) {
+			URL target = params[0];
+			LyrDBService lyricsService = new LyrDBService(this.mContext);
+			return lyricsService.search();
+		}
+
+		@Override
+		protected void onPostExecute(Artist result) {
+			super.onPostExecute(result);
+			fillArtistInfo(result);
+			this.mProgressDialog.dismiss();
+		}
+	}*/
 
 	final String TAG = getClass().getName();
 
@@ -84,5 +132,9 @@ public class ArtistViewerActivity extends BaseActivity {
 		 * .getColumnIndexOrThrow(People.NAME)); Log.i(TAG, "Response : " +
 		 * "Selected contact : " + name); } } break; }
 		 */
+	}
+	
+	private void fillArtistInfo(Artist artist) {
+		
 	}
 }

@@ -14,6 +14,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -24,7 +25,7 @@ import com.ventura.lyricsfinder.discogs.DiscogsConstants;
 import com.ventura.lyricsfinder.discogs.entities.QueryType;
 import com.ventura.lyricsfinder.discogs.ui.ListArtistsActivity;
 import com.ventura.lyricsfinder.lyrdb.ui.ListLyricsActivity;
-import com.ventura.lyricsfinder.lyrdb.ui.LyricsViewerActivity;
+import com.ventura.lyricsfinder.musixmatch.ui.LyricsViewerActivity;
 
 public class MusicInfoActivity extends BaseActivity {
 	private EditText mMusicTitleTextField;
@@ -49,7 +50,9 @@ public class MusicInfoActivity extends BaseActivity {
 		this.setContentView(R.layout.music_info);
 
 		this.defineVariables();
-
+		
+		getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+		
 		Intent intent = this.getIntent();
 		this.loadMusicTags(intent);
 
@@ -64,7 +67,7 @@ public class MusicInfoActivity extends BaseActivity {
 				String song = mMusicTitleTextField.getText().toString();
 				if (!song.equals("") && !artist.equals("")) {
 					Intent intent = new Intent(view.getContext(),
-							ListLyricsActivity.class);
+							LyricsViewerActivity.class);
 					intent.putExtra(GlobalConstants.EXTRA_ARTIST_NAME, artist);
 					intent.putExtra(GlobalConstants.EXTRA_TRACK_NAME, song);
 					startActivity(intent);

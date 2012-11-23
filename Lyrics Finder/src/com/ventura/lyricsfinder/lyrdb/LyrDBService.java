@@ -64,8 +64,11 @@ public class LyrDBService {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		String[] foundLyricsLines = searchResults.split("\r\n");
 		List<Lyric> foundLyrics = new ArrayList<Lyric>();
+		if (searchResults.equals("")) {
+			return foundLyrics;
+		}
+		String[] foundLyricsLines = searchResults.split("\r\n");
 		for (int i = 0; i < foundLyricsLines.length; i++) {
 			foundLyricsLines[i] = foundLyricsLines[i].replace("\\", "~");
 			String[] prop = foundLyricsLines[i].split("~");
