@@ -2,17 +2,33 @@ package com.ventura.lyricsfinder.ui;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.RandomAccessFile;
+import java.io.UnsupportedEncodingException;
 
+import org.cmc.music.common.ID3WriteException;
 import org.cmc.music.metadata.IMusicMetadata;
 import org.cmc.music.metadata.MusicMetadataSet;
 import org.cmc.music.myid3.MyID3;
+import org.farng.mp3.MP3File;
+import org.farng.mp3.TagConstant;
+import org.farng.mp3.TagException;
+import org.farng.mp3.id3.AbstractID3v2;
+import org.farng.mp3.lyrics3.Lyrics3v2;
+import org.jmusixmatch.MusixMatch;
+import org.jmusixmatch.MusixMatchException;
 
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
+import android.media.MediaMetadataRetriever;
+import android.media.MediaScannerConnection;
+import android.media.MediaScannerConnection.MediaScannerConnectionClient;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
+import android.provider.MediaStore.Audio.Media;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -24,10 +40,12 @@ import com.ventura.lyricsfinder.R;
 import com.ventura.lyricsfinder.discogs.DiscogsConstants;
 import com.ventura.lyricsfinder.discogs.entities.QueryType;
 import com.ventura.lyricsfinder.discogs.ui.ListArtistsActivity;
-import com.ventura.lyricsfinder.lyrdb.ui.ListLyricsActivity;
+import com.ventura.lyricsfinder.musixmatch.ui.Constants;
 import com.ventura.lyricsfinder.musixmatch.ui.LyricsViewerActivity;
 
 public class MusicInfoActivity extends BaseActivity {
+	final String TAG = getClass().getName();
+
 	private EditText mMusicTitleTextField;
 	private EditText mArtistTextField;
 	private EditText mAlbumTextField;
@@ -50,9 +68,10 @@ public class MusicInfoActivity extends BaseActivity {
 		this.setContentView(R.layout.music_info);
 
 		this.defineVariables();
-		
-		getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-		
+
+		getWindow().setSoftInputMode(
+				WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
 		Intent intent = this.getIntent();
 		this.loadMusicTags(intent);
 
@@ -121,6 +140,111 @@ public class MusicInfoActivity extends BaseActivity {
 				}
 			} else if (Intent.ACTION_SEND.equals(action) && type != null) {
 				this.bindData(musicMetadataSet);
+
+				org.farng.mp3.MP3File file = null;
+				try {
+					file = new MP3File(song);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (TagException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				Cursor c = getContentResolver().query(
+						Media.EXTERNAL_CONTENT_URI,
+						new String[] { Media._ID, Media.DISPLAY_NAME,
+								Media.TRACK }, null, null,
+						Media.DEFAULT_SORT_ORDER);
+
+				// Determine the column index of the column named "word"
+				int index = c.getColumnIndex(Media.DISPLAY_NAME);
+
+				/*
+				 * Only executes if the cursor is valid. The User Dictionary
+				 * Provider returns null if an internal error occurs. Other
+				 * providers may throw an Exception instead of returning null.
+				 */
+
+				if (c != null) {
+					/*
+					 * Moves to the next row in the cursor. Before the first
+					 * movement in the cursor, the "row pointer" is -1, and if
+					 * you try to retrieve data at that position you will get an
+					 * exception.
+					 */
+					while (c.moveToNext()) {
+
+						// Gets the value from the column.
+						Log.i(TAG,
+								"From contentProvider (_ID): "
+										+ c.getString(index));
+					}
+				}
+
+				if (file.hasLyrics3Tag()) {
+					Log.i(TAG, "hasLyrics3Tag");
+					Log.i(TAG, file.getLyrics3Tag().getSongLyric());
+				} else {
+					Log.i(TAG, "doesntHaveLyrics3Tag");
+				}
+
+				if (file.hasID3v1Tag()) {
+					Log.i(TAG, "hasID3v1Tag");
+					Log.i(TAG, "Artist: " + file.getID3v1Tag().getArtist());
+					Log.i(TAG, "Title: " + file.getID3v1Tag().getSongTitle());
+				} else {
+					Log.i(TAG, "doesntHaveID3v1Tag");
+				}
+
+				if (file.hasID3v2Tag()) {
+					Log.i(TAG, "hasID3v2Tag");
+					Log.i(TAG, "Lyric Before: "
+							+ file.getID3v2Tag().getSongLyric().length());
+					MusixMatch mm = new MusixMatch(Constants.API_KEY);
+					try {
+						int trackID = mm
+								.getMatchingTrack(
+										file.getID3v2Tag().getSongTitle(),
+										file.getID3v2Tag().getLeadArtist())
+								.getTrack().getTrackId();
+						file.getID3v2Tag().setSongLyric(
+								mm.getLyrics(trackID).getLyricsBody());
+					} catch (MusixMatchException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					
+					try {
+						file.save(TagConstant.MP3_FILE_SAVE_OVERWRITE);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (TagException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					/*
+					 * sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri
+					 * .parse("file://" +
+					 * Environment.getExternalStorageDirectory())));
+					 */
+					// MediaScannerConnection.scanFile(this, new String[]
+					// {song.getPath()}, null, null);
+					String filePath = Environment
+							.getExternalStoragePublicDirectory(
+									Environment.DIRECTORY_PICTURES)
+							.getAbsolutePath()
+							+ "/" + song.getName();
+					MediaScannerConnection.scanFile(this,
+							new String[] { filePath }, null, null);
+					Log.i(TAG, "Lyric After: "
+							+ file.getID3v2Tag().getSongLyric().length());
+					Log.i(TAG, "Title: " + file.getID3v2Tag().getSongTitle());
+					AbstractID3v2 t = file.getID3v2Tag();
+				} else {
+					Log.i(TAG, "doesntHaveID3v2Tag");
+				}
 			}
 		}
 	}
