@@ -1,15 +1,13 @@
 package com.ventura.lyricsfinder.discogs;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-
-import com.ventura.lyricsfinder.discogs.entities.Image;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.widget.ImageView;
+
+import com.ventura.lyricsfinder.discogs.entities.Image;
 
 public class ImageLoaderTask extends AsyncTask<Void, Void, Bitmap> {
 
@@ -25,8 +23,8 @@ public class ImageLoaderTask extends AsyncTask<Void, Void, Bitmap> {
 	protected Bitmap doInBackground(Void... nothing) {
 		Bitmap bmp = null;
 		try {
-			bmp = BitmapFactory.decodeStream(this.mImage.getUrl().openConnection()
-					.getInputStream());
+			bmp = BitmapFactory.decodeStream(this.mImage.getUrl()
+					.openConnection().getInputStream());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -36,7 +34,6 @@ public class ImageLoaderTask extends AsyncTask<Void, Void, Bitmap> {
 	@Override
 	protected void onPostExecute(Bitmap result) {
 		super.onPostExecute(result);
-
 
 		if (this.mImage.getHeight() > 0 && this.mImage.getWidth() > 0) {
 			this.mTarget.setMinimumHeight(this.mImage.getHeight());

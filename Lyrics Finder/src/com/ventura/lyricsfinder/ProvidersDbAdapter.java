@@ -16,10 +16,6 @@
 
 package com.ventura.lyricsfinder;
 
-import com.ventura.lyricsfinder.lyrics.provider.LyricProvider;
-import com.ventura.lyricsfinder.lyrics.provider.LyricProviderFactory;
-import com.ventura.lyricsfinder.lyrics.provider.LyricProviders;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -27,6 +23,10 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+
+import com.ventura.lyricsfinder.lyrics.provider.LyricProvider;
+import com.ventura.lyricsfinder.lyrics.provider.LyricProviderFactory;
+import com.ventura.lyricsfinder.lyrics.provider.LyricProviders;
 
 public class ProvidersDbAdapter {
 
@@ -155,9 +155,8 @@ public class ProvidersDbAdapter {
 	 */
 	public Cursor fetchAllProviders() {
 
-		return mDb.query(DATABASE_TABLE, new String[] { KEY_ROWID,
-				KEY_NAME, KEY_URL, KEY_CODE }, null, null, null,
-				null, null);
+		return mDb.query(DATABASE_TABLE, new String[] { KEY_ROWID, KEY_NAME,
+				KEY_URL, KEY_CODE }, null, null, null, null, null);
 	}
 
 	/**
@@ -173,9 +172,9 @@ public class ProvidersDbAdapter {
 
 		Cursor mCursor =
 
-		mDb.query(true, DATABASE_TABLE, new String[] { KEY_ROWID,
-				KEY_NAME, KEY_URL, KEY_CODE }, KEY_ROWID + "="
-				+ rowId, null, null, null, null, null);
+		mDb.query(true, DATABASE_TABLE, new String[] { KEY_ROWID, KEY_NAME,
+				KEY_URL, KEY_CODE }, KEY_ROWID + "=" + rowId, null, null, null,
+				null, null);
 		if (mCursor != null) {
 			mCursor.moveToFirst();
 		}
@@ -194,8 +193,8 @@ public class ProvidersDbAdapter {
 		LyricProvider lyricProvider = null;
 
 		Cursor mCursor = mDb.query(true, DATABASE_TABLE, new String[] {
-				KEY_ROWID, KEY_NAME, KEY_URL, KEY_CODE },
-				KEY_CODE + "='" + code.toString() + "'", null, null, null, null, null);
+				KEY_ROWID, KEY_NAME, KEY_URL, KEY_CODE }, KEY_CODE + "='"
+				+ code.toString() + "'", null, null, null, null, null);
 		if (mCursor != null) {
 			mCursor.moveToFirst();
 			int idColumnIndex = mCursor.getColumnIndex(KEY_ROWID);
@@ -210,7 +209,7 @@ public class ProvidersDbAdapter {
 			lyricProvider.setCode(Enum.valueOf(LyricProviders.class,
 					mCursor.getString(codeColumnIndex)));
 		}
-		
+
 		return lyricProvider;
 	}
 }

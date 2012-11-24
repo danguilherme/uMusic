@@ -16,11 +16,11 @@ public class AzLyrics extends LyricProvider {
 		int[] lyricsRange = new int[] {
 				indexOfStartingElement + startingElement.length(),
 				html.indexOf(endingElement, indexOfStartingElement) };
-		
+
 		if (indexOfStartingElement < 0) {
 			throw new LyricNotFoundException();
 		}
-		
+
 		html = html.trim();
 		lyric = html.substring(lyricsRange[0], lyricsRange[1]);
 

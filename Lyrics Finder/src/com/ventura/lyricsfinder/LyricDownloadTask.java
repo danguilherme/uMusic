@@ -12,7 +12,6 @@ public class LyricDownloadTask extends AsyncTask<Lyric, Integer, Lyric> {
 	private LyricProvider mLyricProvider;
 	private TextView mTargetLyricComponent;
 	private ProgressDialog mProgressDialog;
-	
 
 	public LyricProvider getLyricProvider() {
 		return mLyricProvider;
@@ -21,7 +20,7 @@ public class LyricDownloadTask extends AsyncTask<Lyric, Integer, Lyric> {
 	public TextView getTargetLyricComponent() {
 		return mTargetLyricComponent;
 	}
-	
+
 	public ProgressDialog getProgressDialog() {
 		return mProgressDialog;
 	}

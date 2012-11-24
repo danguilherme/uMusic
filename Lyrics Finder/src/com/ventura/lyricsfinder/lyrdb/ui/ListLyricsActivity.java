@@ -16,9 +16,9 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.ventura.lyricsfinder.GlobalConstants;
 import com.ventura.lyricsfinder.R;
@@ -112,10 +112,11 @@ public class ListLyricsActivity extends ListActivity {
 
 	private void fillListView(List<Lyric> lyrics) {
 		if (lyrics.size() <= 0) {
-			Toast.makeText(this, "No lyrics were found", Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, "No lyrics were found", Toast.LENGTH_SHORT)
+					.show();
 			this.finish();
 		}
-		
+
 		ArrayList<HashMap<String, String>> lyricsList = new ArrayList<HashMap<String, String>>();
 
 		for (int i = 0; i < lyrics.size(); i++) {

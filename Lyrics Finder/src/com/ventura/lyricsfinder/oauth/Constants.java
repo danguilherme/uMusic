@@ -18,5 +18,5 @@ public class Constants {
 	public static final String OAUTH_CALLBACK_HOST = "callback";
 	public static final String OAUTH_CALLBACK_URL = OAUTH_CALLBACK_SCHEME
 			+ "://" + OAUTH_CALLBACK_HOST;
-	
+
 }

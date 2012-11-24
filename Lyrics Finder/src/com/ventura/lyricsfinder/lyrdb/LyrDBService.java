@@ -18,9 +18,7 @@ import org.json.JSONObject;
 import android.content.Context;
 import android.content.res.Resources;
 import android.util.Log;
-import android.webkit.DownloadListener;
 
-import com.ventura.lyricsfinder.LyricDownloadTask;
 import com.ventura.lyricsfinder.R;
 import com.ventura.lyricsfinder.lyrdb.entities.Lyric;
 

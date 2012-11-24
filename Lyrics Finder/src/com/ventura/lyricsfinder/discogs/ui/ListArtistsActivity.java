@@ -16,8 +16,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.View;
-import android.view.ViewTreeObserver;
-import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.LinearLayout;
@@ -57,7 +55,8 @@ public class ListArtistsActivity extends ListActivity {
 			finish();
 
 		new ListArtistsTask(this,
-				new ArtistViewerActivity().getConsumer(this.prefs), queryType).execute(queryText);
+				new ArtistViewerActivity().getConsumer(this.prefs), queryType)
+				.execute(queryText);
 
 		list = (ListView) findViewById(android.R.id.list);
 

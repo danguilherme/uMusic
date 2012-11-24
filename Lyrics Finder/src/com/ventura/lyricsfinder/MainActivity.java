@@ -49,7 +49,7 @@ public class MainActivity extends Activity {
 		this.mArtistTextField = (EditText) findViewById(R.id.artist_text_field);
 		this.mLyricTextView = (TextView) findViewById(R.id.lyrics_text_view);
 		this.mFindButton = (Button) findViewById(R.id.button_find_lyrics);
-		
+
 		this.mProvidersDbHelper = new ProvidersDbAdapter(this);
 		this.mProvidersDbHelper.open();
 

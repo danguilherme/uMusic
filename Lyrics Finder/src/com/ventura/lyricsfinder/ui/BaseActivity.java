@@ -3,14 +3,13 @@ package com.ventura.lyricsfinder.ui;
 import oauth.signpost.OAuth;
 import oauth.signpost.OAuthConsumer;
 import oauth.signpost.commonshttp.CommonsHttpOAuthConsumer;
-
-import com.ventura.lyricsfinder.oauth.Constants;
-
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+
+import com.ventura.lyricsfinder.oauth.Constants;
 
 public abstract class BaseActivity extends Activity {
 	protected SharedPreferences prefs;

@@ -16,8 +16,7 @@ import com.ventura.lyricsfinder.R;
 public class CustomAdapter extends BaseAdapter {
 	public static final String MUSIC_NAME = "MUSIC_NAME";
 	public static final String ARTIST_NAME = "ARTIST_NAME";
-	
-	
+
 	private Activity activity;
 	private ArrayList<HashMap<String, String>> data;
 	private static LayoutInflater inflater = null;
@@ -54,7 +53,7 @@ public class CustomAdapter extends BaseAdapter {
 		// Setting all values in listview
 		title.setText(lyric.get(CustomAdapter.MUSIC_NAME));
 		artist.setText(lyric.get(CustomAdapter.ARTIST_NAME));
-		
+
 		return vi;
 	}
 

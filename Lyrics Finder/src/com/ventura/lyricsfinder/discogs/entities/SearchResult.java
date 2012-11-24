@@ -145,6 +145,5 @@ public class SearchResult {
 	public void setSearchType(QueryType searchType) {
 		this.searchType = searchType;
 	}
-	
-	
+
 }

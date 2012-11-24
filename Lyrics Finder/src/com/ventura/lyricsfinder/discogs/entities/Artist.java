@@ -167,8 +167,8 @@ public class Artist {
 			for (int i = 0; artistArraysHelper != null
 					&& i < artistArraysHelper.length(); i++) {
 				JSONObject actualImage = artistArraysHelper.getJSONObject(i);
-				image = new Image(new URL(actualImage
-						.getString(Image.KEY_URI)),
+				image = new Image(
+						new URL(actualImage.getString(Image.KEY_URI)),
 						actualImage.getInt(Image.KEY_WIDTH),
 						actualImage.getInt(Image.KEY_HEIGHT),
 						actualImage.getString(Image.KEY_TYPE));

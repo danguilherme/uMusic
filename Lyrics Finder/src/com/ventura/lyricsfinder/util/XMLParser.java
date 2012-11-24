@@ -32,7 +32,9 @@ public class XMLParser {
 
 	/**
 	 * Getting XML from URL making HTTP request
-	 * @param url string
+	 * 
+	 * @param url
+	 *            string
 	 * */
 	public String getXmlFromUrl(String url) {
 		String xml = null;
@@ -56,12 +58,14 @@ public class XMLParser {
 		// return XML
 		return xml;
 	}
-	
+
 	/**
 	 * Getting XML DOM element
-	 * @param XML string
+	 * 
+	 * @param XML
+	 *            string
 	 * */
-	public Document getDomElement(String xml){
+	public Document getDomElement(String xml) {
 		Document doc = null;
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		try {
@@ -69,47 +73,54 @@ public class XMLParser {
 			DocumentBuilder db = dbf.newDocumentBuilder();
 
 			InputSource is = new InputSource();
-		        is.setCharacterStream(new StringReader(xml));
-		        doc = db.parse(is); 
+			is.setCharacterStream(new StringReader(xml));
+			doc = db.parse(is);
 
-			} catch (ParserConfigurationException e) {
-				Log.e("Error: ", e.getMessage());
-				return null;
-			} catch (SAXException e) {
-				Log.e("Error: ", e.getMessage());
-	            return null;
-			} catch (IOException e) {
-				Log.e("Error: ", e.getMessage());
-				return null;
-			}
-
-	        return doc;
-	}
-	
-	/** Getting node value
-	  * @param elem element
-	  */
-	 public final String getElementValue( Node elem ) {
-	     Node child;
-	     if( elem != null){
-	         if (elem.hasChildNodes()){
-	             for( child = elem.getFirstChild(); child != null; child = child.getNextSibling() ){
-	                 if( child.getNodeType() == Node.TEXT_NODE  ){
-	                     return child.getNodeValue();
-	                 }
-	             }
-	         }
-	     }
-	     return "";
-	 }
-	 
-	 /**
-	  * Getting node value
-	  * @param Element node
-	  * @param key string
-	  * */
-	 public String getValue(Element item, String str) {		
-			NodeList n = item.getElementsByTagName(str);		
-			return this.getElementValue(n.item(0));
+		} catch (ParserConfigurationException e) {
+			Log.e("Error: ", e.getMessage());
+			return null;
+		} catch (SAXException e) {
+			Log.e("Error: ", e.getMessage());
+			return null;
+		} catch (IOException e) {
+			Log.e("Error: ", e.getMessage());
+			return null;
 		}
+
+		return doc;
+	}
+
+	/**
+	 * Getting node value
+	 * 
+	 * @param elem
+	 *            element
+	 */
+	public final String getElementValue(Node elem) {
+		Node child;
+		if (elem != null) {
+			if (elem.hasChildNodes()) {
+				for (child = elem.getFirstChild(); child != null; child = child
+						.getNextSibling()) {
+					if (child.getNodeType() == Node.TEXT_NODE) {
+						return child.getNodeValue();
+					}
+				}
+			}
+		}
+		return "";
+	}
+
+	/**
+	 * Getting node value
+	 * 
+	 * @param Element
+	 *            node
+	 * @param key
+	 *            string
+	 * */
+	public String getValue(Element item, String str) {
+		NodeList n = item.getElementsByTagName(str);
+		return this.getElementValue(n.item(0));
+	}
 }

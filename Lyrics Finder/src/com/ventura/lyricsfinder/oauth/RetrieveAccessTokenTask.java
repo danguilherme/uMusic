@@ -1,7 +1,5 @@
 package com.ventura.lyricsfinder.oauth;
 
-import com.ventura.lyricsfinder.discogs.ui.ArtistViewerActivity;
-
 import oauth.signpost.OAuth;
 import oauth.signpost.OAuthConsumer;
 import oauth.signpost.OAuthProvider;
@@ -13,34 +11,36 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.ventura.lyricsfinder.discogs.ui.ArtistViewerActivity;
+
 public class RetrieveAccessTokenTask extends AsyncTask<Uri, Void, Void> {
 
 	final String TAG = getClass().getName();
-	
-	private Context	context;
+
+	private Context context;
 	private OAuthProvider provider;
 	private OAuthConsumer consumer;
 	private SharedPreferences prefs;
-	
-	public RetrieveAccessTokenTask(Context context, OAuthConsumer consumer,OAuthProvider provider, SharedPreferences prefs) {
+
+	public RetrieveAccessTokenTask(Context context, OAuthConsumer consumer,
+			OAuthProvider provider, SharedPreferences prefs) {
 		this.context = context;
 		this.consumer = consumer;
 		this.provider = provider;
-		this.prefs=prefs;
+		this.prefs = prefs;
 	}
 
-
 	/**
-	 * Retrieve the oauth_verifier, and store the oauth and oauth_token_secret 
+	 * Retrieve the oauth_verifier, and store the oauth and oauth_token_secret
 	 * for future API calls.
 	 */
 	@Override
-	protected Void doInBackground(Uri...params) {
+	protected Void doInBackground(Uri... params) {
 		Uri tempUri = params[0];
 		final Uri uri = Uri.parse(tempUri.decode(tempUri.toString()));
-		
-		
-		final String oauth_verifier = uri.getQueryParameter(OAuth.OAUTH_VERIFIER);
+
+		final String oauth_verifier = uri
+				.getQueryParameter(OAuth.OAUTH_VERIFIER);
 
 		try {
 			provider.retrieveAccessToken(consumer, oauth_verifier);
@@ -49,15 +49,16 @@ public class RetrieveAccessTokenTask extends AsyncTask<Uri, Void, Void> {
 			edit.putString(OAuth.OAUTH_TOKEN, consumer.getToken());
 			edit.putString(OAuth.OAUTH_TOKEN_SECRET, consumer.getTokenSecret());
 			edit.commit();
-			
+
 			String token = prefs.getString(OAuth.OAUTH_TOKEN, "");
 			String secret = prefs.getString(OAuth.OAUTH_TOKEN_SECRET, "");
-			
+
 			consumer.setTokenWithSecret(token, secret);
-			context.startActivity(new Intent(context, ArtistViewerActivity.class));
+			context.startActivity(new Intent(context,
+					ArtistViewerActivity.class));
 
 			Log.i(TAG, "OAuth - Access Token Retrieved");
-			
+
 		} catch (Exception e) {
 			Log.e(TAG, "OAuth - Access Token Retrieval Error", e);
 		}

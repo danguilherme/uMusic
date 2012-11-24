@@ -2,10 +2,7 @@ package com.ventura.lyricsfinder.ui;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.RandomAccessFile;
-import java.io.UnsupportedEncodingException;
 
-import org.cmc.music.common.ID3WriteException;
 import org.cmc.music.metadata.IMusicMetadata;
 import org.cmc.music.metadata.MusicMetadataSet;
 import org.cmc.music.myid3.MyID3;
@@ -13,16 +10,13 @@ import org.farng.mp3.MP3File;
 import org.farng.mp3.TagConstant;
 import org.farng.mp3.TagException;
 import org.farng.mp3.id3.AbstractID3v2;
-import org.farng.mp3.lyrics3.Lyrics3v2;
 import org.jmusixmatch.MusixMatch;
 import org.jmusixmatch.MusixMatchException;
 
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
-import android.media.MediaMetadataRetriever;
 import android.media.MediaScannerConnection;
-import android.media.MediaScannerConnection.MediaScannerConnectionClient;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -214,7 +208,7 @@ public class MusicInfoActivity extends BaseActivity {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
-					
+
 					try {
 						file.save(TagConstant.MP3_FILE_SAVE_OVERWRITE);
 					} catch (IOException e) {

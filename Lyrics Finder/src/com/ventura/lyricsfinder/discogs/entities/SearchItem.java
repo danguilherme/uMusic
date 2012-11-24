@@ -6,8 +6,6 @@ import java.net.URL;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.net.Uri;
-
 public class SearchItem {
 	public static final String KEY_THUMB = "thumb";
 	public static final String KEY_TITLE = "title";
@@ -28,8 +26,7 @@ public class SearchItem {
 				artist.setName(config.getString(KEY_TITLE));
 				artist.setProfileUrl(new URL(config.getString(KEY_RESOURCE_URL)));
 				artist.getImages().add(
-						new Image(new URL(config
-								.getString(KEY_THUMB))));
+						new Image(new URL(config.getString(KEY_THUMB))));
 			} catch (JSONException e) {
 				e.printStackTrace();
 			} catch (MalformedURLException e) {
