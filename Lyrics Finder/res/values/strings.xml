@@ -30,6 +30,12 @@
     <!-- Music Info Activity [START] -->
     <string name="title_activity_music_info">Music information</string>
     <!-- Music Info Activity [END] -->
+    
+    <!-- Bind Lyrics Activity [START] -->
+    <string name="title_activity_bind_lyrics">Bind Lyrics</string>
+    <string name="btn_lyrics_is_ok">That\'s it!</string>
+    <string name="btn_edit_lyrics">I want to edit before</string>
+    <!-- Bind Lyrics Activity [END] -->
 
 	<string name="menu_see_providers">See available providers</string>
 	
@@ -46,7 +52,9 @@
     <string name="message_fetching_artists_list_body">I am retrieving mathcing artists to you, please wait.</string>
     <string name="message_artist_not_found">Sorry, artist not found</string>
     
+    <string name="message_lyrics_saved">Lyrics saved.</string>
     <string name="message_no_music_metadata_found">The music you are trying to load has no metadata.</string>
+    <string name="message_file_not_supported">Sorry, file not supported.</string>
     <!-- Messages [END] -->
     
     <string name="provider_terra_name">Terra Letras</string>

@@ -145,36 +145,6 @@ public class MusicInfoActivity extends BaseActivity {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				Cursor c = getContentResolver().query(
-						Media.EXTERNAL_CONTENT_URI,
-						new String[] { Media._ID, Media.DISPLAY_NAME,
-								Media.TRACK }, null, null,
-						Media.DEFAULT_SORT_ORDER);
-
-				// Determine the column index of the column named "word"
-				int index = c.getColumnIndex(Media.DISPLAY_NAME);
-
-				/*
-				 * Only executes if the cursor is valid. The User Dictionary
-				 * Provider returns null if an internal error occurs. Other
-				 * providers may throw an Exception instead of returning null.
-				 */
-
-				if (c != null) {
-					/*
-					 * Moves to the next row in the cursor. Before the first
-					 * movement in the cursor, the "row pointer" is -1, and if
-					 * you try to retrieve data at that position you will get an
-					 * exception.
-					 */
-					while (c.moveToNext()) {
-
-						// Gets the value from the column.
-						Log.i(TAG,
-								"From contentProvider (_ID): "
-										+ c.getString(index));
-					}
-				}
 
 				if (file.hasLyrics3Tag()) {
 					Log.i(TAG, "hasLyrics3Tag");
@@ -218,13 +188,6 @@ public class MusicInfoActivity extends BaseActivity {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					/*
-					 * sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri
-					 * .parse("file://" +
-					 * Environment.getExternalStorageDirectory())));
-					 */
-					// MediaScannerConnection.scanFile(this, new String[]
-					// {song.getPath()}, null, null);
 					String filePath = Environment
 							.getExternalStoragePublicDirectory(
 									Environment.DIRECTORY_PICTURES)
@@ -331,22 +294,6 @@ public class MusicInfoActivity extends BaseActivity {
 			mTrackNumberTextField.setText(trackNumber);
 			mYearTextField.setText(year);
 		}
-	}
-
-	private String getFilePathFromContentUri(Uri fileUri,
-			ContentResolver contentResolver) {
-		// See http://stackoverflow.com/a/11603837
-		String filePath;
-		String[] filePathColumn = { MediaStore.MediaColumns.DATA };
-
-		Cursor cursor = contentResolver.query(fileUri, filePathColumn, null,
-				null, null);
-		cursor.moveToFirst();
-
-		int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-		filePath = cursor.getString(columnIndex);
-		cursor.close();
-		return filePath;
 	}
 
 	private File getMusicFile(Uri path) {
