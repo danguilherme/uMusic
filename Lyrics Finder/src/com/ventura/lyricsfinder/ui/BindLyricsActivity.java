@@ -24,6 +24,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ventura.lyricsfinder.R;
+import com.ventura.lyricsfinder.constants.GlobalConstants;
+import com.ventura.lyricsfinder.constants.RequestCodes;
+import com.ventura.lyricsfinder.lyrdb.ui.ListLyricsActivity;
 import com.ventura.lyricsfinder.musixmatch.ui.Constants;
 
 public class BindLyricsActivity extends BaseActivity {
@@ -74,14 +77,18 @@ public class BindLyricsActivity extends BaseActivity {
 					getString(R.string.message_file_not_supported),
 					Toast.LENGTH_SHORT).show();
 			finish();
+		} else {
+			if (mActualMP3File.getID3v2Tag().getSongLyric().length() > 0) {
+				Toast.makeText(getBaseContext(), "This song already have lyrics.",
+						Toast.LENGTH_SHORT).show();
+			}
+			Intent lyricsSearchIntent = new Intent(this,ListLyricsActivity.class);
+			lyricsSearchIntent.putExtra(GlobalConstants.EXTRA_ARTIST_NAME, this.mActualMP3File.getID3v2Tag().getLeadArtist());
+			lyricsSearchIntent.putExtra(GlobalConstants.EXTRA_TRACK_NAME, this.mActualMP3File.getID3v2Tag().getSongTitle());
+			this.startActivityForResult(lyricsSearchIntent, RequestCodes.GET_LYRICS);
 		}
 
-		if (mActualMP3File.getID3v2Tag().getSongLyric().length() > 0) {
-			Toast.makeText(getBaseContext(), "This song already have lyrics.",
-					Toast.LENGTH_SHORT).show();
-		}
-
-		new LyricsSearchTask(this).execute(mActualMP3File);
+		//new LyricsSearchTask(this).execute(mActualMP3File);
 
 		mAcceptLyricsButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
@@ -117,6 +124,19 @@ public class BindLyricsActivity extends BaseActivity {
 				mLyricsTextField.setText(mLyricsTextView.getText());
 			}
 		});
+	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (requestCode == RequestCodes.GET_LYRICS) {
+			if (resultCode == RESULT_OK) {
+				Lyrics lyr = new Lyrics();
+				lyr.setLyricsBody(data.getStringExtra(GlobalConstants.EXTRA_TRACK_LYRICS));
+				this.setLyrics(lyr);
+			} else if (resultCode == RESULT_CANCELED) {
+				finish();
+			}
+		}
 	}
 
 	private void setLyrics(Lyrics lyrics) {

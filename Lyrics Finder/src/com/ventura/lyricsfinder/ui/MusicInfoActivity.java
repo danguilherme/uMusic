@@ -29,8 +29,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.ventura.lyricsfinder.GlobalConstants;
 import com.ventura.lyricsfinder.R;
+import com.ventura.lyricsfinder.constants.GlobalConstants;
 import com.ventura.lyricsfinder.discogs.DiscogsConstants;
 import com.ventura.lyricsfinder.discogs.entities.QueryType;
 import com.ventura.lyricsfinder.discogs.ui.ListArtistsActivity;

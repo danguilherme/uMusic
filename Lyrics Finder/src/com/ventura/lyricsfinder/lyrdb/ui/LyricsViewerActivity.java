@@ -6,17 +6,21 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.TextView;
 
-import com.ventura.lyricsfinder.GlobalConstants;
 import com.ventura.lyricsfinder.R;
+import com.ventura.lyricsfinder.constants.GlobalConstants;
 import com.ventura.lyricsfinder.lyrdb.LyrDBService;
 
 public class LyricsViewerActivity extends Activity {
-
-	TextView lyricsTextView;
-	TextView artistNameTextView;
-	TextView musicNameTextView;
+	
+	private TextView lyricsTextView;
+	private TextView artistNameTextView;
+	private TextView musicNameTextView;
+	private Button acceptLyricsButton;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -30,16 +34,31 @@ public class LyricsViewerActivity extends Activity {
 		artistNameTextView = (TextView) this
 				.findViewById(R.id.artist_text_view);
 		musicNameTextView = (TextView) this.findViewById(R.id.music_text_view);
+		acceptLyricsButton = (Button) this.findViewById(R.id.btn_accept_lyrics);
 
 		new GetLyricTask(this).execute(lyricId);
 		artistNameTextView.setText(intent
 				.getStringExtra(GlobalConstants.EXTRA_ARTIST_NAME));
 		musicNameTextView.setText(intent
 				.getStringExtra(GlobalConstants.EXTRA_TRACK_NAME));
+		
+		acceptLyricsButton.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				sendResponse(lyricsTextView.getText());
+			}
+		});
+	}
+	
+	private void sendResponse(CharSequence lyrics) {
+		Intent resultIntent = new Intent();
+		resultIntent.putExtra(GlobalConstants.EXTRA_TRACK_LYRICS, lyrics);
+		setResult(RESULT_OK, resultIntent);
+		finish();
 	}
 
 	private void setLyric(String lyric) {
 		lyricsTextView.setText(lyric);
+		acceptLyricsButton.setVisibility(View.VISIBLE);
 	}
 
 	private class GetLyricTask extends AsyncTask<String, Void, String> {

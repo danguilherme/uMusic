@@ -1,6 +1,8 @@
 <resources>
 
-    <string name="app_name">Lyrics Finder</string>
+    <string name="app_name">Turn Up The Music</string>
+    <string name="app_code_name">TurnUpTheMusic</string>
+    <string name="app_version">0.1</string>
 
     <!-- Song Properties [START] -->
     <string name="song_artist">Artist</string>
@@ -67,6 +69,10 @@
     <!-- Artist Viewer [START] -->
     <string name="discogs_view_artist_profile">View artist profile on Discogs</string>
     <!-- Artist Viewer [END] -->
+    
+    <!-- Lyrics Viewer [START] -->
+    <string name="btn_select_lyric">Select</string>
+    <!-- Lyrics Viewer [END] -->
     
     <!-- Discogs [START] -->
     <string name="discogs_url_search" formatted="false">/database/search?q=%2$s%26type=%1$s</string>

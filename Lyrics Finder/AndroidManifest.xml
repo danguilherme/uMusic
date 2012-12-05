@@ -71,25 +71,21 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".discogs.ui.ListArtistsActivity"
-            android:launchMode="singleTask" >
+            android:name=".discogs.ui.ListArtistsActivity" >
         </activity>
 
         <!-- LyrDB-related activities -->
         <activity
             android:name=".lyrdb.ui.ListLyricsActivity"
-            android:configChanges="orientation"
-            android:launchMode="singleTask" >
+            android:configChanges="orientation" >
         </activity>
         <activity
             android:name=".lyrdb.ui.LyricsViewerActivity"
-            android:configChanges="orientation"
-            android:launchMode="singleTask" >
+            android:configChanges="orientation" >
         </activity>
         <activity
             android:name=".musixmatch.ui.LyricsViewerActivity"
-            android:configChanges="orientation"
-            android:launchMode="singleTask" >
+            android:configChanges="orientation" >
         </activity>
     </application>
 

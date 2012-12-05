@@ -20,8 +20,9 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.ventura.lyricsfinder.GlobalConstants;
 import com.ventura.lyricsfinder.R;
+import com.ventura.lyricsfinder.constants.GlobalConstants;
+import com.ventura.lyricsfinder.constants.RequestCodes;
 import com.ventura.lyricsfinder.lyrdb.CustomAdapter;
 import com.ventura.lyricsfinder.lyrdb.LyrDBService;
 import com.ventura.lyricsfinder.lyrdb.QueryType;
@@ -38,7 +39,7 @@ public class ListLyricsActivity extends ListActivity {
 	private class ListLyricsTask extends AsyncTask<Lyric, Void, List<Lyric>> {
 
 		private Context mContext;
-		private QueryType mQueryTyoe;
+		private QueryType mQueryType;
 		private ProgressDialog mProgressDialog;
 
 		public ListLyricsTask(Context context, QueryType queryType) {
@@ -50,7 +51,7 @@ public class ListLyricsActivity extends ListActivity {
 			this.mProgressDialog.setCancelable(true);
 
 			this.mContext = context;
-			this.mQueryTyoe = queryType;
+			this.mQueryType = queryType;
 		}
 
 		@Override
@@ -63,7 +64,7 @@ public class ListLyricsActivity extends ListActivity {
 		protected List<Lyric> doInBackground(Lyric... params) {
 			Lyric target = params[0];
 			LyrDBService lyricsService = new LyrDBService(this.mContext);
-			return lyricsService.search(this.mQueryTyoe,
+			return lyricsService.search(this.mQueryType,
 					target.getArtistName(), target.getMusicName());
 		}
 
@@ -105,9 +106,31 @@ public class ListLyricsActivity extends ListActivity {
 						.get(position).getArtistName());
 				intent.putExtra(GlobalConstants.EXTRA_TRACK_NAME, mListItems
 						.get(position).getMusicName());
-				startActivity(intent);
+				startActivityForResult(intent, RequestCodes.GET_LYRICS);
+
+				// Intent resultIntent
+				// setResult(RESULT_OK, data)
 			}
 		});
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (requestCode == RequestCodes.GET_LYRICS) {
+			if (resultCode == RESULT_OK) {
+				this.sendResult(data.getStringExtra(GlobalConstants.EXTRA_TRACK_LYRICS));
+			}
+			if (resultCode == RESULT_CANCELED) {
+				// Write your code on no result return
+			}
+		}
+	}
+	
+	private void sendResult(CharSequence lyrics) {
+		Intent resultIntent = new Intent();
+		resultIntent.putExtra(GlobalConstants.EXTRA_TRACK_LYRICS, lyrics);
+		setResult(RESULT_OK, resultIntent);
+		finish();
 	}
 
 	private void fillListView(List<Lyric> lyrics) {

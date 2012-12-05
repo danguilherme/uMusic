@@ -78,6 +78,7 @@ public class LyrDBService {
 
 	private String doGet(String url) throws Exception {
 		DefaultHttpClient httpclient = new DefaultHttpClient();
+		url += "&agent=" + R.string.app_code_name + "/" + R.string.app_version;
 		HttpGet request = new HttpGet(url);
 		request.addHeader("Accept", "text/txt");
 		Log.i(TAG, "Requesting URL : " + url);
