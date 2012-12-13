@@ -4,7 +4,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +19,7 @@ import org.json.JSONObject;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.content.res.Resources.NotFoundException;
 import android.util.Log;
 
 import com.ventura.lyricsfinder.R;
@@ -46,14 +49,47 @@ public class LyrDBService {
 		return lyric;
 	}
 
-	public List<Lyric> search(QueryType type, String artistName,
-			String musicName) {
-		artistName = URLEncoder.encode(artistName);
-		musicName = URLEncoder.encode(musicName);
+	public List<Lyric> search(QueryType type, Lyric lyric) {
+		lyric.setArtistName(URLEncoder.encode(lyric.getArtistName()));
+		lyric.setMusicName(URLEncoder.encode(lyric.getMusicName()));
+		
 		Resources res = this.mContext.getResources();
-		String url = String.format(res.getString(R.string.lyrdb_url_base)
-				+ res.getString(R.string.lyrdb_url_search).replace("%26", "&"),
-				artistName, musicName, type.toString().toLowerCase());
+		String url = null, lyrDBUrl = res.getString(R.string.lyrdb_url_base)
+				+ res.getString(R.string.lyrdb_url_search).replace("%26", "&");
+
+		switch (type) {
+		case FullT:
+			url = String.format(lyrDBUrl, lyric.getArtistName() + "+" + lyric.getMusicName(), type
+					.toString().toLowerCase());
+			break;
+		case Match:
+			try {
+				url = String.format(lyrDBUrl,
+						lyric.getArtistName() + URLEncoder.encode("|", "ISO8859-2")
+								+ lyric.getMusicName(), type.toString().toLowerCase());
+			} catch (NotFoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (UnsupportedEncodingException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			break;
+		case Artist:
+			url = String.format(lyrDBUrl, lyric.getArtistName(), type
+					.toString().toLowerCase());
+			break;
+		case TrackName:
+			url = String.format(lyrDBUrl, lyric.getMusicName(), type
+					.toString().toLowerCase());
+			break;
+		case InLyrics:
+			url = String.format(lyrDBUrl, lyric.getLyric(), type
+					.toString().toLowerCase());
+			break;
+		default:
+			break;
+		}
 
 		String searchResults = null;
 		try {
@@ -77,8 +113,10 @@ public class LyrDBService {
 	}
 
 	private String doGet(String url) throws Exception {
+		Resources res = this.mContext.getResources();
 		DefaultHttpClient httpclient = new DefaultHttpClient();
-		url += "&agent=" + R.string.app_code_name + "/" + R.string.app_version;
+		url += "&agent=" + res.getString(R.string.app_code_name) + "/"
+				+ res.getString(R.string.app_version);
 		HttpGet request = new HttpGet(url);
 		request.addHeader("Accept", "text/txt");
 		Log.i(TAG, "Requesting URL : " + url);

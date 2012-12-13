@@ -56,6 +56,15 @@ public class BindLyricsActivity extends BaseActivity {
 		if (!action.equals(Intent.ACTION_SEND)) {
 			finish();
 		}
+		
+
+		if (!this.isConected()) {
+			Toast.makeText(getBaseContext(),
+					getString(R.string.message_no_internet_connection),
+					Toast.LENGTH_SHORT).show();
+			finish();
+			return;
+		}
 
 		Uri sharedPath = intent.getData();
 		if (sharedPath == null && intent.getExtras() != null) {

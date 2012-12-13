@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.ventura.lyricsfinder.R;
@@ -21,6 +23,7 @@ public class LyricsViewerActivity extends Activity {
 	private TextView artistNameTextView;
 	private TextView musicNameTextView;
 	private Button acceptLyricsButton;
+	private LinearLayout progressBarContainer;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +38,7 @@ public class LyricsViewerActivity extends Activity {
 				.findViewById(R.id.artist_text_view);
 		musicNameTextView = (TextView) this.findViewById(R.id.music_text_view);
 		acceptLyricsButton = (Button) this.findViewById(R.id.btn_accept_lyrics);
+		progressBarContainer = (LinearLayout) this.findViewById(R.id.progress_bar_container);
 
 		new GetLyricTask(this).execute(lyricId);
 		artistNameTextView.setText(intent
@@ -59,6 +63,7 @@ public class LyricsViewerActivity extends Activity {
 	private void setLyric(String lyric) {
 		lyricsTextView.setText(lyric);
 		acceptLyricsButton.setVisibility(View.VISIBLE);
+		progressBarContainer.setVisibility(View.GONE);
 	}
 
 	private class GetLyricTask extends AsyncTask<String, Void, String> {

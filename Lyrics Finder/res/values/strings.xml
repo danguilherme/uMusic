@@ -81,7 +81,7 @@
     
     <!-- LyrDB [START] -->
     <string name="lyrdb_url_base" formatted="false">http://webservices.lyrdb.com</string>
-    <string name="lyrdb_url_search" formatted="false">/lookup.php?q=%1$s+%2$s%26for=%3$s</string>
+    <string name="lyrdb_url_search" formatted="false">/lookup.php?q=%1$s%26for=%2$s</string>
     <string name="lyrdb_url_lyrics" formatted="false">/getlyr.php?q=%1$s</string>
     <!-- LyrDB [END] -->
 

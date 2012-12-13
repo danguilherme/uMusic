@@ -14,6 +14,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -65,7 +66,7 @@ public class ListLyricsActivity extends ListActivity {
 			Lyric target = params[0];
 			LyrDBService lyricsService = new LyrDBService(this.mContext);
 			return lyricsService.search(this.mQueryType,
-					target.getArtistName(), target.getMusicName());
+					target);
 		}
 
 		@Override
@@ -166,4 +167,6 @@ public class ListLyricsActivity extends ListActivity {
 			Log.i(TAG, "PORTRAIT");
 		}
 	}
+	
+	
 }
