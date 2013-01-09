@@ -3,6 +3,7 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/list_selector"
+    android:minHeight="60dip"
     android:orientation="horizontal"
     android:padding="5dip" >
 
@@ -14,9 +15,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:background="#00000000"
-        android:text="Rihanna Love the way lie"
+        android:text="Love The Way You Lie"
         android:textColor="#040404"
-        android:textSize="15dip"
+        android:textSize="15sp"
         android:textStyle="bold"
         android:typeface="sans" />
 
@@ -27,12 +28,10 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/title"
-        android:layout_centerVertical="true"
-        android:layout_marginTop="20dip"
         android:background="#00000000"
-        android:text="Just gona stand there and ..."
+        android:text="Rihanna"
         android:textColor="#343434"
-        android:textSize="10dip" />
+        android:textSize="10sp" />
 
     <!-- Rightend Arrow -->
 

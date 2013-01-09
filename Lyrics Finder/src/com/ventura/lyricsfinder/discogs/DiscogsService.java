@@ -1,20 +1,16 @@
 package com.ventura.lyricsfinder.discogs;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
 
 import oauth.signpost.OAuthConsumer;
 import oauth.signpost.exception.OAuthCommunicationException;
 import oauth.signpost.exception.OAuthExpectationFailedException;
 import oauth.signpost.exception.OAuthMessageSignerException;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -22,52 +18,167 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.util.Log;
 
+import com.ventura.lyricsfinder.BaseService;
 import com.ventura.lyricsfinder.R;
-import com.ventura.lyricsfinder.discogs.entities.Artist;
-import com.ventura.lyricsfinder.discogs.entities.QueryType;
-import com.ventura.lyricsfinder.discogs.entities.SearchResult;
-import com.ventura.lyricsfinder.oauth.Constants;
+import com.ventura.lyricsfinder.discogs.entity.Artist;
+import com.ventura.lyricsfinder.discogs.entity.Release;
+import com.ventura.lyricsfinder.discogs.entity.SearchResult;
+import com.ventura.lyricsfinder.discogs.entity.Track;
+import com.ventura.lyricsfinder.discogs.entity.enumerator.QueryType;
+import com.ventura.lyricsfinder.discogs.oauth.Constants;
+import com.ventura.lyricsfinder.exception.LazyInternetConnectionException;
+import com.ventura.lyricsfinder.exception.NoInternetConnectionException;
 
-public class DiscogsService {
+public class DiscogsService extends BaseService {
 	final String TAG = getClass().getName();
-	private Context mContext;
+	private OAuthConsumer mConsumer;
 
-	public DiscogsService(Context context) {
-		this.mContext = context;
+	public DiscogsService(Context context, OAuthConsumer consumer) {
+		super(context);
+		this.mConsumer = consumer;
 	}
 
-	public SearchResult search(QueryType type, String query,
-			OAuthConsumer consumer) throws JSONException {
+	public SearchResult search(QueryType type, String query)
+			throws NoInternetConnectionException,
+			LazyInternetConnectionException {
 		if (query != null)
 			query = URLEncoder.encode(query);
-		Resources res = this.mContext.getResources();
+		Resources res = this.getContext().getResources();
 		String url = res.getString(R.string.discogs_url_search);
 		url = String.format(Constants.API_REQUEST + url.replace("%26", "&"),
 				type, query).toLowerCase();
 
-		String searchResults = this.doGet(url, consumer);
-		SearchResult searchResult = new SearchResult(type, new JSONObject(
-				searchResults));
+		JSONObject jsonResponse = this.doGet(url);
+
+		SearchResult searchResult = null;
+
+		if (jsonResponse.optBoolean(this.KEY_SUCCESS)) {
+			String searchResults = jsonResponse.optString(this.KEY_DATA);
+			if (searchResults == null || searchResults == "")
+				return new SearchResult();
+
+			try {
+				searchResult = new SearchResult(type, new JSONObject(
+						searchResults));
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+		}
+
 		return searchResult;
 	}
 
-	public Artist getArtistInfo(String artistId, OAuthConsumer consumer)
-			throws JSONException {
-		Resources res = this.mContext.getResources();
-		String url = res.getString(R.string.discogs_url_artists);
-		url = String.format(Constants.API_REQUEST + url, artistId);
+	public Artist getArtistInfo(int artistId)
+			throws NoInternetConnectionException,
+			LazyInternetConnectionException {
 
-		String artistInfo = this.doGet(url, consumer);
-		Artist artist = new Artist(new JSONObject(artistInfo));
+		Resources res = this.getContext().getResources();
+		String url = res.getString(R.string.discogs_url_artists);
+		url = String.format(Constants.API_REQUEST + url,
+				String.valueOf(artistId));
+
+		JSONObject jsonResponse = this.doGet(url);
+
+		Artist artist = null;
+		if (jsonResponse.optBoolean(this.KEY_SUCCESS)) {
+			String artistInfo = jsonResponse.optString(this.KEY_DATA);
+
+			try {
+				artist = new Artist(new JSONObject(artistInfo));
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+		}
 		return artist;
 	}
 
-	private String doGet(String url, OAuthConsumer consumer) {
-		DefaultHttpClient httpclient = new DefaultHttpClient();
+	public List<Release> getArtistReleases(int artistId)
+			throws NoInternetConnectionException,
+			LazyInternetConnectionException {
+
+		Resources res = this.getContext().getResources();
+		String url = res.getString(R.string.discogs_url_releases);
+		url = String.format(Constants.API_REQUEST + url,
+				String.valueOf(artistId));
+
+		JSONObject jsonResponse = this.doGet(url);
+
+		if (jsonResponse.optBoolean(this.KEY_SUCCESS)) {
+			try {
+				// Needs this because the response in 'data' comes as string
+				jsonResponse = new JSONObject(
+						jsonResponse.optString(this.KEY_DATA));
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+		}
+
+		List<Release> releases = new ArrayList<Release>();
+
+		try {
+			JSONArray releasesJsonArray = jsonResponse
+					.getJSONArray(Release.KEY_SEARCH_RESULT_RELEASES);
+
+			for (int i = 0; i < releasesJsonArray.length(); i++) {
+				releases.add(new Release(releasesJsonArray.getJSONObject(i)));
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+
+		return releases;
+	}
+
+	public List<Track> getReleaseTracks(Release release)
+			throws NoInternetConnectionException,
+			LazyInternetConnectionException {
+
+		Resources res = this.getContext().getResources();
+		String url = null;
+
+		switch (release.getType()) {
+		case Master:
+			url = res.getString(R.string.discogs_url_tracks_masters);
+			break;
+		case Release:
+			url = res.getString(R.string.discogs_url_tracks_releases);
+			break;
+		}
+
+		url = String.format(Constants.API_REQUEST + url,
+				String.valueOf(release.getId()));
+
+		JSONObject jsonResponse = this.doGet(url);
+		
+		List<Track> trackList = new ArrayList<Track>();
+		
+		try {
+			if (jsonResponse.getBoolean(KEY_SUCCESS)) {
+				jsonResponse =  new JSONObject(jsonResponse.getString(KEY_DATA));
+				
+				JSONArray trackListJsonArray = jsonResponse.getJSONArray("tracklist");
+				
+				for (int i = 0; i < trackListJsonArray.length(); i++) {
+					trackList.add(new Track(trackListJsonArray.getJSONObject(i)));
+				}
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+
+		return trackList;
+	}
+
+	@Override
+	protected JSONObject doGet(String url)
+			throws NoInternetConnectionException,
+			LazyInternetConnectionException {
+
 		HttpGet request = new HttpGet(url);
 		Log.i(TAG, "Requesting URL : " + url);
+
 		try {
-			consumer.sign(request);
+			this.mConsumer.sign(request);
 		} catch (OAuthMessageSignerException e) {
 			e.printStackTrace();
 		} catch (OAuthExpectationFailedException e) {
@@ -76,44 +187,6 @@ public class DiscogsService {
 			e.printStackTrace();
 		}
 
-		HttpResponse response = null;
-		try {
-			response = httpclient.execute(request);
-		} catch (ClientProtocolException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		if (response.getStatusLine().getStatusCode() != 200) {
-			JSONObject obj = new JSONObject();
-			try {
-				obj.put("success", false);
-				obj.put("message", response.getStatusLine().getReasonPhrase());
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
-			return obj.toString();
-		}
-		Log.i(TAG, "Statusline : " + response.getStatusLine());
-		InputStream data;
-		StringBuilder responseBuilder = null;
-		try {
-			data = response.getEntity().getContent();
-
-			BufferedReader bufferedReader = new BufferedReader(
-					new InputStreamReader(data));
-			String responeLine;
-			responseBuilder = new StringBuilder();
-			while ((responeLine = bufferedReader.readLine()) != null) {
-				responseBuilder.append(responeLine);
-			}
-			Log.i(TAG, "Response : " + responseBuilder.toString());
-		} catch (IllegalStateException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		return responseBuilder.toString();
+		return this.doGet(request);
 	}
 }

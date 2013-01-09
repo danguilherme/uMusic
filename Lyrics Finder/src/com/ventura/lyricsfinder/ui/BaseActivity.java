@@ -18,16 +18,16 @@ import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.util.Log;
 
-import com.ventura.lyricsfinder.oauth.Constants;
+import com.ventura.lyricsfinder.discogs.oauth.Constants;
 
 public abstract class BaseActivity extends Activity {
 	final String TAG = getClass().getName();
-	protected SharedPreferences prefs;
+	protected SharedPreferences sharedPreferences;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		this.prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		this.sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 	}
 
 	protected void clearCredentials() {
@@ -46,47 +46,6 @@ public abstract class BaseActivity extends Activity {
 				Constants.CONSUMER_KEY, Constants.CONSUMER_SECRET);
 		consumer.setTokenWithSecret(token, secret);
 		return consumer;
-	}
-
-	public boolean isConected() {
-		try {
-			ConnectivityManager cm = (ConnectivityManager) this
-					.getSystemService(Context.CONNECTIVITY_SERVICE);
-
-			if (cm.getNetworkInfo(ConnectivityManager.TYPE_MOBILE)
-					.isConnected()) { // Status de conexão 3G
-				Log.i(TAG,
-						"Status de conexão 3G: "
-								+ cm.getNetworkInfo(
-										ConnectivityManager.TYPE_MOBILE)
-										.isConnected());
-				return true;
-			} else if (cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI)
-					.isConnected()) { // Status de conexão 3G
-				Log.i(TAG,
-						"Status de conexão Wifi: "
-								+ cm.getNetworkInfo(
-										ConnectivityManager.TYPE_WIFI)
-										.isConnected());
-				return true;
-			} else { // Não possui conexão com a internet
-				Log.i(TAG,
-						"Status de conexão Wifi: "
-								+ cm.getNetworkInfo(
-										ConnectivityManager.TYPE_WIFI)
-										.isConnected());
-				Log.i(TAG,
-						"Status de conexão 3G: "
-								+ cm.getNetworkInfo(
-										ConnectivityManager.TYPE_MOBILE)
-										.isConnected());
-				return false;
-			}
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
-			e.printStackTrace();
-			return false;
-		}
 	}
 
 	public String getFilePathFromContentUri(Uri fileUri,

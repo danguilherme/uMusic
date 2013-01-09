@@ -5,17 +5,11 @@
     android:orientation="vertical" >
 
     <Button
-        android:id="@+id/btn_open_main_activity"
+        android:id="@+id/btn_save_file"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="@string/btn_find_lyric" >
-    </Button>
-
-    <Button
-        android:id="@+id/btn_view_artist_info"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="View artist info" >
+        android:onClick="onSaveButtonClicked"
+        android:text="@string/btn_save_file" >
     </Button>
 
     <ScrollView

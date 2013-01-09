@@ -22,12 +22,12 @@ import com.ventura.lyricsfinder.constants.GlobalConstants;
 public class LyricsViewerActivity extends Activity {
 	final String TAG = getClass().getName();
 
-	TextView lyricsTextView;
-	TextView artistNameTextView;
-	TextView musicNameTextView;
+	private TextView lyricsTextView;
+	private TextView artistNameTextView;
+	private TextView musicNameTextView;
 
-	MusixMatch mMusixMatch;
-	TrackData mTrack = new TrackData();
+	private MusixMatch mMusixMatch;
+	private TrackData mTrack = new TrackData();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

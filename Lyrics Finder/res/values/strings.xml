@@ -22,43 +22,60 @@
     <!-- Song Properties [END] -->
 
 
-    <!-- Main Activity [START] -->
-    <string name="title_activity_main">Lyrics Finder</string>
-    <string name="menu_settings">Settings</string>
-    <string name="btn_find_lyric">Find Lyrics</string>
-    <!-- Main Activity [END] -->
+    <!-- Artist Viewer Activity [START] -->
+    <string name="title_activity_artist_viewer">Artist information</string>
+    <!-- Artist Viewer Activity [END] -->
+    
+    <!-- Releases Viewer Activity [START] -->
+    <string name="title_activity_releases_viewer">Releases</string>
+    <!-- Releases Viewer Activity [END] -->
 
 
     <!-- Music Info Activity [START] -->
     <string name="title_activity_music_info">Music information</string>
+    <string name="btn_save_file">Save File</string>
+    <string name="menu_find_lyrics">Find Lyrics</string>
+    <string name="menu_view_artist_info">View Artist Information</string>
+    <string name="menu_view_artist_info_condensed">Artist Info</string>
     <!-- Music Info Activity [END] -->
-    
+
+
     <!-- Bind Lyrics Activity [START] -->
     <string name="title_activity_bind_lyrics">Bind Lyrics</string>
     <string name="btn_lyrics_is_ok">That\'s it!</string>
     <string name="btn_edit_lyrics">I want to edit before</string>
     <!-- Bind Lyrics Activity [END] -->
 
-	<string name="menu_see_providers">See available providers</string>
-	
-	<!-- Messages [START] -->
+
+    <!-- External URLs [START] -->
+    <string name="twitter">Twitter</string>
+    <string name="facebook">Facebook</string>
+    <string name="wikipedia">Wikipedia</string>
+    <string name="youtube">Youtube</string>
+    <string name="googleplus">Google+</string>
+    <string name="tumblr">Tumblr</string>
+    <string name="vimeo">Vimeo</string>
+    <string name="myspace">MySpace</string>
+    <string name="own_website">Own website</string>
+    <string name="other_website">Other</string>
+    <!-- External URLs [END] -->
+
+
+    <!-- Messages [START] -->
     <string name="message_no_internet_connection">No internet connection.</string>
-    
     <string name="message_fetching_lyrics_list_title">Fetching artists...</string>
     <string name="message_fetching_lyrics_list_body">I am retrieving the lyrics to you, please wait.</string>
     <string name="message_fetching_lyric_title">Loading lyric...</string>
     <string name="message_fetching_lyric_body">Bringing the lyric\'s text, it may take a while.</string>
     <string name="message_lyric_not_found">Sorry, lyric not found.</string>
-    
     <string name="message_fetching_artists_list_title">Fetching artists...</string>
-    <string name="message_fetching_artists_list_body">I am retrieving mathcing artists to you, please wait.</string>
+    <string name="message_fetching_artists_list_body">I am retrieving matching artists to you, please wait.</string>
     <string name="message_artist_not_found">Sorry, artist not found</string>
-    
     <string name="message_lyrics_saved">Lyrics saved.</string>
     <string name="message_no_music_metadata_found">The music you are trying to load has no metadata.</string>
     <string name="message_file_not_supported">Sorry, file not supported.</string>
     <!-- Messages [END] -->
-    
+
     <string name="provider_terra_name">Terra Letras</string>
     <string name="provider_terra_url">http://letras.mus.br/winamp.php?artista=%1$s%26musica=%2$s</string>
     <string name="provider_lyrster_name">Lyrster</string>
@@ -68,21 +85,39 @@
 
     <!-- Artist Viewer [START] -->
     <string name="discogs_view_artist_profile">View artist profile on Discogs</string>
+    <string name="discogs_view_artist_releases">View artist\'s releases</string>
+    <string name="menu_download_artist_image">Download artist image</string>
     <!-- Artist Viewer [END] -->
+
+    <!-- Releases Viewer [START] -->
+    <string name="message_fetching_releases_title">Fetching artist\'s releases...</string>
+    <string name="message_fetching_releases_body">Searching for the artist\'s release, please wait.</string>
+    <!-- Releases Viewer [END] -->
     
     <!-- Lyrics Viewer [START] -->
+    <string name="title_activity_lyrics_viewer">Lyrics List</string>
     <string name="btn_select_lyric">Select</string>
+    <string name="menu_set_music_tags">Set file tags</string>
     <!-- Lyrics Viewer [END] -->
-    
+
+
     <!-- Discogs [START] -->
     <string name="discogs_url_search" formatted="false">/database/search?q=%2$s%26type=%1$s</string>
     <string name="discogs_url_artists" formatted="false">/artists/%1$s</string>
+    <string name="discogs_url_releases" formatted="false">/artists/%1$s/releases</string>
+    <string name="discogs_url_tracks_releases" formatted="false">/releases/%1$s</string>
+    <string name="discogs_url_tracks_masters" formatted="false">/masters/%1$s</string>
     <!-- Discogs [END] -->
-    
+
+
     <!-- LyrDB [START] -->
     <string name="lyrdb_url_base" formatted="false">http://webservices.lyrdb.com</string>
     <string name="lyrdb_url_search" formatted="false">/lookup.php?q=%1$s%26for=%2$s</string>
     <string name="lyrdb_url_lyrics" formatted="false">/getlyr.php?q=%1$s</string>
     <!-- LyrDB [END] -->
+
+    <string-array name="external_urls_context_menu_items">
+        <item name="copy">@android:string/copyUrl</item>
+    </string-array>
 
 </resources>

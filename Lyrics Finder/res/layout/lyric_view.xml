@@ -36,18 +36,14 @@
         <Button
             android:id="@id/btn_accept_lyrics"
             android:layout_width="0dip"
-            android:visibility="invisible"
-            android:layout_gravity="center_vertical|center_horizontal"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|center_horizontal"
             android:layout_weight="1"
-            android:text="@string/btn_select_lyric" />
+            android:text="@string/btn_select_lyric"
+            android:visibility="invisible" />
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/artist_text_view"
-        android:layout_width="fill_parent"
-        android:layout_height="2dp"
-        android:background="#000" />
+    <TextView style="@style/scroll_divider" />
 
     <ScrollView
         android:layout_width="fill_parent"
@@ -68,7 +64,7 @@
         android:orientation="horizontal" >
 
         <ProgressBar
-            android:id="@+id/progress_bar"
+            android:id="@android:id/progress"
             style="@android:style/Widget.ProgressBar.Small"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

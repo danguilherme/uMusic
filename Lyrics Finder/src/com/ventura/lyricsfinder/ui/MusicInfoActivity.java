@@ -9,32 +9,25 @@ import org.cmc.music.myid3.MyID3;
 import org.farng.mp3.MP3File;
 import org.farng.mp3.TagConstant;
 import org.farng.mp3.TagException;
-import org.farng.mp3.id3.AbstractID3v2;
-import org.jmusixmatch.MusixMatch;
-import org.jmusixmatch.MusixMatchException;
+import org.farng.mp3.id3.AbstractID3v2Frame;
 
-import android.content.ContentResolver;
 import android.content.Intent;
-import android.database.Cursor;
-import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
-import android.provider.MediaStore.Audio.Media;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.ventura.lyricsfinder.R;
 import com.ventura.lyricsfinder.constants.GlobalConstants;
 import com.ventura.lyricsfinder.discogs.DiscogsConstants;
-import com.ventura.lyricsfinder.discogs.entities.QueryType;
+import com.ventura.lyricsfinder.discogs.entity.enumerator.QueryType;
 import com.ventura.lyricsfinder.discogs.ui.ListArtistsActivity;
-import com.ventura.lyricsfinder.musixmatch.ui.Constants;
 import com.ventura.lyricsfinder.musixmatch.ui.LyricsViewerActivity;
 
 public class MusicInfoActivity extends BaseActivity {
@@ -54,7 +47,8 @@ public class MusicInfoActivity extends BaseActivity {
 	private EditText mProducerArtistTextField;
 	private EditText mTrackNumberTextField;
 	private EditText mYearTextField;
-	private Uri mActualLyricPath;
+
+	private File mCurrentMusicFile;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -68,40 +62,18 @@ public class MusicInfoActivity extends BaseActivity {
 
 		Intent intent = this.getIntent();
 		this.loadMusicTags(intent);
+	}
 
-		Button button = (Button) this.findViewById(R.id.btn_open_main_activity);
-		Button btnViewArtistInfo = (Button) this
-				.findViewById(R.id.btn_view_artist_info);
-
-		button.setOnClickListener(new View.OnClickListener() {
-
-			public void onClick(View view) {
-				String artist = mArtistTextField.getText().toString();
-				String song = mMusicTitleTextField.getText().toString();
-				if (!song.equals("") && !artist.equals("")) {
-					Intent intent = new Intent(view.getContext(),
-							LyricsViewerActivity.class);
-					intent.putExtra(GlobalConstants.EXTRA_ARTIST_NAME, artist);
-					intent.putExtra(GlobalConstants.EXTRA_TRACK_NAME, song);
-					startActivity(intent);
-				}
+	public void onSaveButtonClicked(View view) {
+		if (mCurrentMusicFile != null) {
+			try {
+				this.saveFile(new MP3File(mCurrentMusicFile));
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (TagException e) {
+				e.printStackTrace();
 			}
-		});
-
-		btnViewArtistInfo.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View view) {
-				String artist = mArtistTextField.getText().toString();
-				if (artist != null && !artist.equals("")) {
-					Intent intent = new Intent(view.getContext(),
-							ListArtistsActivity.class);
-					intent.setAction(Intent.ACTION_SEND);
-					intent.putExtra(DiscogsConstants.KEY_QUERY_TYPE,
-							QueryType.Artist.toString());
-					intent.putExtra(DiscogsConstants.KEY_QUERY_TEXT, artist);
-					startActivity(intent);
-				}
-			}
-		});
+		}
 	}
 
 	private void loadMusicTags(Intent intent) {
@@ -111,18 +83,18 @@ public class MusicInfoActivity extends BaseActivity {
 		if (sharedPath == null && intent.getExtras() != null) {
 			sharedPath = (Uri) intent.getExtras().get(Intent.EXTRA_STREAM);
 		}
-		mActualLyricPath = sharedPath;
-		File song = getMusicFile(mActualLyricPath);
+
+		mCurrentMusicFile = getSharedFile(sharedPath);
 
 		if (action != null && !action.equals(Intent.ACTION_MAIN)) {
 			MusicMetadataSet musicMetadataSet = null;
-			if (song == null) {
+			if (mCurrentMusicFile == null) {
 				Toast.makeText(getApplicationContext(), "No file found.",
 						Toast.LENGTH_LONG).show();
 				action = null;
 			} else {
 				try {
-					musicMetadataSet = new MyID3().read(song);
+					musicMetadataSet = new MyID3().read(mCurrentMusicFile);
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
@@ -137,7 +109,7 @@ public class MusicInfoActivity extends BaseActivity {
 
 				org.farng.mp3.MP3File file = null;
 				try {
-					file = new MP3File(song);
+					file = new MP3File(mCurrentMusicFile);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -147,60 +119,56 @@ public class MusicInfoActivity extends BaseActivity {
 				}
 
 				if (file.hasLyrics3Tag()) {
-					Log.i(TAG, "hasLyrics3Tag");
-					Log.i(TAG, file.getLyrics3Tag().getSongLyric());
+					Log.i(TAG, "File has Lyrics3 tags ------------------");
+					Log.i(TAG, "Lyrics: " + file.getLyrics3Tag().getSongLyric());
 				} else {
-					Log.i(TAG, "doesntHaveLyrics3Tag");
+					Log.i(TAG, "File does not have Lyrics3 tags --------");
 				}
 
 				if (file.hasID3v1Tag()) {
-					Log.i(TAG, "hasID3v1Tag");
-					Log.i(TAG, "Artist: " + file.getID3v1Tag().getArtist());
-					Log.i(TAG, "Title: " + file.getID3v1Tag().getSongTitle());
+					Log.i(TAG, "File has ID3v1 tags --------------------");
+					String artist = file.getID3v1Tag().getArtist(), music = file
+							.getID3v1Tag().getSongTitle();
+
+					Log.i(TAG, "Artist: " + artist);
+					Log.i(TAG, "Title: " + music);
 				} else {
-					Log.i(TAG, "doesntHaveID3v1Tag");
+					Log.i(TAG, "File does not have ID3v1 tags ----------");
 				}
 
 				if (file.hasID3v2Tag()) {
-					Log.i(TAG, "hasID3v2Tag");
-					Log.i(TAG, "Lyric Before: "
-							+ file.getID3v2Tag().getSongLyric().length());
-					MusixMatch mm = new MusixMatch(Constants.API_KEY);
-					try {
-						int trackID = mm
-								.getMatchingTrack(
-										file.getID3v2Tag().getSongTitle(),
-										file.getID3v2Tag().getLeadArtist())
-								.getTrack().getTrackId();
-						file.getID3v2Tag().setSongLyric(
-								mm.getLyrics(trackID).getLyricsBody());
-					} catch (MusixMatchException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
+
+					AbstractID3v2Frame lyricsTagFrame = file.getID3v2Tag()
+							.getFrame(
+									"USLT" + ((char) 0) + "XXX" + ((char) 0)
+											+ "");
+					String lyrics = null;
+					if (lyricsTagFrame != null) {
+						lyrics = lyricsTagFrame.getBody()
+								.getObject("Lyrics/Text").toString();
 					}
 
-					try {
-						file.save(TagConstant.MP3_FILE_SAVE_OVERWRITE);
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (TagException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					String filePath = Environment
-							.getExternalStoragePublicDirectory(
-									Environment.DIRECTORY_PICTURES)
-							.getAbsolutePath()
-							+ "/" + song.getName();
-					MediaScannerConnection.scanFile(this,
-							new String[] { filePath }, null, null);
-					Log.i(TAG, "Lyric After: "
-							+ file.getID3v2Tag().getSongLyric().length());
-					Log.i(TAG, "Title: " + file.getID3v2Tag().getSongTitle());
-					AbstractID3v2 t = file.getID3v2Tag();
+					// If exists lyrics in the old tag frame, copy it to the new
+					// lyrics tag.
+					/*
+					 * if (lyrics != null && !lyrics.equals("")) {
+					 * file.getID3v2Tag().setSongLyric(lyrics); saveFile(file);
+					 * }
+					 */
+
+					Log.i(TAG, "File has ID3v2 tags --------------------");
+					// AbstractID3v2 t = file.getID3v2Tag();
+					String artist = file.getID3v2Tag().getLeadArtist(), music = file
+							.getID3v2Tag().getSongTitle();
+					lyrics = file.getID3v2Tag().getSongLyric();
+
+					Log.i(TAG, "Artist: " + artist);
+					Log.i(TAG, "Title: " + music);
+					Log.i(TAG, "Lyrics: "
+							+ (lyrics != null ? lyrics.length() : null)
+							+ " characters");
 				} else {
-					Log.i(TAG, "doesntHaveID3v2Tag");
+					Log.i(TAG, "File does not have ID3v2 tags ----------");
 				}
 			}
 		}
@@ -296,17 +264,58 @@ public class MusicInfoActivity extends BaseActivity {
 		}
 	}
 
-	private File getMusicFile(Uri path) {
-		if (path == null)
-			return null;
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater menuInflater = new MenuInflater(this);
+		menuInflater.inflate(R.menu.music_info_menu, menu);
 
-		String uri;
-		if (path.toString().startsWith("content")) {
-			uri = this.getFilePathFromContentUri(path, getContentResolver());
-		} else {
-			uri = path.getPath();
+		return super.onCreateOptionsMenu(menu);
+	}
+
+	@Override
+	public boolean onMenuItemSelected(int featureId, MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.menu_find_lyrics:
+			this.findLyrics(this.mArtistTextField.getText().toString(),
+					this.mMusicTitleTextField.getText().toString());
+			break;
+		case R.id.menu_view_artist_info:
+			this.viewArtistInfo(mArtistTextField.getText().toString());
+			break;
+		default:
+			return super.onMenuItemSelected(featureId, item);
 		}
+		return true;
+	}
 
-		return new File(uri);
+	private void findLyrics(String artistName, String musicTitle) {
+		if (!musicTitle.equals("") && !artistName.equals("")) {
+			Intent intent = new Intent(this, LyricsViewerActivity.class);
+			intent.putExtra(GlobalConstants.EXTRA_ARTIST_NAME, artistName);
+			intent.putExtra(GlobalConstants.EXTRA_TRACK_NAME, musicTitle);
+			startActivity(intent);
+		}
+	}
+
+	private void viewArtistInfo(String artistName) {
+		if (artistName != null && !artistName.equals("")) {
+			Intent intent = new Intent(this, ListArtistsActivity.class);
+			intent.setAction(Intent.ACTION_SEND);
+			intent.putExtra(DiscogsConstants.KEY_QUERY_TYPE,
+					QueryType.Artist.toString());
+			intent.putExtra(DiscogsConstants.KEY_QUERY_TEXT, artistName);
+			startActivity(intent);
+		}
+	}
+
+	public void saveFile(MP3File file) {
+		try {
+			MP3File mp3File = new MP3File(file);
+			mp3File.save(TagConstant.MP3_FILE_SAVE_OVERWRITE);
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (TagException e) {
+			e.printStackTrace();
+		}
 	}
 }

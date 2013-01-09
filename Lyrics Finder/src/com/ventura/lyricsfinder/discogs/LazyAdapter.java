@@ -34,7 +34,15 @@ public class LazyAdapter extends BaseAdapter {
 	}
 
 	public Object getItem(int position) {
-		return position;
+		return data.get(position);
+	}
+
+	public void filter(String query) {
+		for (int i = 0; i < data.size(); i++) {
+			if (!data.get(i).get(DiscogsConstants.KEY_TITLE).equalsIgnoreCase(query)) {
+				data.remove(i);
+			}
+		}
 	}
 
 	public long getItemId(int position) {
@@ -64,7 +72,7 @@ public class LazyAdapter extends BaseAdapter {
 		title.setText(song.get(DiscogsConstants.KEY_TITLE));
 		artist.setText(song.get(DiscogsConstants.KEY_TITLE));
 		duration.setText(song.get(DiscogsConstants.KEY_ID));
-		imageLoader.DisplayImage(song.get(DiscogsConstants.KEY_THUMB),
+		imageLoader.displayImage(song.get(DiscogsConstants.KEY_THUMB),
 				thumb_image);
 		return vi;
 	}

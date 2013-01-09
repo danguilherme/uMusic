@@ -8,169 +8,277 @@
 package com.ventura.lyricsfinder;
 
 public final class R {
+    public static final class array {
+        /**  LyrDB [END] 
+         */
+        public static final int external_urls_context_menu_items=0x7f060000;
+    }
     public static final class attr {
     }
     public static final class drawable {
         public static final int arrow=0x7f020000;
-        public static final int gradient_bg=0x7f020001;
-        public static final int gradient_bg_hover=0x7f020002;
-        public static final int heart=0x7f020003;
-        public static final int ic_action_search=0x7f020004;
-        public static final int ic_launcher=0x7f020005;
-        public static final int image_bg=0x7f020006;
-        public static final int list_selector=0x7f020007;
-        public static final int no_image=0x7f020008;
-        public static final int play=0x7f020009;
-        public static final int rihanna=0x7f02000a;
+        public static final int arrow_down=0x7f020001;
+        public static final int arrow_down_48=0x7f020002;
+        public static final int arrow_right=0x7f020003;
+        public static final int arrow_up=0x7f020004;
+        public static final int arrow_up_48=0x7f020005;
+        public static final int button_list_first=0x7f020006;
+        public static final int button_list_first_hover=0x7f020007;
+        public static final int button_list_first_selector=0x7f020008;
+        public static final int button_list_last=0x7f020009;
+        public static final int button_list_last_hover=0x7f02000a;
+        public static final int button_list_last_selector=0x7f02000b;
+        public static final int button_list_middle=0x7f02000c;
+        public static final int button_list_middle_hover=0x7f02000d;
+        public static final int button_list_middle_selector=0x7f02000e;
+        public static final int button_list_single=0x7f02000f;
+        public static final int button_list_single_hover=0x7f020010;
+        public static final int button_list_single_selector=0x7f020011;
+        public static final int facebook_16=0x7f020012;
+        public static final int facebook_32=0x7f020013;
+        public static final int google_plus_16=0x7f020014;
+        public static final int google_plus_32=0x7f020015;
+        public static final int gradient_bg=0x7f020016;
+        public static final int gradient_bg_hover=0x7f020017;
+        public static final int heart=0x7f020018;
+        public static final int ic_action_search=0x7f020019;
+        public static final int ic_launcher=0x7f02001a;
+        public static final int ic_slider_down=0x7f02001b;
+        public static final int ic_slider_up=0x7f02001c;
+        public static final int image_bg=0x7f02001d;
+        public static final int list_selector=0x7f02001e;
+        public static final int myspace_16=0x7f02001f;
+        public static final int myspace_32=0x7f020020;
+        public static final int no_image=0x7f020021;
+        public static final int other_website=0x7f020022;
+        public static final int own_website=0x7f020023;
+        public static final int play=0x7f020024;
+        public static final int rihanna=0x7f020025;
+        public static final int rounded_borders=0x7f020026;
+        public static final int tray_handle_normal=0x7f020027;
+        public static final int tray_handle_pressed=0x7f020028;
+        public static final int tray_handle_selected=0x7f020029;
+        public static final int tumblr_16=0x7f02002a;
+        public static final int tumblr_32=0x7f02002b;
+        public static final int twitter_16=0x7f02002c;
+        public static final int twitter_32=0x7f02002d;
+        public static final int vimeo_16=0x7f02002e;
+        public static final int vimeo_32=0x7f02002f;
+        public static final int wordpress_16=0x7f020030;
+        public static final int wordpress_32=0x7f020031;
+        public static final int youtube_16=0x7f020032;
+        public static final int youtube_32=0x7f020033;
     }
     public static final class id {
-        public static final int album_text_field=0x7f070017;
-        public static final int arrow=0x7f07000e;
-        public static final int artist=0x7f07000c;
-        public static final int artist_bio=0x7f070008;
-        public static final int artist_discogs_url=0x7f070005;
-        public static final int artist_image=0x7f070007;
-        public static final int artist_name=0x7f070004;
-        public static final int artist_scrollview=0x7f070006;
-        public static final int artist_text_field=0x7f070016;
-        public static final int artist_text_view=0x7f070010;
-        public static final int btn_accept_lyrics=0x7f070000;
-        public static final int btn_edit_lyrics=0x7f070001;
-        public static final int btn_open_main_activity=0x7f070013;
-        public static final int btn_view_artist_info=0x7f070014;
-        public static final int comment_text_field=0x7f070018;
-        public static final int compilation_text_field=0x7f070019;
-        public static final int composer2_text_field=0x7f07001b;
-        public static final int composer_text_field=0x7f07001a;
-        public static final int duration=0x7f07000d;
-        public static final int duration_text_field=0x7f07001c;
-        public static final int featuring_list_text_field=0x7f07001d;
-        public static final int genre_text_field=0x7f07001e;
-        public static final int list_image=0x7f07000a;
-        public static final int lyrics_text_field=0x7f070003;
-        public static final int lyrics_text_view=0x7f070002;
-        public static final int menu_azlyrics=0x7f070029;
-        public static final int menu_lyrster=0x7f070028;
-        public static final int menu_providers_group=0x7f070023;
-        public static final int menu_see_providers=0x7f070024;
-        public static final int menu_set_providers_group=0x7f070026;
-        public static final int menu_settings=0x7f070025;
-        public static final int menu_terra=0x7f070027;
-        public static final int music_text_field=0x7f070015;
-        public static final int music_text_view=0x7f07000f;
-        public static final int producer_artist_text_field=0x7f070020;
-        public static final int producer_text_field=0x7f07001f;
-        public static final int progress_bar=0x7f070012;
-        public static final int progress_bar_container=0x7f070011;
-        public static final int thumbnail=0x7f070009;
-        public static final int title=0x7f07000b;
-        public static final int track_number_text_field=0x7f070021;
-        public static final int year_text_field=0x7f070022;
+        public static final int album_text_field=0x7f090021;
+        public static final int arrow=0x7f09001a;
+        public static final int artist=0x7f090018;
+        public static final int artist_aditional_information_sliding=0x7f090008;
+        public static final int artist_bio=0x7f090007;
+        public static final int artist_image=0x7f090006;
+        public static final int artist_name=0x7f090004;
+        public static final int artist_scrollview=0x7f090005;
+        public static final int artist_text_field=0x7f090020;
+        public static final int artist_text_view=0x7f09001c;
+        public static final int btn_accept_lyrics=0x7f090000;
+        public static final int btn_edit_lyrics=0x7f090001;
+        public static final int btn_open_artist_discogs_profile=0x7f09000d;
+        public static final int btn_open_artist_releases=0x7f09000e;
+        public static final int btn_release_open_tracks=0x7f090032;
+        public static final int btn_save_file=0x7f09001e;
+        public static final int comment_text_field=0x7f090022;
+        public static final int compilation_text_field=0x7f090023;
+        public static final int composer2_text_field=0x7f090025;
+        public static final int composer_text_field=0x7f090024;
+        public static final int container=0x7f09000b;
+        public static final int duration=0x7f090019;
+        public static final int duration_text_field=0x7f090026;
+        public static final int external_urls_container=0x7f090012;
+        public static final int featuring_list_text_field=0x7f090027;
+        public static final int genre_text_field=0x7f090028;
+        public static final int key=0x7f090014;
+        public static final int list_image=0x7f090017;
+        public static final int lyrics_text_field=0x7f090003;
+        public static final int lyrics_text_view=0x7f090002;
+        public static final int members_container=0x7f090011;
+        public static final int members_layout=0x7f09000f;
+        public static final int menu_artist_options=0x7f090037;
+        public static final int menu_download_artist_image=0x7f090038;
+        public static final int menu_find_lyrics=0x7f09003c;
+        public static final int menu_music_options=0x7f09003b;
+        public static final int menu_search_options=0x7f090039;
+        public static final int menu_set_music_tags=0x7f09003a;
+        public static final int menu_view_artist_info=0x7f09003d;
+        public static final int music_text_field=0x7f09001f;
+        public static final int music_text_view=0x7f09001b;
+        public static final int producer_artist_text_field=0x7f09002a;
+        public static final int producer_text_field=0x7f090029;
+        public static final int profile_and_releases_buttons_container=0x7f09000c;
+        public static final int progress_bar_container=0x7f09001d;
+        public static final int release_status=0x7f090031;
+        public static final int release_thumb=0x7f09002d;
+        public static final int release_title=0x7f09002e;
+        public static final int release_track_container=0x7f090033;
+        public static final int release_type=0x7f09002f;
+        public static final int release_year=0x7f090030;
+        public static final int slider=0x7f09000a;
+        public static final int slider_drawable=0x7f090013;
+        public static final int sliding_content=0x7f090009;
+        public static final int thumbnail=0x7f090016;
+        public static final int title=0x7f090010;
+        public static final int track_duration=0x7f090036;
+        public static final int track_number_text_field=0x7f09002b;
+        public static final int track_position=0x7f090034;
+        public static final int track_title=0x7f090035;
+        public static final int value=0x7f090015;
+        public static final int year_text_field=0x7f09002c;
     }
     public static final class layout {
         public static final int activity_bind_lyrics=0x7f030000;
         public static final int artist_info=0x7f030001;
-        public static final int default_list=0x7f030002;
-        public static final int list_item=0x7f030003;
-        public static final int list_item_lyric=0x7f030004;
-        public static final int lyric_view=0x7f030005;
-        public static final int music_info=0x7f030006;
+        public static final int button_group=0x7f030002;
+        public static final int button_group_item=0x7f030003;
+        public static final int default_list=0x7f030004;
+        public static final int key_value_panel=0x7f030005;
+        public static final int list_item=0x7f030006;
+        public static final int list_item_lyric=0x7f030007;
+        public static final int lyric_view=0x7f030008;
+        public static final int music_info=0x7f030009;
+        public static final int release=0x7f03000a;
+        public static final int releases_view=0x7f03000b;
+        public static final int track=0x7f03000c;
     }
     public static final class menu {
-        public static final int activity_main=0x7f060000;
+        public static final int artist_info_menu=0x7f080000;
+        public static final int list_lyrics_menu=0x7f080001;
+        public static final int music_info_menu=0x7f080002;
     }
     public static final class string {
-        public static final int app_code_name=0x7f040001;
-        public static final int app_name=0x7f040000;
-        public static final int app_version=0x7f040002;
-        public static final int btn_edit_lyrics=0x7f040017;
-        public static final int btn_find_lyric=0x7f040013;
-        public static final int btn_lyrics_is_ok=0x7f040016;
-        /**  Artist Viewer [END] 
- Lyrics Viewer [START] 
-         */
-        public static final int btn_select_lyric=0x7f04002c;
-        public static final int discogs_url_artists=0x7f04002e;
+        public static final int app_code_name=0x7f050001;
+        public static final int app_name=0x7f050000;
+        public static final int app_version=0x7f050002;
+        public static final int btn_edit_lyrics=0x7f05001a;
+        public static final int btn_lyrics_is_ok=0x7f050019;
+        public static final int btn_save_file=0x7f050014;
+        public static final int btn_select_lyric=0x7f05003d;
+        public static final int discogs_url_artists=0x7f050040;
+        public static final int discogs_url_releases=0x7f050041;
         /**  Lyrics Viewer [END] 
  Discogs [START] 
          */
-        public static final int discogs_url_search=0x7f04002d;
+        public static final int discogs_url_search=0x7f05003f;
+        public static final int discogs_url_tracks_masters=0x7f050043;
+        public static final int discogs_url_tracks_releases=0x7f050042;
         /**  Artist Viewer [START] 
          */
-        public static final int discogs_view_artist_profile=0x7f04002b;
+        public static final int discogs_view_artist_profile=0x7f050037;
+        public static final int discogs_view_artist_releases=0x7f050038;
+        public static final int facebook=0x7f05001c;
+        public static final int googleplus=0x7f05001f;
         /**  Discogs [END] 
  LyrDB [START] 
          */
-        public static final int lyrdb_url_base=0x7f04002f;
-        public static final int lyrdb_url_lyrics=0x7f040031;
-        public static final int lyrdb_url_search=0x7f040030;
-        /**  Bind Lyrics Activity [END] 
+        public static final int lyrdb_url_base=0x7f050044;
+        public static final int lyrdb_url_lyrics=0x7f050046;
+        public static final int lyrdb_url_search=0x7f050045;
+        public static final int menu_download_artist_image=0x7f050039;
+        public static final int menu_find_lyrics=0x7f050015;
+        public static final int menu_set_music_tags=0x7f05003e;
+        public static final int menu_view_artist_info=0x7f050016;
+        public static final int menu_view_artist_info_condensed=0x7f050017;
+        public static final int message_artist_not_found=0x7f05002d;
+        public static final int message_fetching_artists_list_body=0x7f05002c;
+        public static final int message_fetching_artists_list_title=0x7f05002b;
+        public static final int message_fetching_lyric_body=0x7f050029;
+        public static final int message_fetching_lyric_title=0x7f050028;
+        public static final int message_fetching_lyrics_list_body=0x7f050027;
+        public static final int message_fetching_lyrics_list_title=0x7f050026;
+        public static final int message_fetching_releases_body=0x7f05003b;
+        /**  Artist Viewer [END] 
+ Releases Viewer [START] 
          */
-        public static final int menu_see_providers=0x7f040018;
-        public static final int menu_settings=0x7f040012;
-        public static final int message_artist_not_found=0x7f040021;
-        public static final int message_fetching_artists_list_body=0x7f040020;
-        public static final int message_fetching_artists_list_title=0x7f04001f;
-        public static final int message_fetching_lyric_body=0x7f04001d;
-        public static final int message_fetching_lyric_title=0x7f04001c;
-        public static final int message_fetching_lyrics_list_body=0x7f04001b;
-        public static final int message_fetching_lyrics_list_title=0x7f04001a;
-        public static final int message_file_not_supported=0x7f040024;
-        public static final int message_lyric_not_found=0x7f04001e;
-        public static final int message_lyrics_saved=0x7f040022;
-        /**  Messages [START] 
+        public static final int message_fetching_releases_title=0x7f05003a;
+        public static final int message_file_not_supported=0x7f050030;
+        public static final int message_lyric_not_found=0x7f05002a;
+        public static final int message_lyrics_saved=0x7f05002e;
+        /**  External URLs [END] 
+ Messages [START] 
          */
-        public static final int message_no_internet_connection=0x7f040019;
-        public static final int message_no_music_metadata_found=0x7f040023;
-        public static final int provider_azlyrics_name=0x7f040029;
-        public static final int provider_azlyrics_url=0x7f04002a;
-        public static final int provider_lyrster_name=0x7f040027;
-        public static final int provider_lyrster_url=0x7f040028;
+        public static final int message_no_internet_connection=0x7f050025;
+        public static final int message_no_music_metadata_found=0x7f05002f;
+        public static final int myspace=0x7f050022;
+        public static final int other_website=0x7f050024;
+        public static final int own_website=0x7f050023;
+        public static final int provider_azlyrics_name=0x7f050035;
+        public static final int provider_azlyrics_url=0x7f050036;
+        public static final int provider_lyrster_name=0x7f050033;
+        public static final int provider_lyrster_url=0x7f050034;
         /**  Messages [END] 
          */
-        public static final int provider_terra_name=0x7f040025;
-        public static final int provider_terra_url=0x7f040026;
-        public static final int song_album=0x7f040005;
+        public static final int provider_terra_name=0x7f050031;
+        public static final int provider_terra_url=0x7f050032;
+        public static final int song_album=0x7f050005;
         /**  Song Properties [START] 
          */
-        public static final int song_artist=0x7f040003;
-        public static final int song_comment=0x7f040006;
-        public static final int song_compilation=0x7f040007;
-        public static final int song_composer=0x7f040008;
-        public static final int song_composer2=0x7f040009;
-        public static final int song_duration=0x7f04000a;
-        public static final int song_featuring_list=0x7f04000b;
-        public static final int song_genre=0x7f04000c;
-        public static final int song_producer=0x7f04000d;
-        public static final int song_producer_artist=0x7f04000e;
-        public static final int song_title=0x7f040004;
-        public static final int song_track_number=0x7f04000f;
-        public static final int song_year=0x7f040010;
+        public static final int song_artist=0x7f050003;
+        public static final int song_comment=0x7f050006;
+        public static final int song_compilation=0x7f050007;
+        public static final int song_composer=0x7f050008;
+        public static final int song_composer2=0x7f050009;
+        public static final int song_duration=0x7f05000a;
+        public static final int song_featuring_list=0x7f05000b;
+        public static final int song_genre=0x7f05000c;
+        public static final int song_producer=0x7f05000d;
+        public static final int song_producer_artist=0x7f05000e;
+        public static final int song_title=0x7f050004;
+        public static final int song_track_number=0x7f05000f;
+        public static final int song_year=0x7f050010;
+        /**  Song Properties [END] 
+ Artist Viewer Activity [START] 
+         */
+        public static final int title_activity_artist_viewer=0x7f050011;
         /**  Music Info Activity [END] 
  Bind Lyrics Activity [START] 
          */
-        public static final int title_activity_bind_lyrics=0x7f040015;
-        /**  Song Properties [END] 
- Main Activity [START] 
+        public static final int title_activity_bind_lyrics=0x7f050018;
+        /**  Releases Viewer [END] 
+ Lyrics Viewer [START] 
          */
-        public static final int title_activity_main=0x7f040011;
-        /**  Main Activity [END] 
+        public static final int title_activity_lyrics_viewer=0x7f05003c;
+        /**  Releases Viewer Activity [END] 
  Music Info Activity [START] 
          */
-        public static final int title_activity_music_info=0x7f040014;
+        public static final int title_activity_music_info=0x7f050013;
+        /**  Artist Viewer Activity [END] 
+ Releases Viewer Activity [START] 
+         */
+        public static final int title_activity_releases_viewer=0x7f050012;
+        public static final int tumblr=0x7f050020;
+        /**  Bind Lyrics Activity [END] 
+ External URLs [START] 
+         */
+        public static final int twitter=0x7f05001b;
+        public static final int vimeo=0x7f050021;
+        public static final int wikipedia=0x7f05001d;
+        public static final int youtube=0x7f05001e;
     }
     public static final class style {
-        public static final int AppTheme=0x7f050000;
-        public static final int Labels=0x7f050003;
-        public static final int Lyric=0x7f050002;
-        public static final int LyricFilter=0x7f050001;
-        public static final int MusicInfoLinearLayout=0x7f050006;
+        public static final int AppTheme=0x7f070000;
+        public static final int Labels=0x7f070003;
+        public static final int Lyric=0x7f070002;
+        public static final int LyricFilter=0x7f070001;
+        public static final int MusicInfoLinearLayout=0x7f070006;
         /**  Music Info Activity 
          */
-        public static final int MusicInfoTextField=0x7f050004;
-        public static final int MusicInfoTextView=0x7f050005;
+        public static final int MusicInfoTextField=0x7f070004;
+        public static final int MusicInfoTextView=0x7f070005;
         /**  Artist Info 
          */
-        public static final int Title=0x7f050007;
+        public static final int Title=0x7f070007;
+        public static final int list_button=0x7f070009;
+        public static final int scroll_divider=0x7f070008;
+    }
+    public static final class xml {
+        public static final int searchable=0x7f040000;
     }
 }

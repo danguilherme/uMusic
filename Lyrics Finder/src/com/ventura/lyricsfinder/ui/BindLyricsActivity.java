@@ -5,16 +5,10 @@ import java.io.IOException;
 import org.farng.mp3.MP3File;
 import org.farng.mp3.TagConstant;
 import org.farng.mp3.TagException;
-import org.jmusixmatch.MusixMatch;
-import org.jmusixmatch.MusixMatchException;
 import org.jmusixmatch.entity.lyrics.Lyrics;
-import org.jmusixmatch.entity.track.TrackData;
 
-import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -27,7 +21,8 @@ import com.ventura.lyricsfinder.R;
 import com.ventura.lyricsfinder.constants.GlobalConstants;
 import com.ventura.lyricsfinder.constants.RequestCodes;
 import com.ventura.lyricsfinder.lyrdb.ui.ListLyricsActivity;
-import com.ventura.lyricsfinder.musixmatch.ui.Constants;
+import com.ventura.lyricsfinder.lyrics.Lyric;
+import com.ventura.lyricsfinder.util.ConnectionManager;
 
 public class BindLyricsActivity extends BaseActivity {
 
@@ -37,7 +32,7 @@ public class BindLyricsActivity extends BaseActivity {
 	private Button mEditLyricsButton;
 	private TextView mLyricsTextView;
 	private EditText mLyricsTextField;
-	private MP3File mActualMP3File;
+	private MP3File mCurrentMP3File;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -56,9 +51,8 @@ public class BindLyricsActivity extends BaseActivity {
 		if (!action.equals(Intent.ACTION_SEND)) {
 			finish();
 		}
-		
 
-		if (!this.isConected()) {
+		if (!new ConnectionManager(this).isConnected()) {
 			Toast.makeText(getBaseContext(),
 					getString(R.string.message_no_internet_connection),
 					Toast.LENGTH_SHORT).show();
@@ -72,7 +66,7 @@ public class BindLyricsActivity extends BaseActivity {
 		}
 
 		try {
-			mActualMP3File = new MP3File(this.getSharedFile(sharedPath));
+			mCurrentMP3File = new MP3File(this.getSharedFile(sharedPath));
 		} catch (IOException e) {
 			Log.i(TAG, "IOException - Error instantiating MP3File from path "
 					+ sharedPath + ". Error message: " + e.getMessage());
@@ -81,23 +75,26 @@ public class BindLyricsActivity extends BaseActivity {
 					+ sharedPath + ". Error message: " + e.getMessage());
 		}
 
-		if (!mActualMP3File.hasID3v2Tag()) {
+		if (!mCurrentMP3File.hasID3v2Tag()) {
 			Toast.makeText(getBaseContext(),
 					getString(R.string.message_file_not_supported),
 					Toast.LENGTH_SHORT).show();
 			finish();
 		} else {
-			if (mActualMP3File.getID3v2Tag().getSongLyric().length() > 0) {
-				Toast.makeText(getBaseContext(), "This song already have lyrics.",
-						Toast.LENGTH_SHORT).show();
+			if (mCurrentMP3File.getID3v2Tag().getSongLyric().length() > 0) {
+				Toast.makeText(getBaseContext(),
+						"This song already have lyrics.", Toast.LENGTH_SHORT)
+						.show();
 			}
-			Intent lyricsSearchIntent = new Intent(this,ListLyricsActivity.class);
-			lyricsSearchIntent.putExtra(GlobalConstants.EXTRA_ARTIST_NAME, this.mActualMP3File.getID3v2Tag().getLeadArtist());
-			lyricsSearchIntent.putExtra(GlobalConstants.EXTRA_TRACK_NAME, this.mActualMP3File.getID3v2Tag().getSongTitle());
-			this.startActivityForResult(lyricsSearchIntent, RequestCodes.GET_LYRICS);
+			Intent lyricsSearchIntent = new Intent(this,
+					ListLyricsActivity.class);
+			lyricsSearchIntent.putExtra(GlobalConstants.EXTRA_ARTIST_NAME,
+					this.mCurrentMP3File.getID3v2Tag().getLeadArtist());
+			lyricsSearchIntent.putExtra(GlobalConstants.EXTRA_TRACK_NAME,
+					this.mCurrentMP3File.getID3v2Tag().getSongTitle());
+			this.startActivityForResult(lyricsSearchIntent,
+					RequestCodes.GET_LYRICS);
 		}
-
-		//new LyricsSearchTask(this).execute(mActualMP3File);
 
 		mAcceptLyricsButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
@@ -107,20 +104,8 @@ public class BindLyricsActivity extends BaseActivity {
 				} else {
 					lyrics = mLyricsTextField.getText().toString();
 				}
-				mActualMP3File.getID3v2Tag().setSongLyric(lyrics);
-
-				try {
-					mActualMP3File.save(TagConstant.MP3_FILE_SAVE_OVERWRITE);
-				} catch (IOException e) {
-					e.printStackTrace();
-				} catch (TagException e) {
-					e.printStackTrace();
-				}
-
-				Toast.makeText(getBaseContext(),
-						getString(R.string.message_lyrics_saved),
-						Toast.LENGTH_SHORT).show();
-				finish();
+				
+				saveLyrics(mCurrentMP3File, new Lyric(null, null, lyrics));
 			}
 		});
 
@@ -134,13 +119,14 @@ public class BindLyricsActivity extends BaseActivity {
 			}
 		});
 	}
-	
+
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == RequestCodes.GET_LYRICS) {
 			if (resultCode == RESULT_OK) {
 				Lyrics lyr = new Lyrics();
-				lyr.setLyricsBody(data.getStringExtra(GlobalConstants.EXTRA_TRACK_LYRICS));
+				lyr.setLyricsBody(data
+						.getStringExtra(GlobalConstants.EXTRA_TRACK_LYRICS));
 				this.setLyrics(lyr);
 			} else if (resultCode == RESULT_CANCELED) {
 				finish();
@@ -155,68 +141,20 @@ public class BindLyricsActivity extends BaseActivity {
 		mEditLyricsButton.setVisibility(View.VISIBLE);
 	}
 
-	private class LyricsSearchTask extends AsyncTask<MP3File, Void, Lyrics> {
+	private void saveLyrics(MP3File file, Lyric lyrics) {
+		file.getID3v2Tag().setSongLyric(lyrics.getLyric());
 
-		private ProgressDialog mProgressDialog;
-		private Context mContext;
-
-		public LyricsSearchTask(Context context) {
-			this.mContext = context;
+		try {
+			file.save(TagConstant.MP3_FILE_SAVE_OVERWRITE);
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (TagException e) {
+			e.printStackTrace();
 		}
 
-		@Override
-		protected void onPreExecute() {
-			super.onPreExecute();
-
-			this.mProgressDialog = new ProgressDialog(mContext);
-			this.mProgressDialog
-					.setTitle(getString(R.string.message_fetching_lyric_title));
-			this.mProgressDialog
-					.setMessage(getString(R.string.message_fetching_lyric_body));
-			this.mProgressDialog.setCancelable(true);
-			this.mProgressDialog.show();
-		}
-
-		@Override
-		protected Lyrics doInBackground(MP3File... params) {
-			MP3File targetFile = params[0];
-			MusixMatch musixMatch = new MusixMatch(Constants.API_KEY);
-			String artist = null, musicName = null;
-			if (targetFile.hasID3v2Tag()) {
-				artist = targetFile.getID3v2Tag().getLeadArtist();
-				musicName = targetFile.getID3v2Tag().getSongTitle();
-			} else if (targetFile.hasID3v1Tag()) {
-				artist = targetFile.getID3v1Tag().getLeadArtist();
-				musicName = targetFile.getID3v1Tag().getSongTitle();
-			}
-			TrackData track = null;
-			Lyrics lyrics = null;
-			try {
-				track = musixMatch.getMatchingTrack(musicName, artist)
-						.getTrack();
-				lyrics = musixMatch.getLyrics(track.getTrackId());
-			} catch (MusixMatchException e) {
-				// Toast.makeText(mContext,
-				// getString(R.string.message_lyric_not_found),
-				// Toast.LENGTH_SHORT).show();
-				// finish();
-			}
-
-			return lyrics;
-		}
-
-		@Override
-		protected void onPostExecute(Lyrics result) {
-			mProgressDialog.dismiss();
-			if (result != null) {
-				super.onPostExecute(result);
-				setLyrics(result);
-			} else {
-				Toast.makeText(mContext,
-						getString(R.string.message_lyric_not_found),
-						Toast.LENGTH_LONG).show();
-				finish();
-			}
-		}
+		Toast.makeText(getBaseContext(),
+				getString(R.string.message_lyrics_saved), Toast.LENGTH_SHORT)
+				.show();
+		finish();
 	}
 }

@@ -3,10 +3,11 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/list_selector"
+    android:minHeight="60dip"
     android:orientation="horizontal"
     android:padding="5dip" >
 
-    <!-- ListRow Left sied Thumbnail image -->
+    <!-- ListRow Left sided Thumbnail image -->
 
     <LinearLayout
         android:id="@+id/thumbnail"

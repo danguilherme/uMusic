@@ -15,6 +15,8 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -36,46 +38,6 @@ public class ListLyricsActivity extends ListActivity {
 	ListView list;
 	CustomAdapter adapter;
 	List<Lyric> mListItems;
-
-	private class ListLyricsTask extends AsyncTask<Lyric, Void, List<Lyric>> {
-
-		private Context mContext;
-		private QueryType mQueryType;
-		private ProgressDialog mProgressDialog;
-
-		public ListLyricsTask(Context context, QueryType queryType) {
-			this.mProgressDialog = new ProgressDialog(context);
-			this.mProgressDialog
-					.setTitle(getString(R.string.message_fetching_lyrics_list_body));
-			this.mProgressDialog
-					.setMessage(getString(R.string.message_fetching_lyrics_list_body));
-			this.mProgressDialog.setCancelable(true);
-
-			this.mContext = context;
-			this.mQueryType = queryType;
-		}
-
-		@Override
-		protected void onPreExecute() {
-			super.onPreExecute();
-			this.mProgressDialog.show();
-		}
-
-		@Override
-		protected List<Lyric> doInBackground(Lyric... params) {
-			Lyric target = params[0];
-			LyrDBService lyricsService = new LyrDBService(this.mContext);
-			return lyricsService.search(this.mQueryType,
-					target);
-		}
-
-		@Override
-		protected void onPostExecute(List<Lyric> result) {
-			super.onPostExecute(result);
-			fillListView(result);
-			this.mProgressDialog.dismiss();
-		}
-	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -108,9 +70,6 @@ public class ListLyricsActivity extends ListActivity {
 				intent.putExtra(GlobalConstants.EXTRA_TRACK_NAME, mListItems
 						.get(position).getMusicName());
 				startActivityForResult(intent, RequestCodes.GET_LYRICS);
-
-				// Intent resultIntent
-				// setResult(RESULT_OK, data)
 			}
 		});
 	}
@@ -119,14 +78,15 @@ public class ListLyricsActivity extends ListActivity {
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == RequestCodes.GET_LYRICS) {
 			if (resultCode == RESULT_OK) {
-				this.sendResult(data.getStringExtra(GlobalConstants.EXTRA_TRACK_LYRICS));
+				this.sendResult(data
+						.getStringExtra(GlobalConstants.EXTRA_TRACK_LYRICS));
 			}
 			if (resultCode == RESULT_CANCELED) {
-				// Write your code on no result return
+				setResult(RESULT_CANCELED, new Intent());
 			}
 		}
 	}
-	
+
 	private void sendResult(CharSequence lyrics) {
 		Intent resultIntent = new Intent();
 		resultIntent.putExtra(GlobalConstants.EXTRA_TRACK_LYRICS, lyrics);
@@ -167,6 +127,60 @@ public class ListLyricsActivity extends ListActivity {
 			Log.i(TAG, "PORTRAIT");
 		}
 	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater mi = new MenuInflater(this);
+		mi.inflate(R.menu.list_lyrics_menu, menu);
+
+		return super.onCreateOptionsMenu(menu);
+	}
 	
+	@Override
+	public boolean onMenuItemSelected(int featureId, MenuItem item) {
+		if (item.getItemId() == R.id.menu_set_music_tags) {
+			Log.i(TAG, item.getTitle() + " clicked");
+		}
+		
+		return super.onMenuItemSelected(featureId, item);
+	}
 	
+	private class ListLyricsTask extends AsyncTask<Lyric, Void, List<Lyric>> {
+
+		private Context mContext;
+		private QueryType mQueryType;
+		private ProgressDialog mProgressDialog;
+
+		public ListLyricsTask(Context context, QueryType queryType) {
+			this.mProgressDialog = new ProgressDialog(context);
+			this.mProgressDialog
+					.setTitle(getString(R.string.message_fetching_lyrics_list_body));
+			this.mProgressDialog
+					.setMessage(getString(R.string.message_fetching_lyrics_list_body));
+			this.mProgressDialog.setCancelable(true);
+
+			this.mContext = context;
+			this.mQueryType = queryType;
+		}
+
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			this.mProgressDialog.show();
+		}
+
+		@Override
+		protected List<Lyric> doInBackground(Lyric... params) {
+			Lyric target = params[0];
+			LyrDBService lyricsService = new LyrDBService(this.mContext);
+			return lyricsService.search(this.mQueryType, target);
+		}
+
+		@Override
+		protected void onPostExecute(List<Lyric> result) {
+			super.onPostExecute(result);
+			fillListView(result);
+			this.mProgressDialog.dismiss();
+		}
+	}
 }

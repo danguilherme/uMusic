@@ -4,6 +4,14 @@ public class Lyric {
 	private String mArtistName;
 	private String mMusicName;
 	private String mLyric;
+	
+	public Lyric() {}
+	
+	public Lyric(String artistName, String musicName, String lyrics){
+		this.mArtistName = artistName;
+		this.mMusicName = musicName;
+		this.mLyric = lyrics;
+	}
 
 	public String getArtistName() {
 		return mArtistName;
