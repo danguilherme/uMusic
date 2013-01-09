@@ -25,7 +25,7 @@ import com.ventura.lyricsfinder.R;
 import com.ventura.lyricsfinder.constants.GlobalConstants;
 import com.ventura.lyricsfinder.discogs.DiscogsService;
 import com.ventura.lyricsfinder.discogs.entity.Artist;
-import com.ventura.lyricsfinder.discogs.entity.Release;
+import com.ventura.lyricsfinder.discogs.entity.ArtistRelease;
 import com.ventura.lyricsfinder.discogs.entity.Track;
 import com.ventura.lyricsfinder.exception.LazyInternetConnectionException;
 import com.ventura.lyricsfinder.exception.NoInternetConnectionException;
@@ -34,7 +34,7 @@ import com.ventura.lyricsfinder.util.ImageLoader;
 
 public class ReleasesViewerActivity extends BaseActivity {
 
-	private List<Release> mCurrentReleases;
+	private List<ArtistRelease> mCurrentReleases;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -52,13 +52,13 @@ public class ReleasesViewerActivity extends BaseActivity {
 		new GetReleasesTask(this, artist).execute();
 	}
 
-	private void buildReleasesList(List<Release> releases) {
+	private void buildReleasesList(List<ArtistRelease> releases) {
 		this.mCurrentReleases = releases;
 
 		Collections.sort(mCurrentReleases);
 
 		for (int i = mCurrentReleases.size() - 1; i > 0; i--) {
-			final Release release = mCurrentReleases.get(i);
+			final ArtistRelease release = mCurrentReleases.get(i);
 			final String releaseUrl = release.getUrl().toString();
 			final LinearLayout releasePanel = (LinearLayout) this
 					.getLayoutInflater().inflate(R.layout.release, null);
@@ -165,7 +165,7 @@ public class ReleasesViewerActivity extends BaseActivity {
 				.setVisibility(View.GONE);
 	}
 
-	private class GetReleasesTask extends AsyncTask<Void, Void, List<Release>> {
+	private class GetReleasesTask extends AsyncTask<Void, Void, List<ArtistRelease>> {
 
 		private ProgressDialog mProgressDialog;
 		private Context mContext;
@@ -196,11 +196,11 @@ public class ReleasesViewerActivity extends BaseActivity {
 		}
 
 		@Override
-		protected List<Release> doInBackground(Void... params) {
+		protected List<ArtistRelease> doInBackground(Void... params) {
 
 			DiscogsService ds = new DiscogsService(getBaseContext(),
 					getConsumer(sharedPreferences));
-			List<Release> releases = null;
+			List<ArtistRelease> releases = null;
 			try {
 				releases = ds.getArtistReleases(this.mArtist.getId());
 			} catch (NoInternetConnectionException e) {
@@ -217,7 +217,7 @@ public class ReleasesViewerActivity extends BaseActivity {
 		}
 
 		@Override
-		protected void onPostExecute(List<Release> result) {
+		protected void onPostExecute(List<ArtistRelease> result) {
 			super.onPostExecute(result);
 			buildReleasesList(result);
 			mProgressDialog.dismiss();
@@ -229,10 +229,10 @@ public class ReleasesViewerActivity extends BaseActivity {
 			AsyncTask<Void, Void, List<Track>> {
 
 		private Context mContext;
-		private Release mRelease;
+		private ArtistRelease mRelease;
 		private LinearLayout mParentReleaseView;
 
-		public GetReleaseTracksTask(Context context, Release release,
+		public GetReleaseTracksTask(Context context, ArtistRelease release,
 				LinearLayout parentReleaseView) {
 			this.mContext = context;
 			this.mRelease = release;

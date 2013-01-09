@@ -21,7 +21,7 @@ import android.util.Log;
 import com.ventura.lyricsfinder.BaseService;
 import com.ventura.lyricsfinder.R;
 import com.ventura.lyricsfinder.discogs.entity.Artist;
-import com.ventura.lyricsfinder.discogs.entity.Release;
+import com.ventura.lyricsfinder.discogs.entity.ArtistRelease;
 import com.ventura.lyricsfinder.discogs.entity.SearchResult;
 import com.ventura.lyricsfinder.discogs.entity.Track;
 import com.ventura.lyricsfinder.discogs.entity.enumerator.QueryType;
@@ -92,7 +92,7 @@ public class DiscogsService extends BaseService {
 		return artist;
 	}
 
-	public List<Release> getArtistReleases(int artistId)
+	public List<ArtistRelease> getArtistReleases(int artistId)
 			throws NoInternetConnectionException,
 			LazyInternetConnectionException {
 
@@ -113,14 +113,14 @@ public class DiscogsService extends BaseService {
 			}
 		}
 
-		List<Release> releases = new ArrayList<Release>();
+		List<ArtistRelease> releases = new ArrayList<ArtistRelease>();
 
 		try {
 			JSONArray releasesJsonArray = jsonResponse
-					.getJSONArray(Release.KEY_SEARCH_RESULT_RELEASES);
+					.getJSONArray(ArtistRelease.KEY_SEARCH_RESULT_RELEASES);
 
 			for (int i = 0; i < releasesJsonArray.length(); i++) {
-				releases.add(new Release(releasesJsonArray.getJSONObject(i)));
+				releases.add(new ArtistRelease(releasesJsonArray.getJSONObject(i)));
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();
@@ -129,7 +129,7 @@ public class DiscogsService extends BaseService {
 		return releases;
 	}
 
-	public List<Track> getReleaseTracks(Release release)
+	public List<Track> getReleaseTracks(ArtistRelease release)
 			throws NoInternetConnectionException,
 			LazyInternetConnectionException {
 
