@@ -1,6 +1,6 @@
 package com.ventura.lyricsfinder.discogs.entity.enumerator;
 
-public enum ReleaseTypes {
+public enum ArtistReleaseTypes {
 	Release,
 	Master
 }

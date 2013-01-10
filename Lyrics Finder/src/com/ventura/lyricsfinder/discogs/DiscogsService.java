@@ -22,6 +22,8 @@ import com.ventura.lyricsfinder.BaseService;
 import com.ventura.lyricsfinder.R;
 import com.ventura.lyricsfinder.discogs.entity.Artist;
 import com.ventura.lyricsfinder.discogs.entity.ArtistRelease;
+import com.ventura.lyricsfinder.discogs.entity.Master;
+import com.ventura.lyricsfinder.discogs.entity.Release;
 import com.ventura.lyricsfinder.discogs.entity.SearchResult;
 import com.ventura.lyricsfinder.discogs.entity.Track;
 import com.ventura.lyricsfinder.discogs.entity.enumerator.QueryType;
@@ -120,7 +122,8 @@ public class DiscogsService extends BaseService {
 					.getJSONArray(ArtistRelease.KEY_SEARCH_RESULT_RELEASES);
 
 			for (int i = 0; i < releasesJsonArray.length(); i++) {
-				releases.add(new ArtistRelease(releasesJsonArray.getJSONObject(i)));
+				releases.add(new ArtistRelease(releasesJsonArray
+						.getJSONObject(i)));
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();
@@ -129,44 +132,56 @@ public class DiscogsService extends BaseService {
 		return releases;
 	}
 
-	public List<Track> getReleaseTracks(ArtistRelease release)
+	public Release getRelease(ArtistRelease artistRelease)
 			throws NoInternetConnectionException,
 			LazyInternetConnectionException {
 
 		Resources res = this.getContext().getResources();
-		String url = null;
-
-		switch (release.getType()) {
-		case Master:
-			url = res.getString(R.string.discogs_url_tracks_masters);
-			break;
-		case Release:
-			url = res.getString(R.string.discogs_url_tracks_releases);
-			break;
-		}
+		String url = res.getString(R.string.discogs_url_tracks_releases);
 
 		url = String.format(Constants.API_REQUEST + url,
-				String.valueOf(release.getId()));
+				String.valueOf(artistRelease.getId()));
 
 		JSONObject jsonResponse = this.doGet(url);
-		
-		List<Track> trackList = new ArrayList<Track>();
-		
+
+		Release release = null;
+
 		try {
 			if (jsonResponse.getBoolean(KEY_SUCCESS)) {
-				jsonResponse =  new JSONObject(jsonResponse.getString(KEY_DATA));
-				
-				JSONArray trackListJsonArray = jsonResponse.getJSONArray("tracklist");
-				
-				for (int i = 0; i < trackListJsonArray.length(); i++) {
-					trackList.add(new Track(trackListJsonArray.getJSONObject(i)));
-				}
+				jsonResponse = new JSONObject(jsonResponse.getString(KEY_DATA));
+				release = new Release(jsonResponse);
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
 
-		return trackList;
+		return release;
+	}
+
+	public Master getMaster(ArtistRelease artistRelease)
+			throws NoInternetConnectionException,
+			LazyInternetConnectionException {
+
+		Resources res = this.getContext().getResources();
+		String url = res.getString(R.string.discogs_url_tracks_masters);
+
+		url = String.format(Constants.API_REQUEST + url,
+				String.valueOf(artistRelease.getId()));
+
+		JSONObject jsonResponse = this.doGet(url);
+
+		Master master = null;
+
+		try {
+			if (jsonResponse.getBoolean(KEY_SUCCESS)) {
+				jsonResponse = new JSONObject(jsonResponse.getString(KEY_DATA));
+				master = new Master(jsonResponse);
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+
+		return master;
 	}
 
 	@Override

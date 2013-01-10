@@ -192,15 +192,21 @@ public class Artist {
 			// Obligatory fields
 			this.id = object.getInt(Artist.KEY_ID);
 			this.name = object.getString(Artist.KEY_NAME);
-			this.discogsUrl = new URL(object.getString(Artist.KEY_URI));
-			this.releasesUrl = new URL(
-					object.getString(Artist.KEY_RELEASES_URL));
 			this.profileUrl = new URL(object.getString(Artist.KEY_PROFILE_URL));
 			// End of obligatory fields
 
 			this.realName = object.optString(Artist.KEY_REALNAME);
 			this.profile = object.optString(Artist.KEY_PROFILE);
 			this.dataQuality = object.optString(Artist.KEY_DATA_QUALITY);
+			
+			String discogsUrl = object.optString(Artist.KEY_URI);
+			if (discogsUrl != null) {
+				this.discogsUrl = new URL(discogsUrl);	
+			}
+			String releasesUrl = object.optString(Artist.KEY_RELEASES_URL);
+			if (releasesUrl != null) {
+				this.releasesUrl = new URL(releasesUrl);	
+			}
 
 			// Loading external urls from the JSON object to an array
 			JSONArray artistArraysHelper = object
