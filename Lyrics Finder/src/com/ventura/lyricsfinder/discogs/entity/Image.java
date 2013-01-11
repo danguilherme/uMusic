@@ -2,6 +2,8 @@ package com.ventura.lyricsfinder.discogs.entity;
 
 import java.net.URL;
 
+import com.google.gson.annotations.SerializedName;
+
 import android.graphics.Bitmap;
 
 public class Image {
@@ -10,9 +12,16 @@ public class Image {
 	public static final String KEY_WIDTH = "width";
 	public static final String KEY_TYPE = "type";
 
-	private int height = 0;
-	private int width = 0;
+	@SerializedName(KEY_URI)
 	private URL url;
+	
+	@SerializedName(KEY_HEIGHT)
+	private int height = 0;
+	
+	@SerializedName(KEY_WIDTH)
+	private int width = 0;
+	
+	@SerializedName(KEY_TYPE)
 	private String type;
 	
 	private Bitmap bitmap;
@@ -34,6 +43,9 @@ public class Image {
 
 	public Image(URL thumbUri) {
 		this.setUrl(thumbUri);
+	}
+
+	public Image() {
 	}
 
 	public int getHeight() {

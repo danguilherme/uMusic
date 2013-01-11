@@ -1,16 +1,10 @@
 package com.ventura.lyricsfinder.discogs.entity;
 
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import android.net.Uri;
-import android.util.Log;
+import com.google.gson.annotations.SerializedName;
 
 public class Artist {
 	public static final String KEY_ID = "id";
@@ -18,7 +12,7 @@ public class Artist {
 	public static final String KEY_PROFILE = "profile";
 	public static final String KEY_IMAGES = "images";
 	public static final String KEY_NAME = "name";
-	public static final String KEY_REALNAME = "realname";
+	public static final String KEY_REAL_NAME = "realname";
 	public static final String KEY_NAME_VARIATIONS = "namevariations";
 	public static final String KEY_RELEASES_URL = "releases_url";
 	public static final String KEY_URI = "uri";
@@ -28,19 +22,34 @@ public class Artist {
 	public static final String KEY_GROUPS = "groups";
 	public static final String KEY_MEMBERS = "members";
 
+	@SerializedName(KEY_ID)
 	private int id;
+	@SerializedName(KEY_ACTIVE)
 	private boolean isActive;
+	@SerializedName(KEY_NAME)
 	private String name;
+	@SerializedName(KEY_REAL_NAME)
 	private String realName;
+	@SerializedName(KEY_NAME_VARIATIONS)
 	private List<String> nameVariations = new ArrayList<String>();
+	@SerializedName(KEY_PROFILE)
 	private String profile;
+	@SerializedName(KEY_RELEASES_URL)
 	private URL releasesUrl;
+	@SerializedName(KEY_URI)
 	private URL discogsUrl;
+	@SerializedName(KEY_EXTERNAL_URLS)
+	private List<URL> externalUrlsStrings = new ArrayList<URL>();
 	private List<ExternalUrl> externalUrls = new ArrayList<ExternalUrl>();
+	@SerializedName(KEY_IMAGES)
 	private List<Image> images = new ArrayList<Image>();
+	@SerializedName(KEY_PROFILE_URL)
 	private URL profileUrl;
+	@SerializedName(KEY_GROUPS)
 	private List<Group> groups = new ArrayList<Group>();
+	@SerializedName(KEY_MEMBERS)
 	private List<Artist> members = new ArrayList<Artist>();
+	@SerializedName(KEY_DATA_QUALITY)
 	private String dataQuality;
 
 	public Artist(int id, String name, URL discogsUrl) {
@@ -68,11 +77,14 @@ public class Artist {
 		this.profileUrl = profileUrl;
 	}
 
-	public Artist(JSONObject config) {
-		this.fill(config);
-	}
-
 	public Artist() {
+	}
+	
+	public void fillExternalUrlsList(){
+		this.externalUrls.clear();
+		for (int i = 0; i < externalUrlsStrings.size(); i++) {
+			this.externalUrls.add(new ExternalUrl(externalUrlsStrings.get(i), this));
+		}
 	}
 
 	public int getId() {
@@ -144,6 +156,10 @@ public class Artist {
 	}
 
 	public void setExternalUrls(List<ExternalUrl> externalUrls) {
+		this.externalUrlsStrings.clear();
+		for (int i = 0; i < externalUrls.size(); i++) {
+			this.externalUrlsStrings.add(externalUrls.get(i).getExternalUrl());
+		}
 		this.externalUrls = externalUrls;
 	}
 
@@ -185,95 +201,5 @@ public class Artist {
 
 	public void setDataQuality(String dataQuality) {
 		this.dataQuality = dataQuality;
-	}
-
-	public void fill(JSONObject object) {
-		try {
-			// Obligatory fields
-			this.id = object.getInt(Artist.KEY_ID);
-			this.name = object.getString(Artist.KEY_NAME);
-			this.profileUrl = new URL(object.getString(Artist.KEY_PROFILE_URL));
-			// End of obligatory fields
-
-			this.realName = object.optString(Artist.KEY_REALNAME);
-			this.profile = object.optString(Artist.KEY_PROFILE);
-			this.dataQuality = object.optString(Artist.KEY_DATA_QUALITY);
-			
-			String discogsUrl = object.optString(Artist.KEY_URI);
-			if (discogsUrl != null) {
-				this.discogsUrl = new URL(discogsUrl);	
-			}
-			String releasesUrl = object.optString(Artist.KEY_RELEASES_URL);
-			if (releasesUrl != null) {
-				this.releasesUrl = new URL(releasesUrl);	
-			}
-
-			// Loading external urls from the JSON object to an array
-			JSONArray artistArraysHelper = object
-					.optJSONArray(Artist.KEY_EXTERNAL_URLS);
-			for (int i = 0; artistArraysHelper != null
-					&& i < artistArraysHelper.length(); i++) {
-				this.externalUrls.add(new ExternalUrl(new URL(
-						artistArraysHelper.getString(i)), this));
-			}
-
-			artistArraysHelper = object
-					.optJSONArray(Artist.KEY_NAME_VARIATIONS);
-			for (int i = 0; artistArraysHelper != null
-					&& i < artistArraysHelper.length(); i++) {
-				this.nameVariations.add(artistArraysHelper.getString(i));
-			}
-
-			artistArraysHelper = object.optJSONArray(Artist.KEY_IMAGES);
-			Image image;
-			for (int i = 0; artistArraysHelper != null
-					&& i < artistArraysHelper.length(); i++) {
-				JSONObject actualImage = artistArraysHelper.getJSONObject(i);
-				image = new Image(
-						new URL(actualImage.getString(Image.KEY_URI)),
-						actualImage.getInt(Image.KEY_WIDTH),
-						actualImage.getInt(Image.KEY_HEIGHT),
-						actualImage.getString(Image.KEY_TYPE));
-				this.images.add(image);
-			}
-
-			artistArraysHelper = object.optJSONArray(Artist.KEY_GROUPS);
-			Group group;
-			for (int i = 0; artistArraysHelper != null
-					&& i < artistArraysHelper.length(); i++) {
-				JSONObject actualGroup = artistArraysHelper.getJSONObject(i);
-				group = new Group(actualGroup.getInt(Group.KEY_ID),
-						actualGroup.getString(Group.KEY_NAME),
-						Uri.parse(actualGroup.getString(Group.KEY_URI)));
-				this.groups.add(group);
-			}
-			artistArraysHelper = object.optJSONArray(Artist.KEY_MEMBERS);
-			for (int i = 0; artistArraysHelper != null
-					&& i < artistArraysHelper.length(); i++) {
-				JSONObject actualMember = artistArraysHelper.getJSONObject(i);
-				Artist artist = new Artist(actualMember.getInt(Artist.KEY_ID),
-						actualMember.getBoolean(Artist.KEY_ACTIVE),
-						actualMember.getString(Artist.KEY_NAME), new URL(
-								actualMember.getString(Artist.KEY_PROFILE_URL)));
-				this.members.add(artist);
-			}
-		} catch (JSONException e) {
-			e.printStackTrace();
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-		}
-
-		String tag = "New artist loaded";
-		Log.i(tag, "Id:\t\t" + this.getId());
-		Log.i(tag, "Name:\t\t" + this.getName());
-		Log.i(tag, "Name Variations:\t\t" + this.getNameVariations());
-		Log.i(tag, "Real Name:\t\t" + this.getRealName());
-		Log.i(tag, "Discogs URL:\t\t" + this.getDiscogsUrl());
-		Log.i(tag, "Profile URL:\t\t" + this.getProfileUrl());
-		Log.i(tag, "Profile:\t\t" + this.getProfile());
-		Log.i(tag, "External URLs:\t\t" + this.getExternalUrls().toString());
-		Log.i(tag, "Groups:\t\t" + this.getGroups().toString());
-		Log.i(tag, "Images:\t\t" + this.getImages().toString());
-		Log.i(tag, "Releases URL:\t\t" + this.getReleasesUrl());
 	}
 }

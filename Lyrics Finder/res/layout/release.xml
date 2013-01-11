@@ -70,17 +70,17 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/btn_release_open_tracks"
+        android:id="@+id/btn_artist_release_open_info"
         style="@android:style/Widget.Button.Small"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="3dp"
         android:drawableLeft="@drawable/arrow_right"
         android:drawablePadding="5dp"
-        android:text="Show tracks" />
+        android:text="Show info" />
 
     <LinearLayout
-        android:id="@+id/release_track_container"
+        android:id="@+id/artist_release_info_container"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="4dp"

@@ -1,14 +1,10 @@
 package com.ventura.lyricsfinder.discogs.entity;
 
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
+import com.google.gson.annotations.SerializedName;
 
 public class Release extends BasicRelease {
 	public static final String KEY_RELEASED_FORMATTED = "released_formatted";
@@ -16,36 +12,19 @@ public class Release extends BasicRelease {
 	public static final String KEY_MASTER_URL = "master_url";
 	public static final String KEY_LABELS = "labels";
 	public static final String KEY_EXTRA_ARTISTS = "extraartists";
-	
+	public static final String KEY_COUNTRY = "country";
+
 	// ???
 	private int releasedFormatted;
 	private int masterId;
 	private URL masterUrl;
+	@SerializedName(KEY_LABELS)
 	private List<Label> labels = new ArrayList<Label>();
+	@SerializedName(KEY_EXTRA_ARTISTS)
 	private List<Artist> extraArtists = new ArrayList<Artist>();
-
-	public Release(JSONObject releaseJsonObject) {
-		super(releaseJsonObject);
-		
-		try {
-			this.releasedFormatted = releaseJsonObject.getInt(KEY_RELEASED_FORMATTED);
-			this.masterId = releaseJsonObject.getInt(KEY_MASTER_ID);
-			this.masterUrl = new URL(releaseJsonObject.getString(KEY_RELEASED_FORMATTED));
-			this.labels = new ArrayList<Label>();
-			
-			JSONArray arrayHelper = releaseJsonObject
-					.optJSONArray(KEY_LABELS);
-			for (int i = 0; arrayHelper != null
-					&& i < arrayHelper.length(); i++) {
-				//arrayHelper.getString(i);
-				this.labels.add(new Label());
-			}
-		} catch (JSONException e) {
-			e.printStackTrace();
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-		}
-	}
+	
+	@SerializedName(KEY_COUNTRY)
+	private String country;
 
 	public int getReleasedFormatted() {
 		return releasedFormatted;
@@ -85,5 +64,13 @@ public class Release extends BasicRelease {
 
 	public void setExtraArtists(List<Artist> extraArtists) {
 		this.extraArtists = extraArtists;
+	}
+
+	public String getCountry() {
+		return country;
+	}
+
+	public void setCountry(String country) {
+		this.country = country;
 	}
 }

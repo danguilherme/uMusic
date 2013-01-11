@@ -17,9 +17,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.LinearLayout.LayoutParams;
 
 import com.ventura.lyricsfinder.R;
 import com.ventura.lyricsfinder.constants.GlobalConstants;
@@ -27,10 +27,11 @@ import com.ventura.lyricsfinder.discogs.DiscogsService;
 import com.ventura.lyricsfinder.discogs.entity.Artist;
 import com.ventura.lyricsfinder.discogs.entity.ArtistRelease;
 import com.ventura.lyricsfinder.discogs.entity.BasicRelease;
+import com.ventura.lyricsfinder.discogs.entity.Label;
 import com.ventura.lyricsfinder.discogs.entity.Master;
 import com.ventura.lyricsfinder.discogs.entity.Release;
 import com.ventura.lyricsfinder.discogs.entity.Track;
-import com.ventura.lyricsfinder.discogs.entity.enumerator.ArtistReleaseTypes;
+import com.ventura.lyricsfinder.discogs.entity.enumerator.SpecialEnums;
 import com.ventura.lyricsfinder.exception.LazyInternetConnectionException;
 import com.ventura.lyricsfinder.exception.NoInternetConnectionException;
 import com.ventura.lyricsfinder.ui.BaseActivity;
@@ -69,11 +70,11 @@ public class ReleasesViewerActivity extends BaseActivity {
 
 			ImageView thumb = (ImageView) releasePanel
 					.findViewById(R.id.release_thumb);
-			if (release.getThumb() != null) {
+			if (release.getThumbImage().getUrl() != null) {
 				thumb = (ImageView) releasePanel
 						.findViewById(R.id.release_thumb);
-				new ImageLoader(this).displayImage(release.getThumb().getUrl()
-						.toString(), thumb);
+				new ImageLoader(this).displayImage(release.getThumbImage()
+						.getUrl().toString(), thumb);
 
 				thumb.setOnClickListener(new OnClickListener() {
 					public void onClick(View v) {
@@ -97,12 +98,12 @@ public class ReleasesViewerActivity extends BaseActivity {
 			TextView format = (TextView) releasePanel
 					.findViewById(R.id.release_status);
 			Button openTracksButton = (Button) releasePanel
-					.findViewById(R.id.btn_release_open_tracks);
+					.findViewById(R.id.btn_artist_release_open_info);
 
 			openTracksButton.setOnClickListener(new OnClickListener() {
 				public void onClick(View view) {
 					LinearLayout tracksContainer = (LinearLayout) releasePanel
-							.findViewById(R.id.release_track_container);
+							.findViewById(R.id.artist_release_info_container);
 
 					if (release.getChildRelease() != null
 							&& release.getChildRelease().getTracks().size() > 0) {
@@ -115,7 +116,7 @@ public class ReleasesViewerActivity extends BaseActivity {
 						}
 
 					} else {
-						new GetReleaseTask(getBaseContext(), release,
+						new GetReleaseOrMasterTask(getBaseContext(), release,
 								releasePanel).execute();
 					}
 
@@ -130,24 +131,70 @@ public class ReleasesViewerActivity extends BaseActivity {
 			year.setText(release.getYear() + "");
 			type.setText(release.getType().toString());
 			format.setVisibility(View.GONE);
-			/*if (release.getFormat().equals("")) {
-				format.setVisibility(View.GONE);
-			} else {
-				format.setText(release.getFormat());
-			}*/
+			/*
+			 * if (release.getFormat().equals("")) {
+			 * format.setVisibility(View.GONE); } else {
+			 * format.setText(release.getFormat()); }
+			 */
 
 			((LinearLayout) this.findViewById(R.id.container))
 					.addView(releasePanel);
 		}
 	}
 
-	private void buildReleaseTracksList(BasicRelease result,
+	private void buildReleaseInfoView(Release result,
+			LinearLayout parentReleaseView) {
+
+		LinearLayout releaseInfoContainer = (LinearLayout) parentReleaseView
+				.findViewById(R.id.artist_release_info_container);
+
+		LinearLayout labelPanel = null;
+		if (result.getLabels().size() != 0) {
+			labelPanel = (LinearLayout) getLayoutInflater().inflate(
+					R.layout.label, null);
+			LinearLayout.LayoutParams linearLayoutParams = new LinearLayout.LayoutParams(
+					LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+			linearLayoutParams.setMargins(0, 0, 0, 10);
+			labelPanel.setLayoutParams(linearLayoutParams);
+
+			TextView txtName = (TextView) labelPanel.findViewById(R.id.label_name);
+			StringBuilder labels = new StringBuilder();
+
+			for (int i = 0; i < result.getLabels().size(); i++) {
+				Label label = result.getLabels().get(i);
+				labels.append(label.getName());
+
+				// If it's the last label
+				if ((i + 1) == result.getLabels().size()) {
+					// Add a final dot.
+					labels.append(".");
+				} else {
+					// Else, add a comma after the name
+					labels.append(";\r\n");
+				}
+			}
+
+			txtName.setText(labels.toString());
+			
+			releaseInfoContainer.addView(labelPanel);
+		}
+
+		this.buildTrackListView(result, parentReleaseView);
+	}
+
+	private void buildMasterInfoView(Master result,
+			LinearLayout parentReleaseView) {
+
+		this.buildTrackListView(result, parentReleaseView);
+	}
+
+	private void buildTrackListView(BasicRelease release,
 			LinearLayout parentReleaseView) {
 		LinearLayout tracksContainer = (LinearLayout) parentReleaseView
-				.findViewById(R.id.release_track_container);
+				.findViewById(R.id.artist_release_info_container);
 
-		for (int j = 0; j < result.getTracks().size(); j++) {
-			Track track = result.getTracks().get(j);
+		for (int j = 0; j < release.getTracks().size(); j++) {
+			Track track = release.getTracks().get(j);
 			LinearLayout trackPanel = (LinearLayout) getLayoutInflater()
 					.inflate(R.layout.track, null);
 
@@ -230,13 +277,14 @@ public class ReleasesViewerActivity extends BaseActivity {
 
 	}
 
-	private class GetReleaseTask extends AsyncTask<Void, Void, BasicRelease> {
+	private class GetReleaseOrMasterTask extends
+			AsyncTask<Void, Void, BasicRelease> {
 
 		private Context mContext;
 		private ArtistRelease mRelease;
 		private LinearLayout mParentReleaseView;
 
-		public GetReleaseTask(Context context, ArtistRelease release,
+		public GetReleaseOrMasterTask(Context context, ArtistRelease release,
 				LinearLayout parentReleaseView) {
 			this.mContext = context;
 			this.mRelease = release;
@@ -255,7 +303,8 @@ public class ReleasesViewerActivity extends BaseActivity {
 					getConsumer(sharedPreferences));
 			BasicRelease release = null;
 			try {
-				if (this.mRelease.getType() == ArtistReleaseTypes.Release) {
+				if (this.mRelease.getType().equals(
+						SpecialEnums.ARTIST_RELEASE_TYPE_RELEASE)) {
 					release = ds.getRelease(this.mRelease);
 				} else {
 					release = ds.getMaster(this.mRelease);
@@ -276,7 +325,13 @@ public class ReleasesViewerActivity extends BaseActivity {
 		@Override
 		protected void onPostExecute(BasicRelease result) {
 			super.onPostExecute(result);
-			buildReleaseTracksList(result, this.mParentReleaseView);
+			if (result.getType().equals(
+					SpecialEnums.ARTIST_RELEASE_TYPE_RELEASE)) {
+				buildReleaseInfoView((Release) result, this.mParentReleaseView);
+			} else if (result.getType().equals(
+					SpecialEnums.ARTIST_RELEASE_TYPE_MASTER)) {
+				buildMasterInfoView((Master) result, this.mParentReleaseView);
+			}
 		}
 
 	}

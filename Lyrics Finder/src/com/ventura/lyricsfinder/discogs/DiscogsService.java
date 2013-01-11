@@ -3,6 +3,7 @@ package com.ventura.lyricsfinder.discogs;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import oauth.signpost.OAuthConsumer;
 import oauth.signpost.exception.OAuthCommunicationException;
@@ -18,6 +19,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.util.Log;
 
+import com.google.gson.Gson;
 import com.ventura.lyricsfinder.BaseService;
 import com.ventura.lyricsfinder.R;
 import com.ventura.lyricsfinder.discogs.entity.Artist;
@@ -25,19 +27,22 @@ import com.ventura.lyricsfinder.discogs.entity.ArtistRelease;
 import com.ventura.lyricsfinder.discogs.entity.Master;
 import com.ventura.lyricsfinder.discogs.entity.Release;
 import com.ventura.lyricsfinder.discogs.entity.SearchResult;
-import com.ventura.lyricsfinder.discogs.entity.Track;
 import com.ventura.lyricsfinder.discogs.entity.enumerator.QueryType;
+import com.ventura.lyricsfinder.discogs.entity.enumerator.SpecialEnums;
 import com.ventura.lyricsfinder.discogs.oauth.Constants;
 import com.ventura.lyricsfinder.exception.LazyInternetConnectionException;
 import com.ventura.lyricsfinder.exception.NoInternetConnectionException;
 
 public class DiscogsService extends BaseService {
 	final String TAG = getClass().getName();
+
 	private OAuthConsumer mConsumer;
+	Gson deserializer;
 
 	public DiscogsService(Context context, OAuthConsumer consumer) {
 		super(context);
 		this.mConsumer = consumer;
+		this.deserializer = new Gson();
 	}
 
 	public SearchResult search(QueryType type, String query)
@@ -48,23 +53,18 @@ public class DiscogsService extends BaseService {
 		Resources res = this.getContext().getResources();
 		String url = res.getString(R.string.discogs_url_search);
 		url = String.format(Constants.API_REQUEST + url.replace("%26", "&"),
-				type, query).toLowerCase();
+				type, query).toLowerCase(Locale.US);
 
-		JSONObject jsonResponse = this.doGet(url);
+		String json = this.doGet(url);
 
 		SearchResult searchResult = null;
-
-		if (jsonResponse.optBoolean(this.KEY_SUCCESS)) {
-			String searchResults = jsonResponse.optString(this.KEY_DATA);
-			if (searchResults == null || searchResults == "")
-				return new SearchResult();
-
-			try {
-				searchResult = new SearchResult(type, new JSONObject(
-						searchResults));
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
+		if (json == null || json.equals(""))
+			return new SearchResult();
+		try {
+			JSONObject jsonResponse = new JSONObject(json);
+			searchResult = new SearchResult(type, jsonResponse);
+		} catch (JSONException e) {
+			e.printStackTrace();
 		}
 
 		return searchResult;
@@ -79,18 +79,17 @@ public class DiscogsService extends BaseService {
 		url = String.format(Constants.API_REQUEST + url,
 				String.valueOf(artistId));
 
-		JSONObject jsonResponse = this.doGet(url);
+		String jsonResponse = this.doGet(url);
 
 		Artist artist = null;
-		if (jsonResponse.optBoolean(this.KEY_SUCCESS)) {
-			String artistInfo = jsonResponse.optString(this.KEY_DATA);
 
-			try {
-				artist = new Artist(new JSONObject(artistInfo));
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
+		try {
+			artist = deserializer.fromJson(jsonResponse, Artist.class);
+			artist.fillExternalUrlsList();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
+
 		return artist;
 	}
 
@@ -103,29 +102,24 @@ public class DiscogsService extends BaseService {
 		url = String.format(Constants.API_REQUEST + url,
 				String.valueOf(artistId));
 
-		JSONObject jsonResponse = this.doGet(url);
-
-		if (jsonResponse.optBoolean(this.KEY_SUCCESS)) {
-			try {
-				// Needs this because the response in 'data' comes as string
-				jsonResponse = new JSONObject(
-						jsonResponse.optString(this.KEY_DATA));
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
-		}
+		String jsonResponse = this.doGet(url);
 
 		List<ArtistRelease> releases = new ArrayList<ArtistRelease>();
 
 		try {
-			JSONArray releasesJsonArray = jsonResponse
+			JSONArray releasesJsonArray = new JSONObject(jsonResponse)
 					.getJSONArray(ArtistRelease.KEY_SEARCH_RESULT_RELEASES);
-
+			
+			ArtistRelease singleRelease;
 			for (int i = 0; i < releasesJsonArray.length(); i++) {
-				releases.add(new ArtistRelease(releasesJsonArray
-						.getJSONObject(i)));
+				singleRelease = deserializer.fromJson(releasesJsonArray
+						.getJSONObject(i).toString(), Release.class);
+				singleRelease.loadThumb();
+				releases.add(singleRelease);
 			}
 		} catch (JSONException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
@@ -142,16 +136,15 @@ public class DiscogsService extends BaseService {
 		url = String.format(Constants.API_REQUEST + url,
 				String.valueOf(artistRelease.getId()));
 
-		JSONObject jsonResponse = this.doGet(url);
+		String jsonResponse = this.doGet(url);
 
 		Release release = null;
 
 		try {
-			if (jsonResponse.getBoolean(KEY_SUCCESS)) {
-				jsonResponse = new JSONObject(jsonResponse.getString(KEY_DATA));
-				release = new Release(jsonResponse);
-			}
-		} catch (JSONException e) {
+			release = deserializer.fromJson(jsonResponse, Release.class);
+			release.loadThumb();
+			release.setType(SpecialEnums.ARTIST_RELEASE_TYPE_RELEASE);
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
@@ -168,16 +161,15 @@ public class DiscogsService extends BaseService {
 		url = String.format(Constants.API_REQUEST + url,
 				String.valueOf(artistRelease.getId()));
 
-		JSONObject jsonResponse = this.doGet(url);
+		String jsonResponse = this.doGet(url);
 
 		Master master = null;
 
 		try {
-			if (jsonResponse.getBoolean(KEY_SUCCESS)) {
-				jsonResponse = new JSONObject(jsonResponse.getString(KEY_DATA));
-				master = new Master(jsonResponse);
-			}
-		} catch (JSONException e) {
+			master = deserializer.fromJson(jsonResponse, Master.class);
+			master.loadThumb();
+			master.setType(SpecialEnums.ARTIST_RELEASE_TYPE_MASTER);
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
@@ -185,8 +177,7 @@ public class DiscogsService extends BaseService {
 	}
 
 	@Override
-	protected JSONObject doGet(String url)
-			throws NoInternetConnectionException,
+	protected String doGet(String url) throws NoInternetConnectionException,
 			LazyInternetConnectionException {
 
 		HttpGet request = new HttpGet(url);

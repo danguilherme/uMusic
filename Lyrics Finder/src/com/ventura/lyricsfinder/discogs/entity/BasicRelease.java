@@ -7,49 +7,39 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.google.gson.annotations.SerializedName;
+
 public abstract class BasicRelease extends ArtistRelease {
 	public static final String KEY_TRACK_LIST = "tracklist";
 	public static final String KEY_STYLES = "styles";
 	public static final String KEY_ARTISTS = "artists";
-	public static final String KEY_COUNTRY = "country";
 	public static final String KEY_GENRES = "genres";
+	public static final String KEY_DATA_QUALITY = "data_quality";
 	public static final String KEY_IMAGES = "images";
 
-	private String country;
-	private String genres;
-	private String dataQuality;
+	@SerializedName(KEY_TRACK_LIST)
 	private List<Track> tracks = new ArrayList<Track>();
+	
+	@SerializedName(KEY_IMAGES)
 	private List<Image> images = new ArrayList<Image>();
-	private List<String> styles = new ArrayList<String>();
+	
+	@SerializedName(KEY_STYLES)
+	private List<String> styles;
+	
+	@SerializedName(KEY_GENRES)
+	private List<String> genres = new ArrayList<String>();
+	
+	@SerializedName(KEY_ARTISTS)
 	private List<Artist> artists = new ArrayList<Artist>();
+	
+	@SerializedName(KEY_DATA_QUALITY)
+	private String dataQuality;
 
-	public BasicRelease(JSONObject releaseJsonObject) {
-		super(releaseJsonObject);
-		try {
-			JSONArray arrayHelper = releaseJsonObject
-					.optJSONArray(KEY_TRACK_LIST);
-			for (int i = 0; arrayHelper != null && i < arrayHelper.length(); i++) {
-				this.tracks.add(new Track(arrayHelper.getJSONObject(i)));
-			}
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
-	public String getCountry() {
-		return country;
-	}
-
-	public void setCountry(String country) {
-		this.country = country;
-	}
-
-	public String getGenres() {
+	public List<String> getGenres() {
 		return genres;
 	}
 
-	public void setGenres(String genres) {
+	public void setGenres(List<String> genres) {
 		this.genres = genres;
 	}
 

@@ -1,5 +1,7 @@
 package com.ventura.lyricsfinder.discogs.entity;
 
+import com.google.gson.annotations.SerializedName;
+
 import android.net.Uri;
 
 public class Group {
@@ -7,8 +9,11 @@ public class Group {
 	public static final String KEY_NAME = "name";
 	public static final String KEY_URI = "resource_url";
 
+	@SerializedName(KEY_ID)
 	private int id;
+	@SerializedName(KEY_NAME)
 	private String name;
+	@SerializedName(KEY_URI)
 	private Uri uri;
 
 	public Group(int id, String name, Uri uri) {

@@ -2,31 +2,21 @@ package com.ventura.lyricsfinder.discogs.entity;
 
 import java.net.URL;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.google.gson.annotations.SerializedName;
 
 public class Master extends BasicRelease {
 	public static final String KEY_MAIN_RELEASE = "main_release";
 	public static final String KEY_MAIN_RELEASE_URL = "main_release_url";
 	public static final String KEY_VERSIONS_URL = "versions_url";
 
+	@SerializedName(KEY_MAIN_RELEASE)
 	private int mainRelease;
-	private URL mainReleaseUrl;
-	private URL versionsUrl;
 	
-	public Master(JSONObject masterJsonObject) {
-		super(masterJsonObject);
-		
-		try {
-			this.mainRelease = masterJsonObject.getInt(KEY_MAIN_RELEASE);
-		/*} catch (MalformedURLException e) {
-			e.printStackTrace();*/
-		} catch (JSONException e1) {
-			e1.printStackTrace();
-		} catch (Exception e1) {
-			e1.printStackTrace();
-		}
-	}
+	@SerializedName(KEY_MAIN_RELEASE_URL)
+	private URL mainReleaseUrl;
+
+	@SerializedName(KEY_VERSIONS_URL)
+	private URL versionsUrl;
 
 	public int getMainRelease() {
 		return mainRelease;

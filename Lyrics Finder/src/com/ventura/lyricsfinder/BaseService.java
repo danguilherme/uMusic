@@ -33,7 +33,7 @@ public class BaseService {
 		this.mContext = context;
 	}
 
-	protected JSONObject doGet(String url)
+	protected String doGet(String url)
 			throws NoInternetConnectionException,
 			LazyInternetConnectionException {
 		
@@ -49,7 +49,7 @@ public class BaseService {
 		return this.doGet(request);
 	}
 
-	protected JSONObject doGet(HttpGet request)
+	protected String doGet(HttpGet request)
 			throws NoInternetConnectionException,
 			LazyInternetConnectionException {
 		
@@ -57,7 +57,6 @@ public class BaseService {
 			throw new NoInternetConnectionException();
 
 		DefaultHttpClient httpClient = new DefaultHttpClient();
-		JSONObject returningObject = new JSONObject();
 		
 		Log.i(TAG, "Requesting URL : " + request.getURI());
 
@@ -76,17 +75,7 @@ public class BaseService {
 
 		if (response == null)
 			return null;
-
-		if (response.getStatusLine().getStatusCode() != 200) {
-			try {
-				returningObject.put(this.KEY_SUCCESS, false);
-				returningObject.put(this.KEY_MESSAGE, response.getStatusLine()
-						.getReasonPhrase());
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
-			return returningObject;
-		}
+		
 		Log.i(TAG, "Statusline : " + response.getStatusLine());
 		InputStream data;
 		StringBuilder responseBuilder = null;
@@ -107,16 +96,7 @@ public class BaseService {
 			e.printStackTrace();
 		}
 
-		try {
-			returningObject.put(this.KEY_SUCCESS, true);
-			returningObject.put(this.KEY_MESSAGE, this.KEY_SUCCESS);
-			returningObject.put(this.KEY_DATA, responseBuilder.toString());
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		return returningObject;
+		return responseBuilder.toString();
 
 	}
 

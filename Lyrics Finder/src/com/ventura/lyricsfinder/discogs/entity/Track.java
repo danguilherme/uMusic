@@ -11,22 +11,12 @@ public class Track {
 
 	private String title;
 	private String duration;
-	private int position;
+	private String position;
 	
-	public Track(String title, int position, String duration) {
+	public Track(String title, String position, String duration) {
 		this.title = title;
 		this.position = position;
 		this.duration = duration;
-	}
-	
-	public Track(JSONObject jsonObjectTrack) {
-		try {
-			this.title = jsonObjectTrack.getString(this.KEY_TITLE);
-			this.position = jsonObjectTrack.getInt(this.KEY_POSITION);
-			this.duration = jsonObjectTrack.getString(this.KEY_DURATION);
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
 	}
 
 	public String getTitle() {
@@ -45,11 +35,11 @@ public class Track {
 		this.duration = duration;
 	}
 
-	public int getPosition() {
+	public String getPosition() {
 		return position;
 	}
 
-	public void setPosition(int position) {
+	public void setPosition(String position) {
 		this.position = position;
 	}
 

@@ -1,16 +1,8 @@
 package com.ventura.lyricsfinder.discogs.entity;
 
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import com.ventura.lyricsfinder.discogs.entity.enumerator.ArtistRoles;
-import com.ventura.lyricsfinder.discogs.entity.enumerator.ArtistReleaseTypes;
+import com.google.gson.annotations.SerializedName;
 
 public class ArtistRelease implements Comparable<ArtistRelease> {
 
@@ -18,69 +10,63 @@ public class ArtistRelease implements Comparable<ArtistRelease> {
 
 	public static final String KEY_ID = "id";
 	public static final String KEY_TITLE = "title";
-	public static final String KEY_IMAGE = "thumb";
-	public static final String KEY_ROLE = "role";
-	public static final String KEY_YEAR = "year";
-	public static final String KEY_RESOURCE_URL = "resource_url";
 	public static final String KEY_TYPE = "type";
+	public static final String KEY_ROLE = "role";
+	public static final String KEY_RESOURCE_URL = "resource_url";
+	public static final String KEY_YEAR = "year";
 
+	public static final String KEY_IMAGE = "thumb";
 	public static final String KEY_STATUS = "status";
+	public static final String KEY_MAIN_RELEASE = "main_release";
 	public static final String KEY_LABEL = "label";
 	public static final String KEY_TRACK_INFO = "trackinfo";
 	public static final String KEY_FORMAT = "format";
-	public static final String KEY_MAIN_RELEASE = "main_release";
 
 	// Mandatory fields
+	@SerializedName(KEY_ID)
 	private int id;
-	private String title;
-	private ArtistReleaseTypes type;
-	private ArtistRoles role;
-	private URL url;
-	private int year;
 	
+	@SerializedName(KEY_TITLE)
+	private String title;
+	
+	@SerializedName(KEY_TYPE)
+	private String type;
+	
+	@SerializedName(KEY_ROLE)
+	private String role;
+	
+	@SerializedName(KEY_RESOURCE_URL)
+	private URL url;
+	
+	@SerializedName(KEY_YEAR)
+	private int year;
+
 	// Other fields
-	private Image thumb;
+	@SerializedName(KEY_IMAGE)
+	private URL thumb;
+	private Image thumbImage = new Image();
+	
+	@SerializedName(KEY_STATUS)
 	private String status;
+	
+	@SerializedName(KEY_MAIN_RELEASE)
 	private int mainRelease;
+	
+	@SerializedName(KEY_LABEL)
 	private String label;
+	
+	@SerializedName(KEY_TRACK_INFO)
 	private String trackInfo;
+	
+	@SerializedName(KEY_FORMAT)
 	private String format;
 	
 	private BasicRelease childRelease;
 
-	public ArtistRelease(JSONObject releaseJsonObject) {
-		try {
-			this.id = releaseJsonObject.getInt(KEY_ID);
-			this.title = releaseJsonObject.getString(KEY_TITLE);
-			String typeString = releaseJsonObject.getString(KEY_TYPE);
-			typeString = typeString.toLowerCase();
-			String firstLetter = typeString.substring(0, 1).toUpperCase();
-			typeString = firstLetter
-					+ typeString.substring(1, typeString.length());
-			this.type = Enum.valueOf(ArtistReleaseTypes.class, typeString);
-			this.url = new URL(releaseJsonObject.getString(KEY_RESOURCE_URL));
-			this.role = Enum.valueOf(ArtistRoles.class, releaseJsonObject.getString(KEY_ROLE));
-
-			String thumbUrl = releaseJsonObject.optString(KEY_IMAGE);
-			if (!thumbUrl.equals("")) {
-				this.thumb = new Image(new URL(thumbUrl));
-			}
-			this.mainRelease = releaseJsonObject.optInt(KEY_MAIN_RELEASE);
-			this.format = releaseJsonObject.optString(KEY_FORMAT);
-			this.trackInfo = releaseJsonObject.optString(KEY_TRACK_INFO);
-			this.label = releaseJsonObject.optString(KEY_LABEL);
-			this.year = releaseJsonObject.optInt(KEY_YEAR);
-			this.status = releaseJsonObject.optString(KEY_STATUS);
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-		} catch (JSONException e1) {
-			e1.printStackTrace();
-		} catch (Exception e1) {
-			e1.printStackTrace();
+	public void loadThumb() {
+		if (thumb != null) {
+			thumbImage.setUrl(thumb);	
 		}
-	}
-
-	public ArtistRelease() {
 	}
 	
 	public int getId() {
@@ -98,13 +84,13 @@ public class ArtistRelease implements Comparable<ArtistRelease> {
 	public void setTitle(String title) {
 		this.title = title;
 	}
-
-	public Image getThumb() {
-		return thumb;
+	
+	public Image getThumbImage() {
+		return thumbImage;
 	}
 
-	public void setThumb(Image thumb) {
-		this.thumb = thumb;
+	public void setThumbImage(Image thumbImage) {
+		this.thumbImage = thumbImage;
 	}
 
 	public int getMainRelease() {
@@ -115,11 +101,11 @@ public class ArtistRelease implements Comparable<ArtistRelease> {
 		this.mainRelease = mainRelease;
 	}
 
-	public ArtistRoles getRole() {
+	public String getRole() {
 		return role;
 	}
 
-	public void setRole(ArtistRoles role) {
+	public void setRole(String role) {
 		this.role = role;
 	}
 
@@ -139,11 +125,11 @@ public class ArtistRelease implements Comparable<ArtistRelease> {
 		this.url = url;
 	}
 
-	public ArtistReleaseTypes getType() {
+	public String getType() {
 		return type;
 	}
 
-	public void setType(ArtistReleaseTypes type) {
+	public void setType(String type) {
 		this.type = type;
 	}
 
