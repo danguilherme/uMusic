@@ -37,7 +37,6 @@ public class BindLyricsActivity extends BaseActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
 		this.setContentView(R.layout.activity_bind_lyrics);
 		mAcceptLyricsButton = (Button) this
 				.findViewById(R.id.btn_accept_lyrics);

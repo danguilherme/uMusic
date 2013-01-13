@@ -21,7 +21,7 @@ public class ArtistRelease implements Comparable<ArtistRelease> {
 	public static final String KEY_LABEL = "label";
 	public static final String KEY_TRACK_INFO = "trackinfo";
 	public static final String KEY_FORMAT = "format";
-
+	
 	// Mandatory fields
 	@SerializedName(KEY_ID)
 	private int id;
@@ -67,6 +67,10 @@ public class ArtistRelease implements Comparable<ArtistRelease> {
 		if (thumb != null) {
 			thumbImage.setUrl(thumb);	
 		}
+	}
+
+	public String toString(){
+		return "Release " + this.title;
 	}
 	
 	public int getId() {

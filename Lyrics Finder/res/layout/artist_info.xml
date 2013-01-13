@@ -1,64 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/com.ventura.lyricsfinder"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:visibility="gone" >
 
-    <TextView
-        android:id="@+id/artist_name"
-        style="@style/Title"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="5dip"
-        android:layout_marginRight="5dip" />
-
-    <TextView style="@style/scroll_divider" />
-
     <FrameLayout
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:background="#CCC" >
 
         <ScrollView
-            android:id="@+id/artist_scrollview"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="fill_parent"
+            android:layout_marginBottom="65dp" >
 
             <LinearLayout
+                android:id="@+id/scroll_container"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical" >
 
-                <FrameLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal|center_vertical" >
-
-                    <ImageView
-                        android:id="@+id/artist_image"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal|center_vertical"
-                        android:contentDescription="@string/song_artist"
-                        android:scaleType="fitXY"
-                        android:src="@drawable/no_image" />
-
-                    <ProgressBar
-                        android:id="@android:id/progress"
-                        style="@android:style/Widget.ProgressBar"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal|center_vertical"
-                        android:indeterminate="true" />
-                </FrameLayout>
-
-                <TextView
-                    android:id="@+id/artist_bio"
+                <com.ventura.lyricsfinder.ui.widget.ButtonGroup
+                    android:id="@+id/profile_and_releases_buttons_container"
                     android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:layout_marginLeft="5dip"
-                    android:layout_marginRight="5dip"
-                    android:paddingBottom="32dp" />
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" >
+
+                    <Button
+                        android:id="@+id/btn_open_artist_discogs_profile"
+                        style="@style/list_button"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical|center_horizontal"
+                        android:onClick="onOpenProfileButtonClicked"
+                        android:text="@string/discogs_view_artist_profile" />
+
+                    <Button
+                        android:id="@+id/btn_open_artist_releases"
+                        style="@style/list_button"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical|center_horizontal"
+                        android:onClick="onOpenReleasesButtonClicked"
+                        android:text="@string/discogs_view_artist_releases" />
+                </com.ventura.lyricsfinder.ui.widget.ButtonGroup>
+
+                <com.ventura.lyricsfinder.ui.widget.ButtonGroup
+                    android:id="@+id/members_container"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone"
+                    app:title="Band members:" >
+                </com.ventura.lyricsfinder.ui.widget.ButtonGroup>
+
+                <com.ventura.lyricsfinder.ui.widget.ButtonGroup
+                    android:id="@+id/external_urls_container"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:title="External URLs:" >
+                </com.ventura.lyricsfinder.ui.widget.ButtonGroup>
             </LinearLayout>
         </ScrollView>
 
@@ -66,91 +70,85 @@
             android:id="@+id/artist_aditional_information_sliding"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:content="@+id/sliding_content"
-            android:handle="@+id/slider" >
+            android:content="@android:id/content"
+            android:handle="@android:id/toggle" >
 
             <ScrollView
-                android:id="@+id/sliding_content"
+                android:id="@android:id/content"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:background="#CCC" >
+                android:background="#FFF" >
 
                 <LinearLayout
-                    android:id="@+id/container"
+                    android:id="@id/scroll_container"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical" >
 
-                    <com.ventura.lyricsfinder.ui.widget.ButtonGroup
-                        android:id="@+id/profile_and_releases_buttons_container"
-                        android:layout_width="fill_parent"
+                    <FrameLayout
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical" >
+                        android:layout_gravity="center_horizontal|center_vertical" >
 
-                        <Button
-                            android:id="@+id/btn_open_artist_discogs_profile"
-                            style="@style/list_button"
-                            android:layout_width="fill_parent"
+                        <ImageView
+                            android:id="@+id/artist_image"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:gravity="center_vertical|center_horizontal"
-                            android:onClick="onOpenProfileButtonClicked"
-                            android:text="@string/discogs_view_artist_profile" />
+                            android:layout_gravity="center_horizontal|center_vertical"
+                            android:contentDescription="@string/song_artist"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/no_image" />
 
-                        <Button
-                            android:id="@+id/btn_open_artist_releases"
-                            style="@style/list_button"
-                            android:layout_width="fill_parent"
+                        <ProgressBar
+                            android:id="@android:id/progress"
+                            style="@android:style/Widget.ProgressBar"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:gravity="center_vertical|center_horizontal"
-                            android:onClick="onOpenReleasesButtonClicked"
-                            android:text="@string/discogs_view_artist_releases" />
-                    </com.ventura.lyricsfinder.ui.widget.ButtonGroup>
+                            android:layout_gravity="center_horizontal|center_vertical"
+                            android:indeterminate="true" />
+                    </FrameLayout>
 
-                    <LinearLayout
-                            android:id="@+id/members_layout"
+                    <TextView
+                        android:id="@+id/artist_bio"
                         android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginRight="5dp"
-                        android:visibility="gone" >
-
-                        <TextView
-                            android:id="@+id/title"
-                            android:layout_width="fill_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Band members:"
-                            android:textStyle="bold"
-                            android:textSize="16sp" />
-
-                        <com.ventura.lyricsfinder.ui.widget.ButtonGroup
-                            android:id="@+id/members_container"
-                            android:layout_width="fill_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical" >
-                        </com.ventura.lyricsfinder.ui.widget.ButtonGroup>
-                    </LinearLayout>
-
-                    <com.ventura.lyricsfinder.ui.widget.ButtonGroup
-                        android:id="@+id/external_urls_container"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical" >
-                    </com.ventura.lyricsfinder.ui.widget.ButtonGroup>
+                        android:layout_height="fill_parent"
+                        android:layout_marginLeft="5dip"
+                        android:layout_marginRight="5dip"
+                        android:paddingBottom="32dp" />
                 </LinearLayout>
             </ScrollView>
 
             <LinearLayout
-                android:id="@+id/slider"
+                android:id="@android:id/toggle"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical|center_horizontal" >
+                android:background="#FFF"
+                android:gravity="center_vertical|center_horizontal"
+                android:orientation="vertical" >
+
+                <TextView style="@style/scroll_divider" />
+
+                <TextView
+                    android:id="@+id/artist_name"
+                    style="@style/Title"
+                    android:layout_width="fill_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginLeft="5dip"
+                    android:layout_marginRight="5dip"
+                    android:layout_weight="1"
+                    android:drawableRight="@drawable/ic_slider_down"
+                    android:gravity="center_vertical" />
 
                 <ImageView
-                    android:id="@+id/slider_drawable"
+                    android:id="@+id/imageview_arrow_up"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_slider_up" />
+                    android:layout_weight="1"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:src="@drawable/ic_slider_up"
+                    android:visibility="gone" />
+
+                <TextView style="@style/scroll_divider" />
             </LinearLayout>
         </SlidingDrawer>
     </FrameLayout>

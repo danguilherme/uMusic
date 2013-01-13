@@ -57,7 +57,7 @@ public class ReleasesViewerActivity extends BaseActivity {
 		new GetReleasesTask(this, artist).execute();
 	}
 
-	private void buildReleasesList(List<ArtistRelease> releases) {
+	private void buildArtistReleasesList(List<ArtistRelease> releases) {
 		this.mCurrentReleases = releases;
 
 		Collections.sort(mCurrentReleases);
@@ -271,7 +271,7 @@ public class ReleasesViewerActivity extends BaseActivity {
 		@Override
 		protected void onPostExecute(List<ArtistRelease> result) {
 			super.onPostExecute(result);
-			buildReleasesList(result);
+			buildArtistReleasesList(result);
 			mProgressDialog.dismiss();
 		}
 

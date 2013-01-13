@@ -6,7 +6,7 @@ import java.util.List;
 
 import com.google.gson.annotations.SerializedName;
 
-public class Artist {
+public class Artist implements Comparable<Artist> {
 	public static final String KEY_ID = "id";
 	public static final String KEY_ACTIVE = "active";
 	public static final String KEY_PROFILE = "profile";
@@ -79,12 +79,18 @@ public class Artist {
 
 	public Artist() {
 	}
-	
-	public void fillExternalUrlsList(){
+
+	public void fillExternalUrlsList() {
 		this.externalUrls.clear();
 		for (int i = 0; i < externalUrlsStrings.size(); i++) {
-			this.externalUrls.add(new ExternalUrl(externalUrlsStrings.get(i), this));
+			this.externalUrls.add(new ExternalUrl(externalUrlsStrings.get(i),
+					this));
 		}
+	}
+
+	@Override
+	public String toString() {
+		return this.name;
 	}
 
 	public int getId() {
@@ -201,5 +207,15 @@ public class Artist {
 
 	public void setDataQuality(String dataQuality) {
 		this.dataQuality = dataQuality;
+	}
+
+	public int compareTo(Artist another) {
+		if (this.isActive == another.isActive) {
+			return 0;
+		} else if (this.isActive && !another.isActive) {
+			return (-1);
+		} else {
+			return 1;
+		}
 	}
 }

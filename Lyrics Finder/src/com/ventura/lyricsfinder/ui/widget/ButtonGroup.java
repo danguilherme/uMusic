@@ -3,9 +3,12 @@ package com.ventura.lyricsfinder.ui.widget;
 import java.util.List;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -26,9 +29,13 @@ public class ButtonGroup extends LinearLayout {
 	private final int BUTTON_PADDING_RIGHT = 8;
 	private final int BUTTON_PADDING_BOTTOM = 12;
 
+	private TextView mTitleTextView;
+	private final int TITLE_ID = -2;
+
 	public ButtonGroup(Context context) {
 		super(context);
 		this.setOrientation(LinearLayout.VERTICAL);
+		this.buildTitle();
 	}
 
 	LinearLayout view;
@@ -37,6 +44,16 @@ public class ButtonGroup extends LinearLayout {
 		super(context, attributeSet);
 		this.setPadding(20, 10, 20, 10);
 		this.setOrientation(LinearLayout.VERTICAL);
+
+		TypedArray typedArray = context.obtainStyledAttributes(attributeSet,
+				R.styleable.ButtonGroup);
+		String groupTitle = typedArray.getString(R.styleable.ButtonGroup_title);
+
+		this.buildTitle();
+
+		if (groupTitle != null && !groupTitle.equals("")) {
+			this.setTitle(groupTitle);
+		}
 	}
 
 	public void addViews(List<Button> children) {
@@ -76,7 +93,7 @@ public class ButtonGroup extends LinearLayout {
 				|| child.getId() == ButtonSeparator.SEPARATOR_ID
 				|| child.getId() == R.id.title) {
 			LayoutParams linearLayoutParams = (LayoutParams) params;
-			//linearLayoutParams.setMargins(0, 0, 0, 0);
+			// linearLayoutParams.setMargins(0, 0, 0, 0);
 			child.setPadding(BUTTON_PADDING_LEFT, BUTTON_PADDING_TOP,
 					BUTTON_PADDING_RIGHT, BUTTON_PADDING_BOTTOM);
 			super.addView(child, linearLayoutParams);
@@ -91,6 +108,30 @@ public class ButtonGroup extends LinearLayout {
 		this.refreshButtonGroupPanel();
 	}
 
+	public void setTitle(String title) {
+		if (title != null && !title.equals("")) {
+			mTitleTextView.setVisibility(View.VISIBLE);
+			mTitleTextView.setText(title);
+		} else {
+			mTitleTextView.setVisibility(View.GONE);
+		}
+	}
+
+	private void buildTitle() {
+		mTitleTextView = new TextView(this.getContext());
+		
+		LinearLayout.LayoutParams layoutParams = new LayoutParams(
+				LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+		layoutParams.bottomMargin = 7;
+		mTitleTextView.setLayoutParams(layoutParams);
+		
+		mTitleTextView.setVisibility(View.GONE);
+		mTitleTextView.setId(TITLE_ID);
+		mTitleTextView.setTypeface(null, Typeface.BOLD);
+		mTitleTextView.setTextSize(16);
+		super.addView(mTitleTextView, 0);
+	}
+
 	private void refreshButtonGroupPanel() {
 
 		boolean first = true, isLast = false;
@@ -98,6 +139,10 @@ public class ButtonGroup extends LinearLayout {
 
 		for (int i = 0; i < childCount; i++, childCount = this.getChildCount()) {
 			View child = this.getChildAt(i);
+
+			if (child.getId() == TITLE_ID)
+				continue;
+
 			isLast = (i + 1) == childCount;
 			if (first) {
 				// If there's only one child
@@ -139,6 +184,5 @@ public class ButtonGroup extends LinearLayout {
 			this.setId(ButtonSeparator.SEPARATOR_ID);
 			this.setBackgroundColor(Color.LTGRAY);
 		}
-
 	}
 }

@@ -1,22 +1,25 @@
 package com.ventura.lyricsfinder.discogs.entity;
 
-import com.google.gson.annotations.SerializedName;
+import java.net.URL;
 
-import android.net.Uri;
+import com.google.gson.annotations.SerializedName;
 
 public class Group {
 	public static final String KEY_ID = "id";
 	public static final String KEY_NAME = "name";
 	public static final String KEY_URI = "resource_url";
+	public static final String KEY_ACTIVE = "id";
 
 	@SerializedName(KEY_ID)
 	private int id;
 	@SerializedName(KEY_NAME)
 	private String name;
 	@SerializedName(KEY_URI)
-	private Uri uri;
+	private URL uri;
+	@SerializedName(KEY_ACTIVE)
+	private boolean isActive; 
 
-	public Group(int id, String name, Uri uri) {
+	public Group(int id, String name, URL uri) {
 		this.id = id;
 		this.name = name;
 		this.uri = uri;
@@ -38,12 +41,16 @@ public class Group {
 		this.name = name;
 	}
 
-	public Uri getUri() {
+	public URL getUrl() {
 		return uri;
 	}
 
-	public void setUri(Uri uri) {
+	public void setUrl(URL uri) {
 		this.uri = uri;
+	}
+
+	public static String getKeyActive() {
+		return KEY_ACTIVE;
 	}
 
 	@Override

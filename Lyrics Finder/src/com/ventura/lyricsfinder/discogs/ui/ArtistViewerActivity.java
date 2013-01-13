@@ -1,5 +1,7 @@
 package com.ventura.lyricsfinder.discogs.ui;
 
+import it.sephiroth.demo.slider.widget.MultiDirectionSlidingDrawer;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -62,7 +64,8 @@ public class ArtistViewerActivity extends BaseActivity {
 	private TextView mArtistBio;
 	private TextView mArtistName;
 	private SlidingDrawer mSlidingDrawer;
-	private LinearLayout mSlidingDrawerContent;
+	private LinearLayout mArtistBioContent;
+	private LinearLayout mArtistExtraInfoContent;
 
 	private ImageDownloaderTask imageDownloaderTask = new ImageDownloaderTask();
 
@@ -85,28 +88,58 @@ public class ArtistViewerActivity extends BaseActivity {
 		mArtistBio = (TextView) findViewById(R.id.artist_bio);
 		mArtistName = (TextView) findViewById(R.id.artist_name);
 		mSlidingDrawer = (SlidingDrawer) findViewById(R.id.artist_aditional_information_sliding);
-		mSlidingDrawerContent = (LinearLayout) mSlidingDrawer
-				.findViewById(R.id.container);
+		mArtistBioContent = (LinearLayout) mSlidingDrawer
+				.findViewById(R.id.scroll_container);
+		mArtistExtraInfoContent = (LinearLayout) this
+				.findViewById(R.id.scroll_container);
 
 		mSlidingDrawer.setOnDrawerOpenListener(new OnDrawerOpenListener() {
 			public void onDrawerOpened() {
-				ImageView slidingDrawable = (ImageView) mSlidingDrawer
-						.getHandle().findViewById(R.id.slider_drawable);
-				slidingDrawable.setImageResource(R.drawable.ic_slider_down);
+				onArtistInfoDrawerOpened();
 			}
 		});
 
 		mSlidingDrawer.setOnDrawerCloseListener(new OnDrawerCloseListener() {
 			public void onDrawerClosed() {
-				ImageView slidingDrawable = (ImageView) mSlidingDrawer
-						.getHandle().findViewById(R.id.slider_drawable);
-				slidingDrawable.setImageResource(R.drawable.ic_slider_up);
+				onArtistInfoDrawerClosed();
 			}
 		});
+
+		mSlidingDrawer.open();
 
 		mArtistName.setText(artist.getName());
 
 		new GetArtistTask(this, consumer, artist).execute();
+	}
+
+	private void onArtistInfoDrawerOpened() {
+		LinearLayout.LayoutParams linearLayoutParams = new LinearLayout.LayoutParams(
+				mArtistName.getLayoutParams());
+		linearLayoutParams.height = LayoutParams.WRAP_CONTENT;
+
+		mArtistName.setCompoundDrawablesWithIntrinsicBounds(0, 0,
+				R.drawable.ic_slider_down, 0);
+
+		mArtistName.setLayoutParams(linearLayoutParams);
+
+		mArtistName.setVisibility(View.VISIBLE);
+		mSlidingDrawer.findViewById(R.id.imageview_arrow_up).setVisibility(
+				View.GONE);
+	}
+
+	private void onArtistInfoDrawerClosed() {
+		LinearLayout.LayoutParams linearLayoutParams = new LinearLayout.LayoutParams(
+				mArtistName.getLayoutParams());
+		linearLayoutParams.height = 85;
+
+		mArtistName.setCompoundDrawablesWithIntrinsicBounds(0, 0,
+				R.drawable.ic_slider_up, 0);
+
+		mArtistName.setLayoutParams(linearLayoutParams);
+
+		mArtistName.setVisibility(View.GONE);
+		mSlidingDrawer.findViewById(R.id.imageview_arrow_up).setVisibility(
+				View.VISIBLE);
 	}
 
 	private void fillView(Artist artist) {
@@ -364,7 +397,7 @@ public class ArtistViewerActivity extends BaseActivity {
 			key.setText("Real Name:");
 			value.setText(this.mCurrentArtist.getRealName());
 
-			mSlidingDrawerContent.addView(keyValuePanel);
+			mArtistExtraInfoContent.addView(keyValuePanel);
 		}
 
 		if (this.mCurrentArtist.getNameVariations().size() > 0) {
@@ -397,12 +430,13 @@ public class ArtistViewerActivity extends BaseActivity {
 			key.setText("Known name variations:");
 			value.setText(knownNames.toString());
 
-			mSlidingDrawerContent.addView(nameVariationsKeyValuePanel);
+			mArtistExtraInfoContent.addView(nameVariationsKeyValuePanel);
 		}
 	}
 
 	private void buildBandMembersView() {
 		if (this.mCurrentArtist.getMembers().size() > 0) {
+			Collections.sort(this.mCurrentArtist.getMembers());
 			// Add the name variations one by one, separated by comma and
 			// finalized with a dot.
 			ButtonGroup buttonGroup = (ButtonGroup) findViewById(R.id.members_container);
@@ -410,7 +444,8 @@ public class ArtistViewerActivity extends BaseActivity {
 			List<Button> buttonsToAdd = new ArrayList<Button>();
 			for (int i = 0; i < this.mCurrentArtist.getMembers().size(); i++) {
 				buttonGroup.setVisibility(View.VISIBLE);
-				this.findViewById(R.id.members_layout).setVisibility(View.VISIBLE);
+				buttonGroup.setVisibility(
+						View.VISIBLE);
 				final Artist actualMember = this.mCurrentArtist.getMembers()
 						.get(i);
 
@@ -751,8 +786,8 @@ public class ArtistViewerActivity extends BaseActivity {
 	// ****** EVENT HANDLERS ******
 	@Override
 	public void onBackPressed() {
-		if (this.mSlidingDrawer.isOpened()) {
-			this.mSlidingDrawer.animateClose();
+		if (!this.mSlidingDrawer.isOpened()) {
+			this.mSlidingDrawer.animateOpen();
 		} else {
 			super.onBackPressed();
 		}

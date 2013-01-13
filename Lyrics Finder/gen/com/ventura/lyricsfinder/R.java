@@ -11,9 +11,74 @@ public final class R {
     public static final class array {
         /**  LyrDB [END] 
          */
-        public static final int external_urls_context_menu_items=0x7f060000;
+        public static final int external_urls_context_menu_items=0x7f070000;
     }
     public static final class attr {
+        /** <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+         */
+        public static final int allowSingleTap=0x7f010005;
+        /** <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+         */
+        public static final int animateOnClick=0x7f010006;
+        /** <p>Must be a dimension value, which is a floating point number appended with a unit such as "<code>14.5sp</code>".
+Available units are: px (pixels), dp (density-independent pixels), sp (scaled pixels based on preferred font size),
+in (inches), mm (millimeters).
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+         */
+        public static final int bottomOffset=0x7f010003;
+        /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
+or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
+         */
+        public static final int content=0x7f010002;
+        /** <p>Must be one of the following constant values.</p>
+<table>
+<colgroup align="left" />
+<colgroup align="left" />
+<colgroup align="left" />
+<tr><th>Constant</th><th>Value</th><th>Description</th></tr>
+<tr><td><code>rightToLeft</code></td><td>0</td><td></td></tr>
+<tr><td><code>bottomToTop</code></td><td>1</td><td></td></tr>
+<tr><td><code>leftToRight</code></td><td>2</td><td></td></tr>
+<tr><td><code>topToBottom</code></td><td>3</td><td></td></tr>
+</table>
+         */
+        public static final int direction=0x7f010000;
+        /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
+or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
+         */
+        public static final int handle=0x7f010001;
+        /** <p>Must be a string value, using '\\;' to escape characters such as '\\n' or '\\uxxxx' for a unicode character.
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+         */
+        public static final int title=0x7f010007;
+        /** <p>Must be a dimension value, which is a floating point number appended with a unit such as "<code>14.5sp</code>".
+Available units are: px (pixels), dp (density-independent pixels), sp (scaled pixels based on preferred font size),
+in (inches), mm (millimeters).
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+         */
+        public static final int topOffset=0x7f010004;
     }
     public static final class drawable {
         public static final int arrow=0x7f020000;
@@ -70,69 +135,70 @@ public final class R {
         public static final int youtube_32=0x7f020033;
     }
     public static final class id {
-        public static final int album_text_field=0x7f090022;
-        public static final int arrow=0x7f09001b;
-        public static final int artist=0x7f090019;
-        public static final int artist_aditional_information_sliding=0x7f090008;
-        public static final int artist_bio=0x7f090007;
-        public static final int artist_image=0x7f090006;
-        public static final int artist_name=0x7f090004;
-        public static final int artist_release_info_container=0x7f090034;
-        public static final int artist_scrollview=0x7f090005;
-        public static final int artist_text_field=0x7f090021;
-        public static final int artist_text_view=0x7f09001d;
-        public static final int btn_accept_lyrics=0x7f090000;
-        public static final int btn_artist_release_open_info=0x7f090033;
-        public static final int btn_edit_lyrics=0x7f090001;
-        public static final int btn_open_artist_discogs_profile=0x7f09000d;
-        public static final int btn_open_artist_releases=0x7f09000e;
-        public static final int btn_save_file=0x7f09001f;
-        public static final int comment_text_field=0x7f090023;
-        public static final int compilation_text_field=0x7f090024;
-        public static final int composer2_text_field=0x7f090026;
-        public static final int composer_text_field=0x7f090025;
-        public static final int container=0x7f09000b;
-        public static final int duration=0x7f09001a;
-        public static final int duration_text_field=0x7f090027;
-        public static final int external_urls_container=0x7f090012;
-        public static final int featuring_list_text_field=0x7f090028;
-        public static final int genre_text_field=0x7f090029;
-        public static final int key=0x7f090014;
-        public static final int label_name=0x7f090016;
-        public static final int list_image=0x7f090018;
-        public static final int lyrics_text_field=0x7f090003;
-        public static final int lyrics_text_view=0x7f090002;
-        public static final int members_container=0x7f090011;
-        public static final int members_layout=0x7f09000f;
-        public static final int menu_artist_options=0x7f090038;
-        public static final int menu_download_artist_image=0x7f090039;
-        public static final int menu_find_lyrics=0x7f09003d;
-        public static final int menu_music_options=0x7f09003c;
-        public static final int menu_search_options=0x7f09003a;
-        public static final int menu_set_music_tags=0x7f09003b;
-        public static final int menu_view_artist_info=0x7f09003e;
-        public static final int music_text_field=0x7f090020;
-        public static final int music_text_view=0x7f09001c;
-        public static final int producer_artist_text_field=0x7f09002b;
-        public static final int producer_text_field=0x7f09002a;
-        public static final int profile_and_releases_buttons_container=0x7f09000c;
-        public static final int progress_bar_container=0x7f09001e;
-        public static final int release_status=0x7f090032;
-        public static final int release_thumb=0x7f09002e;
-        public static final int release_title=0x7f09002f;
-        public static final int release_type=0x7f090030;
-        public static final int release_year=0x7f090031;
-        public static final int slider=0x7f09000a;
-        public static final int slider_drawable=0x7f090013;
-        public static final int sliding_content=0x7f090009;
-        public static final int thumbnail=0x7f090017;
-        public static final int title=0x7f090010;
-        public static final int track_duration=0x7f090037;
-        public static final int track_number_text_field=0x7f09002c;
-        public static final int track_position=0x7f090035;
-        public static final int track_title=0x7f090036;
-        public static final int value=0x7f090015;
-        public static final int year_text_field=0x7f09002d;
+        public static final int album_text_field=0x7f050022;
+        public static final int arrow=0x7f05001b;
+        public static final int artist=0x7f050019;
+        public static final int artist_aditional_information_sliding=0x7f05000e;
+        public static final int artist_bio=0x7f050010;
+        public static final int artist_image=0x7f05000f;
+        public static final int artist_name=0x7f050011;
+        public static final int artist_release_info_container=0x7f050034;
+        public static final int artist_text_field=0x7f050021;
+        public static final int artist_text_view=0x7f05001d;
+        public static final int bottomToTop=0x7f050001;
+        public static final int btn_accept_lyrics=0x7f050004;
+        public static final int btn_artist_release_open_info=0x7f050033;
+        public static final int btn_edit_lyrics=0x7f050005;
+        public static final int btn_open_artist_discogs_profile=0x7f05000a;
+        public static final int btn_open_artist_releases=0x7f05000b;
+        public static final int btn_save_file=0x7f05001f;
+        public static final int comment_text_field=0x7f050023;
+        public static final int compilation_text_field=0x7f050024;
+        public static final int composer2_text_field=0x7f050026;
+        public static final int composer_text_field=0x7f050025;
+        public static final int container=0x7f050035;
+        public static final int duration=0x7f05001a;
+        public static final int duration_text_field=0x7f050027;
+        public static final int external_urls_container=0x7f05000d;
+        public static final int featuring_list_text_field=0x7f050028;
+        public static final int genre_text_field=0x7f050029;
+        public static final int imageview_arrow_up=0x7f050012;
+        public static final int key=0x7f050013;
+        public static final int label_name=0x7f050015;
+        public static final int leftToRight=0x7f050002;
+        public static final int list_image=0x7f050017;
+        public static final int lyrics_text_field=0x7f050007;
+        public static final int lyrics_text_view=0x7f050006;
+        public static final int members_container=0x7f05000c;
+        public static final int menu_artist_options=0x7f050039;
+        public static final int menu_download_artist_image=0x7f05003a;
+        public static final int menu_find_lyrics=0x7f05003e;
+        public static final int menu_music_options=0x7f05003d;
+        public static final int menu_search_options=0x7f05003b;
+        public static final int menu_set_music_tags=0x7f05003c;
+        public static final int menu_view_artist_info=0x7f05003f;
+        public static final int music_text_field=0x7f050020;
+        public static final int music_text_view=0x7f05001c;
+        public static final int producer_artist_text_field=0x7f05002b;
+        public static final int producer_text_field=0x7f05002a;
+        public static final int profile_and_releases_buttons_container=0x7f050009;
+        public static final int progress_bar_container=0x7f05001e;
+        public static final int release_status=0x7f050032;
+        public static final int release_thumb=0x7f05002e;
+        public static final int release_title=0x7f05002f;
+        public static final int release_type=0x7f050030;
+        public static final int release_year=0x7f050031;
+        public static final int rightToLeft=0x7f050000;
+        public static final int scroll_container=0x7f050008;
+        public static final int thumbnail=0x7f050016;
+        public static final int title=0x7f050018;
+        public static final int topToBottom=0x7f050003;
+        public static final int track_duration=0x7f050038;
+        public static final int track_number_text_field=0x7f05002c;
+        public static final int track_position=0x7f050036;
+        public static final int track_title=0x7f050037;
+        public static final int value=0x7f050014;
+        public static final int year_text_field=0x7f05002d;
     }
     public static final class layout {
         public static final int activity_bind_lyrics=0x7f030000;
@@ -151,136 +217,290 @@ public final class R {
         public static final int track=0x7f03000d;
     }
     public static final class menu {
-        public static final int artist_info_menu=0x7f080000;
-        public static final int list_lyrics_menu=0x7f080001;
-        public static final int music_info_menu=0x7f080002;
+        public static final int artist_info_menu=0x7f090000;
+        public static final int list_lyrics_menu=0x7f090001;
+        public static final int music_info_menu=0x7f090002;
     }
     public static final class string {
-        public static final int app_code_name=0x7f050001;
-        public static final int app_name=0x7f050000;
-        public static final int app_version=0x7f050002;
-        public static final int btn_edit_lyrics=0x7f05001a;
-        public static final int btn_lyrics_is_ok=0x7f050019;
-        public static final int btn_save_file=0x7f050014;
-        public static final int btn_select_lyric=0x7f05003d;
-        public static final int discogs_url_artists=0x7f050040;
-        public static final int discogs_url_releases=0x7f050041;
+        public static final int app_code_name=0x7f060001;
+        public static final int app_name=0x7f060000;
+        public static final int app_version=0x7f060002;
+        public static final int btn_edit_lyrics=0x7f06001a;
+        public static final int btn_lyrics_is_ok=0x7f060019;
+        public static final int btn_save_file=0x7f060014;
+        public static final int btn_select_lyric=0x7f06003d;
+        public static final int discogs_url_artists=0x7f060040;
+        public static final int discogs_url_releases=0x7f060041;
         /**  Lyrics Viewer [END] 
  Discogs [START] 
          */
-        public static final int discogs_url_search=0x7f05003f;
-        public static final int discogs_url_tracks_masters=0x7f050043;
-        public static final int discogs_url_tracks_releases=0x7f050042;
+        public static final int discogs_url_search=0x7f06003f;
+        public static final int discogs_url_tracks_masters=0x7f060043;
+        public static final int discogs_url_tracks_releases=0x7f060042;
         /**  Artist Viewer [START] 
          */
-        public static final int discogs_view_artist_profile=0x7f050037;
-        public static final int discogs_view_artist_releases=0x7f050038;
-        public static final int facebook=0x7f05001c;
-        public static final int googleplus=0x7f05001f;
+        public static final int discogs_view_artist_profile=0x7f060037;
+        public static final int discogs_view_artist_releases=0x7f060038;
+        public static final int facebook=0x7f06001c;
+        public static final int googleplus=0x7f06001f;
         /**  Discogs [END] 
  LyrDB [START] 
          */
-        public static final int lyrdb_url_base=0x7f050044;
-        public static final int lyrdb_url_lyrics=0x7f050046;
-        public static final int lyrdb_url_search=0x7f050045;
-        public static final int menu_download_artist_image=0x7f050039;
-        public static final int menu_find_lyrics=0x7f050015;
-        public static final int menu_set_music_tags=0x7f05003e;
-        public static final int menu_view_artist_info=0x7f050016;
-        public static final int menu_view_artist_info_condensed=0x7f050017;
-        public static final int message_artist_not_found=0x7f05002d;
-        public static final int message_fetching_artists_list_body=0x7f05002c;
-        public static final int message_fetching_artists_list_title=0x7f05002b;
-        public static final int message_fetching_lyric_body=0x7f050029;
-        public static final int message_fetching_lyric_title=0x7f050028;
-        public static final int message_fetching_lyrics_list_body=0x7f050027;
-        public static final int message_fetching_lyrics_list_title=0x7f050026;
-        public static final int message_fetching_releases_body=0x7f05003b;
+        public static final int lyrdb_url_base=0x7f060044;
+        public static final int lyrdb_url_lyrics=0x7f060046;
+        public static final int lyrdb_url_search=0x7f060045;
+        public static final int menu_download_artist_image=0x7f060039;
+        public static final int menu_find_lyrics=0x7f060015;
+        public static final int menu_set_music_tags=0x7f06003e;
+        public static final int menu_view_artist_info=0x7f060016;
+        public static final int menu_view_artist_info_condensed=0x7f060017;
+        public static final int message_artist_not_found=0x7f06002d;
+        public static final int message_fetching_artists_list_body=0x7f06002c;
+        public static final int message_fetching_artists_list_title=0x7f06002b;
+        public static final int message_fetching_lyric_body=0x7f060029;
+        public static final int message_fetching_lyric_title=0x7f060028;
+        public static final int message_fetching_lyrics_list_body=0x7f060027;
+        public static final int message_fetching_lyrics_list_title=0x7f060026;
+        public static final int message_fetching_releases_body=0x7f06003b;
         /**  Artist Viewer [END] 
  Releases Viewer [START] 
          */
-        public static final int message_fetching_releases_title=0x7f05003a;
-        public static final int message_file_not_supported=0x7f050030;
-        public static final int message_lyric_not_found=0x7f05002a;
-        public static final int message_lyrics_saved=0x7f05002e;
+        public static final int message_fetching_releases_title=0x7f06003a;
+        public static final int message_file_not_supported=0x7f060030;
+        public static final int message_lyric_not_found=0x7f06002a;
+        public static final int message_lyrics_saved=0x7f06002e;
         /**  External URLs [END] 
  Messages [START] 
          */
-        public static final int message_no_internet_connection=0x7f050025;
-        public static final int message_no_music_metadata_found=0x7f05002f;
-        public static final int myspace=0x7f050022;
-        public static final int other_website=0x7f050024;
-        public static final int own_website=0x7f050023;
-        public static final int provider_azlyrics_name=0x7f050035;
-        public static final int provider_azlyrics_url=0x7f050036;
-        public static final int provider_lyrster_name=0x7f050033;
-        public static final int provider_lyrster_url=0x7f050034;
+        public static final int message_no_internet_connection=0x7f060025;
+        public static final int message_no_music_metadata_found=0x7f06002f;
+        public static final int myspace=0x7f060022;
+        public static final int other_website=0x7f060024;
+        public static final int own_website=0x7f060023;
+        public static final int provider_azlyrics_name=0x7f060035;
+        public static final int provider_azlyrics_url=0x7f060036;
+        public static final int provider_lyrster_name=0x7f060033;
+        public static final int provider_lyrster_url=0x7f060034;
         /**  Messages [END] 
          */
-        public static final int provider_terra_name=0x7f050031;
-        public static final int provider_terra_url=0x7f050032;
-        public static final int song_album=0x7f050005;
+        public static final int provider_terra_name=0x7f060031;
+        public static final int provider_terra_url=0x7f060032;
+        public static final int song_album=0x7f060005;
         /**  Song Properties [START] 
          */
-        public static final int song_artist=0x7f050003;
-        public static final int song_comment=0x7f050006;
-        public static final int song_compilation=0x7f050007;
-        public static final int song_composer=0x7f050008;
-        public static final int song_composer2=0x7f050009;
-        public static final int song_duration=0x7f05000a;
-        public static final int song_featuring_list=0x7f05000b;
-        public static final int song_genre=0x7f05000c;
-        public static final int song_producer=0x7f05000d;
-        public static final int song_producer_artist=0x7f05000e;
-        public static final int song_title=0x7f050004;
-        public static final int song_track_number=0x7f05000f;
-        public static final int song_year=0x7f050010;
+        public static final int song_artist=0x7f060003;
+        public static final int song_comment=0x7f060006;
+        public static final int song_compilation=0x7f060007;
+        public static final int song_composer=0x7f060008;
+        public static final int song_composer2=0x7f060009;
+        public static final int song_duration=0x7f06000a;
+        public static final int song_featuring_list=0x7f06000b;
+        public static final int song_genre=0x7f06000c;
+        public static final int song_producer=0x7f06000d;
+        public static final int song_producer_artist=0x7f06000e;
+        public static final int song_title=0x7f060004;
+        public static final int song_track_number=0x7f06000f;
+        public static final int song_year=0x7f060010;
         /**  Song Properties [END] 
  Artist Viewer Activity [START] 
          */
-        public static final int title_activity_artist_viewer=0x7f050011;
+        public static final int title_activity_artist_viewer=0x7f060011;
         /**  Music Info Activity [END] 
  Bind Lyrics Activity [START] 
          */
-        public static final int title_activity_bind_lyrics=0x7f050018;
+        public static final int title_activity_bind_lyrics=0x7f060018;
         /**  Releases Viewer [END] 
  Lyrics Viewer [START] 
          */
-        public static final int title_activity_lyrics_viewer=0x7f05003c;
+        public static final int title_activity_lyrics_viewer=0x7f06003c;
         /**  Releases Viewer Activity [END] 
  Music Info Activity [START] 
          */
-        public static final int title_activity_music_info=0x7f050013;
+        public static final int title_activity_music_info=0x7f060013;
         /**  Artist Viewer Activity [END] 
  Releases Viewer Activity [START] 
          */
-        public static final int title_activity_releases_viewer=0x7f050012;
-        public static final int tumblr=0x7f050020;
+        public static final int title_activity_releases_viewer=0x7f060012;
+        public static final int tumblr=0x7f060020;
         /**  Bind Lyrics Activity [END] 
  External URLs [START] 
          */
-        public static final int twitter=0x7f05001b;
-        public static final int vimeo=0x7f050021;
-        public static final int wikipedia=0x7f05001d;
-        public static final int youtube=0x7f05001e;
+        public static final int twitter=0x7f06001b;
+        public static final int vimeo=0x7f060021;
+        public static final int wikipedia=0x7f06001d;
+        public static final int youtube=0x7f06001e;
     }
     public static final class style {
-        public static final int AppTheme=0x7f070000;
-        public static final int Labels=0x7f070003;
-        public static final int Lyric=0x7f070002;
-        public static final int LyricFilter=0x7f070001;
-        public static final int MusicInfoLinearLayout=0x7f070006;
+        public static final int AppTheme=0x7f080000;
+        public static final int Labels=0x7f080003;
+        public static final int Lyric=0x7f080002;
+        public static final int LyricFilter=0x7f080001;
+        public static final int MusicInfoLinearLayout=0x7f080006;
         /**  Music Info Activity 
          */
-        public static final int MusicInfoTextField=0x7f070004;
-        public static final int MusicInfoTextView=0x7f070005;
+        public static final int MusicInfoTextField=0x7f080004;
+        public static final int MusicInfoTextView=0x7f080005;
         /**  Artist Info 
          */
-        public static final int Title=0x7f070007;
-        public static final int list_button=0x7f070009;
-        public static final int scroll_divider=0x7f070008;
+        public static final int Title=0x7f080007;
+        public static final int list_button=0x7f080009;
+        public static final int scroll_divider=0x7f080008;
     }
     public static final class xml {
         public static final int searchable=0x7f040000;
     }
+    public static final class styleable {
+        /** Attributes that can be used with a ButtonGroup.
+           <p>Includes the following attributes:</p>
+           <table>
+           <colgroup align="left" />
+           <colgroup align="left" />
+           <tr><th>Attribute</th><th>Description</th></tr>
+           <tr><td><code>{@link #ButtonGroup_title com.ventura.lyricsfinder:title}</code></td><td></td></tr>
+           </table>
+           @see #ButtonGroup_title
+         */
+        public static final int[] ButtonGroup = {
+            0x7f010007
+        };
+        /**
+          <p>This symbol is the offset where the {@link com.ventura.lyricsfinder.R.attr#title}
+          attribute's value can be found in the {@link #ButtonGroup} array.
+
+
+          <p>Must be a string value, using '\\;' to escape characters such as '\\n' or '\\uxxxx' for a unicode character.
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+          @attr name android:title
+        */
+        public static final int ButtonGroup_title = 0;
+        /** Attributes that can be used with a MultiDirectionSlidingDrawer.
+           <p>Includes the following attributes:</p>
+           <table>
+           <colgroup align="left" />
+           <colgroup align="left" />
+           <tr><th>Attribute</th><th>Description</th></tr>
+           <tr><td><code>{@link #MultiDirectionSlidingDrawer_allowSingleTap com.ventura.lyricsfinder:allowSingleTap}</code></td><td></td></tr>
+           <tr><td><code>{@link #MultiDirectionSlidingDrawer_animateOnClick com.ventura.lyricsfinder:animateOnClick}</code></td><td></td></tr>
+           <tr><td><code>{@link #MultiDirectionSlidingDrawer_bottomOffset com.ventura.lyricsfinder:bottomOffset}</code></td><td></td></tr>
+           <tr><td><code>{@link #MultiDirectionSlidingDrawer_content com.ventura.lyricsfinder:content}</code></td><td></td></tr>
+           <tr><td><code>{@link #MultiDirectionSlidingDrawer_direction com.ventura.lyricsfinder:direction}</code></td><td></td></tr>
+           <tr><td><code>{@link #MultiDirectionSlidingDrawer_handle com.ventura.lyricsfinder:handle}</code></td><td></td></tr>
+           <tr><td><code>{@link #MultiDirectionSlidingDrawer_topOffset com.ventura.lyricsfinder:topOffset}</code></td><td></td></tr>
+           </table>
+           @see #MultiDirectionSlidingDrawer_allowSingleTap
+           @see #MultiDirectionSlidingDrawer_animateOnClick
+           @see #MultiDirectionSlidingDrawer_bottomOffset
+           @see #MultiDirectionSlidingDrawer_content
+           @see #MultiDirectionSlidingDrawer_direction
+           @see #MultiDirectionSlidingDrawer_handle
+           @see #MultiDirectionSlidingDrawer_topOffset
+         */
+        public static final int[] MultiDirectionSlidingDrawer = {
+            0x7f010000, 0x7f010001, 0x7f010002, 0x7f010003,
+            0x7f010004, 0x7f010005, 0x7f010006
+        };
+        /**
+          <p>This symbol is the offset where the {@link com.ventura.lyricsfinder.R.attr#allowSingleTap}
+          attribute's value can be found in the {@link #MultiDirectionSlidingDrawer} array.
+
+
+          <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+          @attr name android:allowSingleTap
+        */
+        public static final int MultiDirectionSlidingDrawer_allowSingleTap = 5;
+        /**
+          <p>This symbol is the offset where the {@link com.ventura.lyricsfinder.R.attr#animateOnClick}
+          attribute's value can be found in the {@link #MultiDirectionSlidingDrawer} array.
+
+
+          <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+          @attr name android:animateOnClick
+        */
+        public static final int MultiDirectionSlidingDrawer_animateOnClick = 6;
+        /**
+          <p>This symbol is the offset where the {@link com.ventura.lyricsfinder.R.attr#bottomOffset}
+          attribute's value can be found in the {@link #MultiDirectionSlidingDrawer} array.
+
+
+          <p>Must be a dimension value, which is a floating point number appended with a unit such as "<code>14.5sp</code>".
+Available units are: px (pixels), dp (density-independent pixels), sp (scaled pixels based on preferred font size),
+in (inches), mm (millimeters).
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+          @attr name android:bottomOffset
+        */
+        public static final int MultiDirectionSlidingDrawer_bottomOffset = 3;
+        /**
+          <p>This symbol is the offset where the {@link com.ventura.lyricsfinder.R.attr#content}
+          attribute's value can be found in the {@link #MultiDirectionSlidingDrawer} array.
+
+
+          <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
+or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
+          @attr name android:content
+        */
+        public static final int MultiDirectionSlidingDrawer_content = 2;
+        /**
+          <p>This symbol is the offset where the {@link com.ventura.lyricsfinder.R.attr#direction}
+          attribute's value can be found in the {@link #MultiDirectionSlidingDrawer} array.
+
+
+          <p>Must be one of the following constant values.</p>
+<table>
+<colgroup align="left" />
+<colgroup align="left" />
+<colgroup align="left" />
+<tr><th>Constant</th><th>Value</th><th>Description</th></tr>
+<tr><td><code>rightToLeft</code></td><td>0</td><td></td></tr>
+<tr><td><code>bottomToTop</code></td><td>1</td><td></td></tr>
+<tr><td><code>leftToRight</code></td><td>2</td><td></td></tr>
+<tr><td><code>topToBottom</code></td><td>3</td><td></td></tr>
+</table>
+          @attr name android:direction
+        */
+        public static final int MultiDirectionSlidingDrawer_direction = 0;
+        /**
+          <p>This symbol is the offset where the {@link com.ventura.lyricsfinder.R.attr#handle}
+          attribute's value can be found in the {@link #MultiDirectionSlidingDrawer} array.
+
+
+          <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
+or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
+          @attr name android:handle
+        */
+        public static final int MultiDirectionSlidingDrawer_handle = 1;
+        /**
+          <p>This symbol is the offset where the {@link com.ventura.lyricsfinder.R.attr#topOffset}
+          attribute's value can be found in the {@link #MultiDirectionSlidingDrawer} array.
+
+
+          <p>Must be a dimension value, which is a floating point number appended with a unit such as "<code>14.5sp</code>".
+Available units are: px (pixels), dp (density-independent pixels), sp (scaled pixels based on preferred font size),
+in (inches), mm (millimeters).
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+          @attr name android:topOffset
+        */
+        public static final int MultiDirectionSlidingDrawer_topOffset = 4;
+    };
 }
