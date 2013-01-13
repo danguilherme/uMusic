@@ -33,6 +33,7 @@ import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -59,7 +60,7 @@ import com.ventura.lyricsfinder.util.ImageLoader;
 public class ArtistViewerActivity extends BaseActivity {
 	final String TAG = getClass().getName();
 
-	private LinearLayout mBaseLayout;
+	private FrameLayout mBaseLayout;
 	private ImageView mArtistImageView;
 	private TextView mArtistBio;
 	private TextView mArtistName;
@@ -75,7 +76,7 @@ public class ArtistViewerActivity extends BaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		mBaseLayout = (LinearLayout) this.getLayoutInflater().inflate(
+		mBaseLayout = (FrameLayout) this.getLayoutInflater().inflate(
 				R.layout.artist_info, null);
 		this.setContentView(mBaseLayout);
 
@@ -444,8 +445,6 @@ public class ArtistViewerActivity extends BaseActivity {
 			List<Button> buttonsToAdd = new ArrayList<Button>();
 			for (int i = 0; i < this.mCurrentArtist.getMembers().size(); i++) {
 				buttonGroup.setVisibility(View.VISIBLE);
-				buttonGroup.setVisibility(
-						View.VISIBLE);
 				final Artist actualMember = this.mCurrentArtist.getMembers()
 						.get(i);
 
