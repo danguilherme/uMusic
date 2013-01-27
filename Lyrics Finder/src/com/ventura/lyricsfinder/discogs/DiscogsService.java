@@ -25,6 +25,7 @@ import com.ventura.lyricsfinder.R;
 import com.ventura.lyricsfinder.discogs.entity.Artist;
 import com.ventura.lyricsfinder.discogs.entity.ArtistRelease;
 import com.ventura.lyricsfinder.discogs.entity.Master;
+import com.ventura.lyricsfinder.discogs.entity.Paging;
 import com.ventura.lyricsfinder.discogs.entity.Release;
 import com.ventura.lyricsfinder.discogs.entity.SearchResult;
 import com.ventura.lyricsfinder.discogs.entity.enumerator.QueryType;
@@ -32,6 +33,7 @@ import com.ventura.lyricsfinder.discogs.entity.enumerator.SpecialEnums;
 import com.ventura.lyricsfinder.discogs.oauth.Constants;
 import com.ventura.lyricsfinder.exception.LazyInternetConnectionException;
 import com.ventura.lyricsfinder.exception.NoInternetConnectionException;
+import com.ventura.lyricsfinder.util.ConnectionManager;
 
 public class DiscogsService extends BaseService {
 	final String TAG = getClass().getName();
@@ -61,9 +63,8 @@ public class DiscogsService extends BaseService {
 		if (json == null || json.equals(""))
 			return new SearchResult();
 		try {
-			JSONObject jsonResponse = new JSONObject(json);
-			searchResult = new SearchResult(type, jsonResponse);
-		} catch (JSONException e) {
+			searchResult = deserializer.fromJson(json, SearchResult.class);
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
@@ -84,6 +85,22 @@ public class DiscogsService extends BaseService {
 		Artist artist = null;
 
 		try {
+			// Workaround to handle the error of urls coming empty.
+			// See http://api.discogs.com/artists/8760, inside the
+			// 'urls' property
+			JSONObject jsonObject = new JSONObject(jsonResponse);
+			JSONArray urlsArray = jsonObject.optJSONArray(Artist.KEY_EXTERNAL_URLS);
+			if (urlsArray != null) {
+				JSONArray correctUrlsArray = new JSONArray();
+				for (int i = 0; i < urlsArray.length(); i++) {
+					if (!urlsArray.getString(i).equals("")) {
+						correctUrlsArray.put(urlsArray.getString(i));
+					}
+				}
+				jsonObject.put(Artist.KEY_EXTERNAL_URLS, correctUrlsArray);
+				jsonResponse = jsonObject.toString();	
+			}
+			
 			artist = deserializer.fromJson(jsonResponse, Artist.class);
 			artist.fillExternalUrlsList();
 		} catch (Exception e) {
@@ -109,7 +126,7 @@ public class DiscogsService extends BaseService {
 		try {
 			JSONArray releasesJsonArray = new JSONObject(jsonResponse)
 					.getJSONArray(ArtistRelease.KEY_SEARCH_RESULT_RELEASES);
-			
+
 			ArtistRelease singleRelease;
 			for (int i = 0; i < releasesJsonArray.length(); i++) {
 				singleRelease = deserializer.fromJson(releasesJsonArray
@@ -194,5 +211,53 @@ public class DiscogsService extends BaseService {
 		}
 
 		return this.doGet(request);
+	}
+
+	public SearchResult navigate(String url)
+			throws NoInternetConnectionException,
+			LazyInternetConnectionException {
+		String targetUrl = url;
+
+		if (targetUrl == null || targetUrl.equals("")) {
+			return null;
+		}
+
+		String json = this.doGet(targetUrl);
+
+		SearchResult searchResult = null;
+		if (json == null || json.equals(""))
+			return new SearchResult();
+		try {
+			searchResult = deserializer.fromJson(json, SearchResult.class);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return searchResult;
+	}
+
+	public SearchResult next(Paging paging)
+			throws NoInternetConnectionException,
+			LazyInternetConnectionException {
+		return navigate(paging.getPageNavigation().getNextPageUrl().toString());
+	}
+
+	protected SearchResult prev(Paging paging)
+			throws NoInternetConnectionException,
+			LazyInternetConnectionException {
+		return navigate(paging.getPageNavigation().getPreviousPageUrl()
+				.toString());
+	}
+
+	protected SearchResult last(Paging paging)
+			throws NoInternetConnectionException,
+			LazyInternetConnectionException {
+		return navigate(paging.getPageNavigation().getLastPageUrl().toString());
+	}
+
+	protected SearchResult first(Paging paging)
+			throws NoInternetConnectionException,
+			LazyInternetConnectionException {
+		return navigate(paging.getPageNavigation().getFirstPageUrl().toString());
 	}
 }

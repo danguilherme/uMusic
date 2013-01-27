@@ -302,7 +302,7 @@ public class MusicInfoActivity extends BaseActivity {
 			Intent intent = new Intent(this, ListArtistsActivity.class);
 			intent.setAction(Intent.ACTION_SEND);
 			intent.putExtra(DiscogsConstants.KEY_QUERY_TYPE,
-					QueryType.Artist.toString());
+					QueryType.artist.toString());
 			intent.putExtra(DiscogsConstants.KEY_QUERY_TEXT, artistName);
 			startActivity(intent);
 		}

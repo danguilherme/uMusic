@@ -1,6 +1,7 @@
 package com.ventura.lyricsfinder.ui;
 
 import java.io.File;
+import java.util.List;
 
 import oauth.signpost.OAuth;
 import oauth.signpost.OAuthConsumer;
@@ -27,7 +28,8 @@ public abstract class BaseActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		this.sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+		this.sharedPreferences = PreferenceManager
+				.getDefaultSharedPreferences(this);
 	}
 
 	protected void clearCredentials() {
@@ -63,7 +65,7 @@ public abstract class BaseActivity extends Activity {
 		cursor.close();
 		return filePath;
 	}
-	
+
 	public File getSharedFile(Uri path) {
 		if (path == null)
 			return null;
@@ -76,5 +78,45 @@ public abstract class BaseActivity extends Activity {
 		}
 
 		return new File(uri);
+	}
+
+	/**
+	 * This method creates a list of strings, one bellow another, separated by a
+	 * semicomma and finalized with a dot. The output is like this:
+	 * <ul>
+	 * <li>First item;</li>
+	 * <li>Item 2;</li>
+	 * <li>Item 3;</li>
+	 * <li>Last item.</li>
+	 * </ul>
+	 * 
+	 * <b>Note:</b> Make sure the <code>toString()</code> method of the
+	 * <code>T</code> class will return what you expect to show up at the list.
+	 * 
+	 * @param source
+	 *            From where the strings will be catch from.
+	 * @return The strings list, with line breaks as \r\n chars.
+	 */
+	protected <T extends Object> String createList(List<T> source) {
+		StringBuilder list = new StringBuilder();
+
+		if (source == null) {
+			return null;
+		}
+
+		for (int i = 0; i < source.size(); i++) {
+			Object currentString = source.get(i);
+			list.append(currentString.toString());
+
+			// If it's the last item
+			if ((i + 1) == source.size()) {
+				// Add a final dot.
+				list.append(".");
+			} else {
+				// Else, add a comma after the name
+				list.append(";\r\n");
+			}
+		}
+		return list.toString();
 	}
 }

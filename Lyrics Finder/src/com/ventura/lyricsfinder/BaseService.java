@@ -10,12 +10,11 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import android.content.Context;
 import android.util.Log;
 
+import com.ventura.lyricsfinder.discogs.entity.Paging;
 import com.ventura.lyricsfinder.exception.LazyInternetConnectionException;
 import com.ventura.lyricsfinder.exception.NoInternetConnectionException;
 import com.ventura.lyricsfinder.util.ConnectionManager;
@@ -33,15 +32,17 @@ public class BaseService {
 		this.mContext = context;
 	}
 
-	protected String doGet(String url)
-			throws NoInternetConnectionException,
+	private void beforeRequest() throws NoInternetConnectionException {
+		if (!ConnectionManager.isConnected(this.getContext()))
+			throw new NoInternetConnectionException();
+	}
+
+	protected String doGet(String url) throws NoInternetConnectionException,
 			LazyInternetConnectionException {
 		
-		if (!new ConnectionManager(this.mContext).isConnected())
-			throw new NoInternetConnectionException();
 		HttpGet request = null;
 		try {
-			request = new HttpGet(url);			
+			request = new HttpGet(url);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -52,12 +53,11 @@ public class BaseService {
 	protected String doGet(HttpGet request)
 			throws NoInternetConnectionException,
 			LazyInternetConnectionException {
-		
-		if (!new ConnectionManager(this.mContext).isConnected())
-			throw new NoInternetConnectionException();
+
+		this.beforeRequest();
 
 		DefaultHttpClient httpClient = new DefaultHttpClient();
-		
+
 		Log.i(TAG, "Requesting URL : " + request.getURI());
 
 		HttpResponse response = null;
@@ -75,7 +75,7 @@ public class BaseService {
 
 		if (response == null)
 			return null;
-		
+
 		Log.i(TAG, "Statusline : " + response.getStatusLine());
 		InputStream data;
 		StringBuilder responseBuilder = null;

@@ -4,18 +4,13 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.util.Log;
 
-public class ConnectionManager {
-	final String TAG = getClass().getName();
+public abstract class ConnectionManager {
 
-	private Context mContext;
-
-	public ConnectionManager(Context context) {
-		this.mContext = context;
-	}
-
-	public boolean isConnected() {
+	public static boolean isConnected(Context context) {
+		String TAG = ConnectionManager.class.getName();
+		
 		try {
-			ConnectivityManager cm = (ConnectivityManager) this.mContext
+			ConnectivityManager cm = (ConnectivityManager) context
 					.getSystemService(Context.CONNECTIVITY_SERVICE);
 
 			if (cm.getNetworkInfo(ConnectivityManager.TYPE_MOBILE)

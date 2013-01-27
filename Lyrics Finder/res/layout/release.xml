@@ -2,100 +2,96 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="5dp"
-    android:orientation="vertical" >
+    android:orientation="horizontal" >
 
     <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content" >
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical" >
 
         <LinearLayout
-            android:id="@id/thumbnail"
-            android:layout_width="wrap_content"
+            android:id="@+id/genres_container"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginRight="5dip"
-            android:background="@drawable/image_bg"
-            android:padding="3dip" >
+            android:visibility="gone" >
 
-            <ImageView
-                android:id="@+id/release_thumb"
-                android:layout_width="50dip"
-                android:layout_height="50dip"
-                android:src="@drawable/rihanna" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="7dp"
+                android:text="Genres:"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/genres"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Rock" />
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="fill_parent"
+            android:id="@+id/styles_container"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:visibility="gone" >
 
             <TextView
-                android:id="@+id/release_title"
-                android:layout_width="fill_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Bad Romance"
-                android:textSize="20sp"
+                android:layout_marginRight="7dp"
+                android:text="Styles:"
                 android:textStyle="bold" />
 
-            <LinearLayout
-                android:layout_width="fill_parent"
+            <TextView
+                android:id="@+id/styles"
+                android:layout_width="0dip"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal" >
+                android:layout_weight="1"
+                android:text="Alternative Rock" />
+        </LinearLayout>
 
-                <TextView
-                    android:id="@+id/release_type"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Master"
-                    android:textStyle="normal" />
-
-                <TextView
-                    android:id="@+id/release_year"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right"
-                    android:text="2008"
-                    android:textSize="15sp"
-                    android:textStyle="normal" />
-            </LinearLayout>
+        <LinearLayout
+            android:id="@+id/label_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone" >
 
             <TextView
-                android:id="@+id/release_status"
-                android:layout_width="fill_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Accepted"
-                android:textStyle="italic" />
+                android:layout_marginRight="7dp"
+                android:text="Label:"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/label"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Wind-Up" />
         </LinearLayout>
     </LinearLayout>
 
-    <Button
-        android:id="@+id/btn_artist_release_open_info"
-        style="@android:style/Widget.Button.Small"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="3dp"
-        android:drawableLeft="@drawable/arrow_right"
-        android:drawablePadding="5dp"
-        android:text="Show info" />
-
     <LinearLayout
-        android:id="@+id/artist_release_info_container"
-        android:layout_width="fill_parent"
+        android:id="@+id/country_container"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="4dp"
-        android:layout_marginLeft="4dp"
-        android:layout_marginRight="4dp"
-        android:background="@drawable/rounded_borders"
-        android:orientation="vertical"
         android:visibility="gone" >
 
-        <ProgressBar
-            android:id="@android:id/progress"
-            style="@android:style/Widget.ProgressBar.Small"
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical|center_horizontal" />
+            android:layout_marginRight="7dp"
+            android:text="Country:"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/country"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="US" />
     </LinearLayout>
 
 </LinearLayout>

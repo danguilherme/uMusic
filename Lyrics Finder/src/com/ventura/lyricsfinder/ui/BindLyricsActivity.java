@@ -51,7 +51,7 @@ public class BindLyricsActivity extends BaseActivity {
 			finish();
 		}
 
-		if (!new ConnectionManager(this).isConnected()) {
+		if (!ConnectionManager.isConnected(this)) {
 			Toast.makeText(getBaseContext(),
 					getString(R.string.message_no_internet_connection),
 					Toast.LENGTH_SHORT).show();

@@ -62,11 +62,11 @@ public class ReleasesViewerActivity extends BaseActivity {
 
 		Collections.sort(mCurrentReleases);
 
-		for (int i = mCurrentReleases.size() - 1; i > 0; i--) {
+		for (int i = mCurrentReleases.size() - 1; i >= 0; i--) {
 			final ArtistRelease release = mCurrentReleases.get(i);
 			final String releaseUrl = release.getUrl().toString();
 			final LinearLayout releasePanel = (LinearLayout) this
-					.getLayoutInflater().inflate(R.layout.release, null);
+					.getLayoutInflater().inflate(R.layout.artist_release, null);
 
 			ImageView thumb = (ImageView) releasePanel
 					.findViewById(R.id.release_thumb);
@@ -93,8 +93,8 @@ public class ReleasesViewerActivity extends BaseActivity {
 					.findViewById(R.id.release_title);
 			TextView year = (TextView) releasePanel
 					.findViewById(R.id.release_year);
-			TextView type = (TextView) releasePanel
-					.findViewById(R.id.release_type);
+			TextView trackInfo = (TextView) releasePanel
+					.findViewById(R.id.release_trackinfo);
 			TextView format = (TextView) releasePanel
 					.findViewById(R.id.release_status);
 			Button openTracksButton = (Button) releasePanel
@@ -129,7 +129,7 @@ public class ReleasesViewerActivity extends BaseActivity {
 
 			title.setText(release.getTitle());
 			year.setText(release.getYear() + "");
-			type.setText(release.getType().toString());
+			trackInfo.setText(release.getTrackInfo());
 			format.setVisibility(View.GONE);
 			/*
 			 * if (release.getFormat().equals("")) {
@@ -148,35 +148,54 @@ public class ReleasesViewerActivity extends BaseActivity {
 		LinearLayout releaseInfoContainer = (LinearLayout) parentReleaseView
 				.findViewById(R.id.artist_release_info_container);
 
-		LinearLayout labelPanel = null;
-		if (result.getLabels().size() != 0) {
-			labelPanel = (LinearLayout) getLayoutInflater().inflate(
-					R.layout.label, null);
+		LinearLayout releasePanel = (LinearLayout) getLayoutInflater().inflate(
+				R.layout.release, null);
+
+		boolean hasContent = false;
+		
+		if (result.getLabels() != null && result.getLabels().size() != 0) {
+			TextView txtLabelName = (TextView) releasePanel
+					.findViewById(R.id.label);
+			txtLabelName.setText(this.createList(result.getLabels()));
+			releasePanel.findViewById(R.id.label_container).setVisibility(
+					View.VISIBLE);
+			hasContent = true;
+		}
+
+		if (result.getGenres() != null && result.getGenres().size() != 0) {
+			TextView txtGenres = (TextView) releasePanel
+					.findViewById(R.id.genres);
+			txtGenres.setText(this.createList(result.getGenres()));
+			releasePanel.findViewById(R.id.genres_container).setVisibility(
+					View.VISIBLE);
+			hasContent = true;
+		}
+
+		if (result.getStyles() != null && result.getStyles().size() != 0) {
+			TextView txtStyles = (TextView) releasePanel
+					.findViewById(R.id.styles);
+			txtStyles.setText(this.createList(result.getStyles()));
+			releasePanel.findViewById(R.id.styles_container).setVisibility(
+					View.VISIBLE);
+			hasContent = true;
+		}
+
+		if (result.getCountry() != null && !result.getCountry().equals("")) {
+			TextView txtCountry = (TextView) releasePanel
+					.findViewById(R.id.country);
+			txtCountry.setText(result.getCountry());
+			releasePanel.findViewById(R.id.country_container).setVisibility(
+					View.VISIBLE);
+			hasContent = true;
+		}
+
+		if (hasContent) {
 			LinearLayout.LayoutParams linearLayoutParams = new LinearLayout.LayoutParams(
 					LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
 			linearLayoutParams.setMargins(0, 0, 0, 10);
-			labelPanel.setLayoutParams(linearLayoutParams);
+			releasePanel.setLayoutParams(linearLayoutParams);
 
-			TextView txtName = (TextView) labelPanel.findViewById(R.id.label_name);
-			StringBuilder labels = new StringBuilder();
-
-			for (int i = 0; i < result.getLabels().size(); i++) {
-				Label label = result.getLabels().get(i);
-				labels.append(label.getName());
-
-				// If it's the last label
-				if ((i + 1) == result.getLabels().size()) {
-					// Add a final dot.
-					labels.append(".");
-				} else {
-					// Else, add a comma after the name
-					labels.append(";\r\n");
-				}
-			}
-
-			txtName.setText(labels.toString());
-			
-			releaseInfoContainer.addView(labelPanel);
+			releaseInfoContainer.addView(releasePanel);
 		}
 
 		this.buildTrackListView(result, parentReleaseView);
@@ -195,6 +214,15 @@ public class ReleasesViewerActivity extends BaseActivity {
 
 		for (int j = 0; j < release.getTracks().size(); j++) {
 			Track track = release.getTracks().get(j);
+			if (track.getPosition().equals("") && track.getTitle().equals("")
+					&& track.getDuration().equals("")) {
+				continue;
+			}
+			
+			if (track.getPosition().equals("0")) {
+				track.setPosition("");
+			}
+			
 			LinearLayout trackPanel = (LinearLayout) getLayoutInflater()
 					.inflate(R.layout.track, null);
 

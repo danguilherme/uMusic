@@ -1,6 +1,7 @@
 package com.ventura.lyricsfinder.discogs;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 import android.app.Activity;
@@ -29,6 +30,10 @@ public class LazyAdapter extends BaseAdapter {
 		imageLoader = new ImageLoader(activity.getApplicationContext());
 	}
 
+	public void add(ArrayList<HashMap<String, String>> data) {
+		this.data.addAll(data);
+	}
+
 	public int getCount() {
 		return data.size();
 	}
@@ -39,7 +44,8 @@ public class LazyAdapter extends BaseAdapter {
 
 	public void filter(String query) {
 		for (int i = 0; i < data.size(); i++) {
-			if (!data.get(i).get(DiscogsConstants.KEY_TITLE).equalsIgnoreCase(query)) {
+			if (!data.get(i).get(DiscogsConstants.KEY_TITLE)
+					.equalsIgnoreCase(query)) {
 				data.remove(i);
 			}
 		}

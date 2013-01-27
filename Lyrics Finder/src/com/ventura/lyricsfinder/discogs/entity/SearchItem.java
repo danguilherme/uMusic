@@ -6,6 +6,7 @@ import java.net.URL;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.google.gson.annotations.SerializedName;
 import com.ventura.lyricsfinder.discogs.entity.enumerator.QueryType;
 
 public class SearchItem {
@@ -16,38 +17,41 @@ public class SearchItem {
 	public static final String KEY_TYPE = "type";
 	public static final String KEY_ID = "id";
 
+	@SerializedName(KEY_ID)
+	private int id;
+	@SerializedName(KEY_TITLE)
+	private String title;
+	@SerializedName(KEY_THUMB)
+	private URL thumbURL;
+	@SerializedName(KEY_TYPE)
 	private QueryType type;
-	private Artist artist;
+	@SerializedName(KEY_URI)
+	private String relativeUrl;
+	@SerializedName(KEY_RESOURCE_URL)
+	private URL url;
 
-	public SearchItem(QueryType type, Object searchResponse) {
-		switch (type) {
-		case Artist:
-			this.artist = (Artist) searchResponse;
-			break;
-		default:
-			break;
-		}
+	public int getId() {
+		return id;
 	}
 
-	public SearchItem(QueryType type, JSONObject config) {
-		switch (type) {
-		case Artist:
-			this.artist = new Artist();
-			try {
-				artist.setId(config.getInt(KEY_ID));
-				artist.setName(config.getString(KEY_TITLE));
-				artist.setProfileUrl(new URL(config.getString(KEY_RESOURCE_URL)));
-				artist.getImages().add(
-						new Image(new URL(config.getString(KEY_THUMB))));
-			} catch (JSONException e) {
-				e.printStackTrace();
-			} catch (MalformedURLException e) {
-				e.printStackTrace();
-			}
-			break;
-		default:
-			break;
-		}
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public URL getThumbURL() {
+		return thumbURL;
+	}
+
+	public void setThumbURL(URL thumbURL) {
+		this.thumbURL = thumbURL;
 	}
 
 	public QueryType getType() {
@@ -58,12 +62,24 @@ public class SearchItem {
 		this.type = type;
 	}
 
-	public Artist getArtist() {
-		return artist;
+	public String getRelativeUrl() {
+		return relativeUrl;
 	}
 
-	public void setArtist(Artist artist) {
-		this.artist = artist;
+	public void setRelativeUrl(String relativeUrl) {
+		this.relativeUrl = relativeUrl;
 	}
 
+	public URL getUrl() {
+		return url;
+	}
+
+	public void setUrl(URL url) {
+		this.url = url;
+	}
+
+	@Override
+	public String toString() {
+		return this.id + "/" + this.title + " - " + this.url;
+	}
 }

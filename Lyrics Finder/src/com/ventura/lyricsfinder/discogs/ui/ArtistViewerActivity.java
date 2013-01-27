@@ -1,7 +1,5 @@
 package com.ventura.lyricsfinder.discogs.ui;
 
-import it.sephiroth.demo.slider.widget.MultiDirectionSlidingDrawer;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -10,6 +8,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 import oauth.signpost.OAuthConsumer;
 import android.app.AlertDialog;
@@ -149,7 +148,7 @@ public class ArtistViewerActivity extends BaseActivity {
 		final ProgressBar artistImageDownloadProgressBar = (ProgressBar) findViewById(android.R.id.progress);
 
 		this.mCurrentArtist = artist;
-		if (this.mCurrentArtist.getImages().size() > 0) {
+		if (this.mCurrentArtist.getImages()!= null && this.mCurrentArtist.getImages().size() > 0) {
 			final Image firstImage = this.mCurrentArtist.getImages().get(0);
 
 			new ImageLoader(this).displayImage(firstImage.getUrl().toString(),
@@ -248,7 +247,7 @@ public class ArtistViewerActivity extends BaseActivity {
 		for (int i = 0; i < externalUrlsLength; i++) {
 			final String currentExternalUrl = this.mCurrentArtist
 					.getExternalUrls().get(i).getExternalUrl().toString()
-					.toLowerCase();
+					.toLowerCase(Locale.US);
 			String username = this.mCurrentArtist.getExternalUrls().get(i)
 					.getExternalUrl().toString()
 					.substring(currentExternalUrl.lastIndexOf("/") + 1);
@@ -402,7 +401,6 @@ public class ArtistViewerActivity extends BaseActivity {
 		}
 
 		if (this.mCurrentArtist.getNameVariations().size() > 0) {
-			StringBuilder knownNames = new StringBuilder();
 			LinearLayout nameVariationsKeyValuePanel = (LinearLayout) this
 					.getLayoutInflater()
 					.inflate(R.layout.key_value_panel, null);
@@ -412,24 +410,8 @@ public class ArtistViewerActivity extends BaseActivity {
 			TextView value = (TextView) nameVariationsKeyValuePanel
 					.findViewById(R.id.value);
 
-			// Add the name variations one by one, separated by comma and
-			// finalized with a dot.
-			for (int i = 0; i < this.mCurrentArtist.getNameVariations().size(); i++) {
-				knownNames.append(this.mCurrentArtist.getNameVariations()
-						.get(i));
-
-				// If it's the last name variation
-				if ((i + 1) == this.mCurrentArtist.getNameVariations().size()) {
-					// Add a final dot.
-					knownNames.append(".");
-				} else {
-					// Else, add a comma after the name
-					knownNames.append(";\r\n");
-				}
-			}
-
 			key.setText("Known name variations:");
-			value.setText(knownNames.toString());
+			value.setText(this.createList(this.mCurrentArtist.getNameVariations()));
 
 			mArtistExtraInfoContent.addView(nameVariationsKeyValuePanel);
 		}
@@ -793,7 +775,6 @@ public class ArtistViewerActivity extends BaseActivity {
 	}
 
 	// Menu
-
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater menuInflater = new MenuInflater(this);
