@@ -1,5 +1,4 @@
-Music Explorer
-==============
+#Music Explorer
 
 ##Introduction
 In the application, it will be possible to:
