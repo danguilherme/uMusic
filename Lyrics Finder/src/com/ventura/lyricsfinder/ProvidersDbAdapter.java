@@ -27,6 +27,7 @@ import android.util.Log;
 import com.ventura.lyricsfinder.lyrics.provider.LyricProvider;
 import com.ventura.lyricsfinder.lyrics.provider.LyricProviderFactory;
 import com.ventura.lyricsfinder.lyrics.provider.LyricProviders;
+import com.ventura.musicexplorer.R;
 
 public class ProvidersDbAdapter {
 

@@ -6,7 +6,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +21,7 @@ import android.content.res.Resources;
 import android.content.res.Resources.NotFoundException;
 import android.util.Log;
 
-import com.ventura.lyricsfinder.R;
+import com.ventura.musicexplorer.R;
 import com.ventura.lyricsfinder.lyrdb.entities.Lyric;
 
 public class LyrDBService {
@@ -52,21 +51,25 @@ public class LyrDBService {
 	public List<Lyric> search(QueryType type, Lyric lyric) {
 		lyric.setArtistName(URLEncoder.encode(lyric.getArtistName()));
 		lyric.setMusicName(URLEncoder.encode(lyric.getMusicName()));
-		
+
 		Resources res = this.mContext.getResources();
 		String url = null, lyrDBUrl = res.getString(R.string.lyrdb_url_base)
 				+ res.getString(R.string.lyrdb_url_search).replace("%26", "&");
 
 		switch (type) {
 		case FullT:
-			url = String.format(lyrDBUrl, lyric.getArtistName() + "+" + lyric.getMusicName(), type
-					.toString().toLowerCase());
+			url = String.format(lyrDBUrl,
+					lyric.getArtistName() + "+" + lyric.getMusicName(), type
+							.toString().toLowerCase());
 			break;
 		case Match:
 			try {
-				url = String.format(lyrDBUrl,
-						lyric.getArtistName() + URLEncoder.encode("|", "ISO8859-2")
-								+ lyric.getMusicName(), type.toString().toLowerCase());
+				url = String.format(
+						lyrDBUrl,
+						lyric.getArtistName()
+								+ URLEncoder.encode("|", "ISO8859-2")
+								+ lyric.getMusicName(), type.toString()
+								.toLowerCase());
 			} catch (NotFoundException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -80,12 +83,12 @@ public class LyrDBService {
 					.toString().toLowerCase());
 			break;
 		case TrackName:
-			url = String.format(lyrDBUrl, lyric.getMusicName(), type
-					.toString().toLowerCase());
+			url = String.format(lyrDBUrl, lyric.getMusicName(), type.toString()
+					.toLowerCase());
 			break;
 		case InLyrics:
-			url = String.format(lyrDBUrl, lyric.getLyric(), type
-					.toString().toLowerCase());
+			url = String.format(lyrDBUrl, lyric.getLyric(), type.toString()
+					.toLowerCase());
 			break;
 		default:
 			break;

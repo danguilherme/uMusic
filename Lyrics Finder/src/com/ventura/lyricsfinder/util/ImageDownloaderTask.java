@@ -1,4 +1,4 @@
-package com.ventura.lyricsfinder.discogs;
+package com.ventura.lyricsfinder.util;
 
 import java.io.IOException;
 
@@ -6,7 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 
-import com.ventura.lyricsfinder.discogs.entity.Image;
+import com.ventura.lyricsfinder.entity.Image;
 
 public class ImageDownloaderTask extends AsyncTask<Void, Void, Bitmap> {
 

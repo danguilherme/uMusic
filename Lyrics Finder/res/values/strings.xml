@@ -1,6 +1,6 @@
 <resources>
 
-    <string name="app_name">Turn Up The Music</string>
+    <string name="app_name">Music Explorer</string>
     <string name="app_code_name">TurnUpTheMusic</string>
     <string name="app_version">0.1</string>
 
@@ -22,10 +22,27 @@
     <!-- Song Properties [END] -->
 
 
-    <!-- Artist Viewer Activity [START] -->
+    <!-- Dashboard -->
+    <string name="dashboard_title">Dashboard</string>
+    <string name="music_player">Music Player</string>
+    <string name="search_artist">Search Artist</string>
+    <string name="search_lyrics">Search Lyrics</string>
+    <string name="about">About</string>
+
+    <!-- Artist Viewer Activity -->
     <string name="title_activity_artist_viewer">Artist information</string>
-    <!-- Artist Viewer Activity [END] -->
+    <string name="external_urls">External URLs</string>
+    <string name="band_members">Band Members</string>
+    <string name="groups">Groups</string>
+    <string name="no_biography">This artist has no Bio.</string>
+    <string name="real_name">Real Name</string>
+    <string name="aliases">Aliases</string>
+    <!-- Image download -->
+    <string name="image_already_being_downloaded">The image is already being downloaded. When it is finished, try again.</string>
+    <string name="image_not_possible_to_download">It wasn\'t possible to bring your photo. Please try again later.</string>
+    <string name="image_saved">Image saved at %1$s.</string>
     
+
     <!-- Releases Viewer Activity [START] -->
     <string name="title_activity_releases_viewer">Releases</string>
     <!-- Releases Viewer Activity [END] -->
@@ -61,21 +78,17 @@
     <!-- External URLs [END] -->
 
 
-    <!-- Messages [START] -->
+    <!-- Messages -->
     <string name="message_no_internet_connection">No internet connection.</string>
-    <string name="message_fetching_lyrics_list_title">Fetching artists...</string>
-    <string name="message_fetching_lyrics_list_body">I am retrieving the lyrics to you, please wait.</string>
-    <string name="message_fetching_lyric_title">Loading lyric...</string>
-    <string name="message_fetching_lyric_body">Bringing the lyric\'s text, it may take a while.</string>
+    <string name="message_lazy_internet_connection">Your connection is lazy! Try again?</string>
+    <string name="message_fetching_lyrics_list">Retrieving lyrics, please wait.</string>
+    <string name="message_fetching_lyrics">Bringing the lyric\'s text. It may take awhile.</string>
     <string name="message_lyric_not_found">Sorry, lyric not found.</string>
-    <string name="message_fetching_artists_list_title">Fetching artists...</string>
-    <string name="message_fetching_artists_list_body">I am retrieving matching artists to you, please wait.</string>
-    <string name="message_artist_not_found">Sorry, artist not found</string>
+    <string name="message_fetching_artists_list">Retrieving matching artists, please wait.</string>
+    <string name="message_artist_not_found">Sorry, artist not found.</string>
     <string name="message_lyrics_saved">Lyrics saved.</string>
-    <string name="message_no_music_metadata_found">The music you are trying to load has no metadata.</string>
+    <string name="message_music_metadata_not_found">The music you are trying to load has no metadata.</string>
     <string name="message_file_not_supported">Sorry, file not supported.</string>
-    <!-- Messages [END] -->
-
     <string name="provider_terra_name">Terra Letras</string>
     <string name="provider_terra_url">http://letras.mus.br/winamp.php?artista=%1$s%26musica=%2$s</string>
     <string name="provider_lyrster_name">Lyrster</string>
@@ -89,11 +102,13 @@
     <string name="menu_download_artist_image">Download artist image</string>
     <!-- Artist Viewer [END] -->
 
+
     <!-- Releases Viewer [START] -->
     <string name="message_fetching_releases_title">Fetching artist\'s releases...</string>
     <string name="message_fetching_releases_body">Searching for the artist\'s release, please wait.</string>
     <!-- Releases Viewer [END] -->
-    
+
+
     <!-- Lyrics Viewer [START] -->
     <string name="title_activity_lyrics_viewer">Lyrics List</string>
     <string name="btn_select_lyric">Select</string>
@@ -119,5 +134,11 @@
     <string-array name="external_urls_context_menu_items">
         <item name="copy">@android:string/copyUrl</item>
     </string-array>
+
+    <!-- API urls -->
+    <string name="get_release_by_id_url" formatted="false">http://aspspider.ws/Danguilherme/api/releases/%1$s</string>
+    <string name="search_artist_url" formatted="false">http://aspspider.ws/Danguilherme/api/artists/search?q=%1$s</string>
+    <string name="get_artist_by_id_url" formatted="false">http://aspspider.ws/Danguilherme/api/artists/%1$s</string>
+    <string name="get_release_by_artist_id_url" formatted="false">http://aspspider.ws/Danguilherme/api/artists/listreleases/%1$s</string>
 
 </resources>

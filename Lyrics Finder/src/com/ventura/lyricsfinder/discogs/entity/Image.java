@@ -2,9 +2,9 @@ package com.ventura.lyricsfinder.discogs.entity;
 
 import java.net.URL;
 
-import com.google.gson.annotations.SerializedName;
-
 import android.graphics.Bitmap;
+
+import com.google.gson.annotations.SerializedName;
 
 public class Image {
 	public static final String KEY_URI = "uri";
@@ -14,16 +14,16 @@ public class Image {
 
 	@SerializedName(KEY_URI)
 	private URL url;
-	
+
 	@SerializedName(KEY_HEIGHT)
 	private int height = 0;
-	
+
 	@SerializedName(KEY_WIDTH)
 	private int width = 0;
-	
+
 	@SerializedName(KEY_TYPE)
 	private String type;
-	
+
 	private Bitmap bitmap;
 
 	public Image(URL uri, int width, int height, String type, Bitmap bitmap) {
@@ -33,7 +33,7 @@ public class Image {
 		this.type = type;
 		this.bitmap = bitmap;
 	}
-	
+
 	public Image(URL uri, int width, int height, String type) {
 		this.setUrl(uri);
 		this.width = width;
@@ -79,12 +79,12 @@ public class Image {
 	public void setType(String type) {
 		this.type = type;
 	}
-	
-	public Bitmap getBitmap(){
+
+	public Bitmap getBitmap() {
 		return this.bitmap;
 	}
-	
-	public void setBitmap(Bitmap bitmap){
+
+	public void setBitmap(Bitmap bitmap) {
 		this.bitmap = bitmap;
 	}
 

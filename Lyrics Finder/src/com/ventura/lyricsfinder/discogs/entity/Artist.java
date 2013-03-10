@@ -46,7 +46,7 @@ public class Artist implements Comparable<Artist> {
 	@SerializedName(KEY_PROFILE_URL)
 	private URL profileUrl;
 	@SerializedName(KEY_GROUPS)
-	private List<Group> groups = new ArrayList<Group>();
+	private List<Artist> groups = new ArrayList<Artist>();
 	@SerializedName(KEY_MEMBERS)
 	private List<Artist> members = new ArrayList<Artist>();
 	@SerializedName(KEY_DATA_QUALITY)
@@ -185,11 +185,11 @@ public class Artist implements Comparable<Artist> {
 		this.profileUrl = profileUrl;
 	}
 
-	public List<Group> getGroups() {
+	public List<Artist> getGroups() {
 		return groups;
 	}
 
-	public void setGroups(List<Group> groups) {
+	public void setGroups(List<Artist> groups) {
 		this.groups = groups;
 	}
 

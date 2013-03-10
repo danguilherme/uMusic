@@ -25,6 +25,7 @@ public class Lyrster extends LyricProvider {
 		return lyric.trim();
 	}
 
+	@Override
 	public String encodeToUrl(String target) {
 		return target.trim().replace(' ', '-').toLowerCase();
 	}

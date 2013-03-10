@@ -3,10 +3,6 @@ package com.ventura.lyricsfinder.discogs.entity;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import com.google.gson.annotations.SerializedName;
 
 public abstract class BasicRelease extends ArtistRelease {
@@ -19,19 +15,19 @@ public abstract class BasicRelease extends ArtistRelease {
 
 	@SerializedName(KEY_TRACK_LIST)
 	private List<Track> tracks = new ArrayList<Track>();
-	
+
 	@SerializedName(KEY_IMAGES)
 	private List<Image> images = new ArrayList<Image>();
-	
+
 	@SerializedName(KEY_STYLES)
 	private List<String> styles;
-	
+
 	@SerializedName(KEY_GENRES)
 	private List<String> genres = new ArrayList<String>();
-	
+
 	@SerializedName(KEY_ARTISTS)
 	private List<Artist> artists = new ArrayList<Artist>();
-	
+
 	@SerializedName(KEY_DATA_QUALITY)
 	private String dataQuality;
 

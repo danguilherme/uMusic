@@ -16,8 +16,4 @@
         <attr name="allowSingleTap" format="boolean" />
         <attr name="animateOnClick" format="boolean" />
     </declare-styleable>
-    
-    <declare-styleable name="ButtonGroup">
-        <attr name="title" format="string" />
-    </declare-styleable>
 </resources>

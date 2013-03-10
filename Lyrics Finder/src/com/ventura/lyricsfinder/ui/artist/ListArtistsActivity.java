@@ -1,13 +1,13 @@
-package com.ventura.lyricsfinder.discogs.ui;
+package com.ventura.lyricsfinder.ui.artist;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import oauth.signpost.OAuthConsumer;
 import android.app.ListActivity;
-import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -15,27 +15,27 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.ventura.lyricsfinder.R;
+import com.ventura.androidutils.exception.LazyInternetConnectionException;
+import com.ventura.androidutils.exception.NoInternetConnectionException;
+import com.ventura.androidutils.utils.InnerActivityAsyncTask;
+import com.ventura.musicexplorer.R;
+import com.ventura.lyricsfinder.constants.GlobalConstants;
 import com.ventura.lyricsfinder.discogs.DiscogsConstants;
 import com.ventura.lyricsfinder.discogs.DiscogsService;
 import com.ventura.lyricsfinder.discogs.LazyAdapter;
 import com.ventura.lyricsfinder.discogs.OnContentDownloadListener;
-import com.ventura.lyricsfinder.discogs.entity.Artist;
 import com.ventura.lyricsfinder.discogs.entity.SearchItem;
 import com.ventura.lyricsfinder.discogs.entity.SearchResult;
 import com.ventura.lyricsfinder.discogs.entity.enumerator.QueryType;
-import com.ventura.lyricsfinder.exception.LazyInternetConnectionException;
-import com.ventura.lyricsfinder.exception.NoInternetConnectionException;
+import com.ventura.lyricsfinder.entity.artist.Artist;
 
 public class ListArtistsActivity extends ListActivity implements
 		OnScrollListener, OnItemClickListener {
@@ -141,8 +141,6 @@ public class ListArtistsActivity extends ListActivity implements
 			map.put(DiscogsConstants.KEY_ID, String.valueOf(item.getId()));
 			// Artist name
 			map.put(DiscogsConstants.KEY_TITLE, item.getTitle());
-			// Artist name
-			map.put(DiscogsConstants.KEY_TITLE, item.getTitle());
 			// Artist image
 			map.put(DiscogsConstants.KEY_THUMB, item.getThumbURL().toString());
 
@@ -167,56 +165,52 @@ public class ListArtistsActivity extends ListActivity implements
 		new LoadMoreTask(listener).execute();
 	}
 
-	private class ListArtistsTask extends AsyncTask<String, Void, SearchResult> {
-		private ProgressDialog mProgressDialog;
-		private Context mContext;
+	private class ListArtistsTask extends
+			InnerActivityAsyncTask<String, Void, SearchResult> {
 		private OAuthConsumer mConsumer;
 		private QueryType mQueryType;
 
 		public ListArtistsTask(Context context, OAuthConsumer consumer,
 				QueryType queryType) {
-
-			this.mProgressDialog = new ProgressDialog(context);
-			this.mProgressDialog
-					.setTitle(getString(R.string.message_fetching_artists_list_title));
-			this.mProgressDialog
-					.setMessage(getString(R.string.message_fetching_artists_list_body));
-			this.mProgressDialog.setCancelable(true);
-			this.mContext = context;
+			super(context, getString(R.string.app_name),
+					getString(R.string.message_fetching_artists_list));
 			this.mConsumer = consumer;
 			this.mQueryType = queryType;
 		}
 
 		@Override
-		protected void onPreExecute() {
-			super.onPreExecute();
-			this.mProgressDialog.show();
-		}
-
-		@Override
 		protected SearchResult doInBackground(String... params) {
-			DiscogsService discogsService = new DiscogsService(this.mContext,
-					this.mConsumer);
+			DiscogsService discogsService = new DiscogsService(
+					this.getContext(), this.mConsumer);
+
 			try {
 				return discogsService.search(this.mQueryType, params[0]);
 			} catch (NoInternetConnectionException e) {
-				Toast.makeText(mContext, "No internet connection...",
-						Toast.LENGTH_SHORT).show();
+				/*
+				 * Toast.makeText(mContext, "No internet connection...",
+				 * Toast.LENGTH_SHORT).show();
+				 */
 				e.printStackTrace();
 			} catch (LazyInternetConnectionException e) {
-				Toast.makeText(mContext, "Your connection is lazy! Try again?",
-						Toast.LENGTH_SHORT).show();
+				/*
+				 * Toast.makeText(mContext,
+				 * "Your connection is lazy! Try again?",
+				 * Toast.LENGTH_SHORT).show();
+				 */
 				e.printStackTrace();
 			}
-			finish();
-			return null;
+			// finish();
+			return new SearchResult();
 		}
 
 		@Override
 		protected void onPostExecute(SearchResult result) {
 			super.onPostExecute(result);
-			this.mProgressDialog.dismiss();
 			updateListView(result);
+		}
+
+		@Override
+		public void onProgressDialogCancelled(DialogInterface progressDialog) {
 		}
 	}
 
@@ -241,6 +235,7 @@ public class ListArtistsActivity extends ListActivity implements
 			return null;
 		}
 
+		@Override
 		protected void onPostExecute(SearchResult searchResult) {
 			if (this.contentDownloadListener != null) {
 				contentDownloadListener.onDownloadFinished(searchResult);
@@ -283,11 +278,11 @@ public class ListArtistsActivity extends ListActivity implements
 		HashMap<String, String> objArtist = (HashMap<String, String>) adapter
 				.getItem(position);
 		Artist artist = new Artist(Integer.parseInt(objArtist
-				.get(DiscogsConstants.KEY_ID)), objArtist
-				.get(DiscogsConstants.KEY_TITLE), null);
+				.get(DiscogsConstants.KEY_ID)),
+				objArtist.get(DiscogsConstants.KEY_TITLE), null);
 		intent.setAction(Intent.ACTION_SEND);
-		intent.putExtra(Artist.KEY_ID, artist.getId());
-		intent.putExtra(Artist.KEY_NAME, artist.getName());
+		intent.putExtra(GlobalConstants.EXTRA_ARTIST_ID, artist.getId());
+		intent.putExtra(GlobalConstants.EXTRA_ARTIST_NAME, artist.getName());
 		startActivity(intent);
 	}
 }

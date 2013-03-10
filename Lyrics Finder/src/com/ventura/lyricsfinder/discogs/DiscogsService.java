@@ -20,8 +20,10 @@ import android.content.res.Resources;
 import android.util.Log;
 
 import com.google.gson.Gson;
-import com.ventura.lyricsfinder.BaseService;
-import com.ventura.lyricsfinder.R;
+import com.ventura.androidutils.exception.LazyInternetConnectionException;
+import com.ventura.androidutils.exception.NoInternetConnectionException;
+import com.ventura.musicexplorer.R;
+import com.ventura.lyricsfinder.business.BaseService;
 import com.ventura.lyricsfinder.discogs.entity.Artist;
 import com.ventura.lyricsfinder.discogs.entity.ArtistRelease;
 import com.ventura.lyricsfinder.discogs.entity.Master;
@@ -31,9 +33,6 @@ import com.ventura.lyricsfinder.discogs.entity.SearchResult;
 import com.ventura.lyricsfinder.discogs.entity.enumerator.QueryType;
 import com.ventura.lyricsfinder.discogs.entity.enumerator.SpecialEnums;
 import com.ventura.lyricsfinder.discogs.oauth.Constants;
-import com.ventura.lyricsfinder.exception.LazyInternetConnectionException;
-import com.ventura.lyricsfinder.exception.NoInternetConnectionException;
-import com.ventura.lyricsfinder.util.ConnectionManager;
 
 public class DiscogsService extends BaseService {
 	final String TAG = getClass().getName();
@@ -54,8 +53,9 @@ public class DiscogsService extends BaseService {
 			query = URLEncoder.encode(query);
 		Resources res = this.getContext().getResources();
 		String url = res.getString(R.string.discogs_url_search);
-		url = String.format(Constants.API_REQUEST + url.replace("%26", "&"),
-				type, query).toLowerCase(Locale.US);
+		url = String.format(
+				Constants.DISCOGS_API_REQUEST + url.replace("%26", "&"), type,
+				query).toLowerCase(Locale.US);
 
 		String json = this.doGet(url);
 
@@ -77,7 +77,7 @@ public class DiscogsService extends BaseService {
 
 		Resources res = this.getContext().getResources();
 		String url = res.getString(R.string.discogs_url_artists);
-		url = String.format(Constants.API_REQUEST + url,
+		url = String.format(Constants.DISCOGS_API_REQUEST + url,
 				String.valueOf(artistId));
 
 		String jsonResponse = this.doGet(url);
@@ -89,7 +89,8 @@ public class DiscogsService extends BaseService {
 			// See http://api.discogs.com/artists/8760, inside the
 			// 'urls' property
 			JSONObject jsonObject = new JSONObject(jsonResponse);
-			JSONArray urlsArray = jsonObject.optJSONArray(Artist.KEY_EXTERNAL_URLS);
+			JSONArray urlsArray = jsonObject
+					.optJSONArray(Artist.KEY_EXTERNAL_URLS);
 			if (urlsArray != null) {
 				JSONArray correctUrlsArray = new JSONArray();
 				for (int i = 0; i < urlsArray.length(); i++) {
@@ -98,9 +99,9 @@ public class DiscogsService extends BaseService {
 					}
 				}
 				jsonObject.put(Artist.KEY_EXTERNAL_URLS, correctUrlsArray);
-				jsonResponse = jsonObject.toString();	
+				jsonResponse = jsonObject.toString();
 			}
-			
+
 			artist = deserializer.fromJson(jsonResponse, Artist.class);
 			artist.fillExternalUrlsList();
 		} catch (Exception e) {
@@ -116,7 +117,7 @@ public class DiscogsService extends BaseService {
 
 		Resources res = this.getContext().getResources();
 		String url = res.getString(R.string.discogs_url_releases);
-		url = String.format(Constants.API_REQUEST + url,
+		url = String.format(Constants.DISCOGS_API_REQUEST + url,
 				String.valueOf(artistId));
 
 		String jsonResponse = this.doGet(url);
@@ -150,7 +151,7 @@ public class DiscogsService extends BaseService {
 		Resources res = this.getContext().getResources();
 		String url = res.getString(R.string.discogs_url_tracks_releases);
 
-		url = String.format(Constants.API_REQUEST + url,
+		url = String.format(Constants.DISCOGS_API_REQUEST + url,
 				String.valueOf(artistRelease.getId()));
 
 		String jsonResponse = this.doGet(url);
@@ -175,7 +176,7 @@ public class DiscogsService extends BaseService {
 		Resources res = this.getContext().getResources();
 		String url = res.getString(R.string.discogs_url_tracks_masters);
 
-		url = String.format(Constants.API_REQUEST + url,
+		url = String.format(Constants.DISCOGS_API_REQUEST + url,
 				String.valueOf(artistRelease.getId()));
 
 		String jsonResponse = this.doGet(url);

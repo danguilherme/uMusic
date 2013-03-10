@@ -30,6 +30,7 @@ public class TerraLetras extends LyricProvider {
 		return lyric;
 	}
 
+	@Override
 	public String encodeToUrl(String target) {
 		return target.trim().replace(' ', '+').replace("%26", "&")
 				.toLowerCase();

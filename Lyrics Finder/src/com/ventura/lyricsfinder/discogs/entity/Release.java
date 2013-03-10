@@ -18,11 +18,12 @@ public class Release extends BasicRelease {
 	private int releasedFormatted;
 	private int masterId;
 	private URL masterUrl;
+
 	@SerializedName(KEY_LABELS)
 	private List<Label> labels = new ArrayList<Label>();
 	@SerializedName(KEY_EXTRA_ARTISTS)
 	private List<Artist> extraArtists = new ArrayList<Artist>();
-	
+
 	@SerializedName(KEY_COUNTRY)
 	private String country;
 

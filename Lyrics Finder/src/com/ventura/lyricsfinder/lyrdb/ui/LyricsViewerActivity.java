@@ -10,15 +10,14 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.ventura.lyricsfinder.R;
+import com.ventura.musicexplorer.R;
 import com.ventura.lyricsfinder.constants.GlobalConstants;
 import com.ventura.lyricsfinder.lyrdb.LyrDBService;
 
 public class LyricsViewerActivity extends Activity {
-	
+
 	private TextView lyricsTextView;
 	private TextView artistNameTextView;
 	private TextView musicNameTextView;
@@ -38,21 +37,22 @@ public class LyricsViewerActivity extends Activity {
 				.findViewById(R.id.artist_text_view);
 		musicNameTextView = (TextView) this.findViewById(R.id.music_text_view);
 		acceptLyricsButton = (Button) this.findViewById(R.id.btn_accept_lyrics);
-		progressBarContainer = (LinearLayout) this.findViewById(R.id.progress_bar_container);
+		progressBarContainer = (LinearLayout) this
+				.findViewById(R.id.progress_bar_container);
 
 		new GetLyricTask(this).execute(lyricId);
 		artistNameTextView.setText(intent
 				.getStringExtra(GlobalConstants.EXTRA_ARTIST_NAME));
 		musicNameTextView.setText(intent
 				.getStringExtra(GlobalConstants.EXTRA_TRACK_NAME));
-		
+
 		acceptLyricsButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				sendResponse(lyricsTextView.getText());
 			}
 		});
 	}
-	
+
 	private void sendResponse(CharSequence lyrics) {
 		Intent resultIntent = new Intent();
 		resultIntent.putExtra(GlobalConstants.EXTRA_TRACK_LYRICS, lyrics);
@@ -73,10 +73,9 @@ public class LyricsViewerActivity extends Activity {
 
 		public GetLyricTask(Context context) {
 			this.mProgressDialog = new ProgressDialog(context);
+			this.mProgressDialog.setTitle(getString(R.string.app_name));
 			this.mProgressDialog
-					.setTitle(getString(R.string.message_fetching_lyric_title));
-			this.mProgressDialog
-					.setMessage(getString(R.string.message_fetching_lyric_body));
+					.setMessage(getString(R.string.message_fetching_lyrics));
 			this.mProgressDialog.setCancelable(true);
 
 			this.mContext = context;

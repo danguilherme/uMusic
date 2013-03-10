@@ -38,12 +38,6 @@
 
     
     <!-- Artist Info -->
-    <style name="Title" parent="android:Theme.Light">
-        <item name="android:textColor">#13A</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:textSize">30sp</item>
-    </style>
-    
     <style name="scroll_divider">
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">2dp</item>
@@ -55,6 +49,29 @@
         <item name="android:textStyle">bold</item>
         <item name="android:paddingTop">10dp</item>
         <item name="android:paddingBottom">10dp</item>
+    </style>
+    
+    <!-- ALL NEW -->
+    <style name="Title" parent="android:Theme.Light">
+        <item name="android:textColor">@color/dark_blue</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">30sp</item>
+    </style>
+    
+    <style name="Text12" parent="android:Theme.Light">
+        <item name="android:textSize">12sp</item>
+    </style>
+    
+    <style name="Text12Bold" parent="Text12">
+        <item name="android:textStyle">bold</item>
+    </style>
+    
+    <style name="Text16" parent="android:Theme.Light">
+        <item name="android:textSize">16sp</item>
+    </style>
+    
+    <style name="Text16Bold" parent="Text16">
+        <item name="android:textStyle">bold</item>
     </style>
 
 </resources>

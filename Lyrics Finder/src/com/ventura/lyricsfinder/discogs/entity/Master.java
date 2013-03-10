@@ -11,17 +11,19 @@ public class Master extends BasicRelease {
 
 	@SerializedName(KEY_MAIN_RELEASE)
 	private int mainRelease;
-	
+
 	@SerializedName(KEY_MAIN_RELEASE_URL)
 	private URL mainReleaseUrl;
 
 	@SerializedName(KEY_VERSIONS_URL)
 	private URL versionsUrl;
 
+	@Override
 	public int getMainRelease() {
 		return mainRelease;
 	}
 
+	@Override
 	public void setMainRelease(int mainRelease) {
 		this.mainRelease = mainRelease;
 	}

@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.ventura.lyricsfinder.R;
+import com.ventura.musicexplorer.R;
 
 public class CustomAdapter extends BaseAdapter {
 	public static final String MUSIC_NAME = "MUSIC_NAME";

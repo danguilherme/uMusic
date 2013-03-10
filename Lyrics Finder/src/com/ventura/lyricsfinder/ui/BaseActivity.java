@@ -7,21 +7,23 @@ import oauth.signpost.OAuth;
 import oauth.signpost.OAuthConsumer;
 import oauth.signpost.commonshttp.CommonsHttpOAuthConsumer;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.ContentResolver;
-import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.database.Cursor;
-import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
-import android.util.Log;
 
+import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.view.MenuItem;
+import com.ventura.musicexplorer.R;
 import com.ventura.lyricsfinder.discogs.oauth.Constants;
 
-public abstract class BaseActivity extends Activity {
+public abstract class BaseActivity extends SherlockActivity {
 	final String TAG = getClass().getName();
 	protected SharedPreferences sharedPreferences;
 
@@ -30,6 +32,17 @@ public abstract class BaseActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		this.sharedPreferences = PreferenceManager
 				.getDefaultSharedPreferences(this);
+
+		Intent intent = this.getIntent();
+		String action = intent.getAction();
+
+		if (action == null) {
+			getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		} else {
+			if (!action.equals(Intent.ACTION_MAIN)) {
+				getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+			}
+		}
 	}
 
 	protected void clearCredentials() {
@@ -118,5 +131,41 @@ public abstract class BaseActivity extends Activity {
 			}
 		}
 		return list.toString();
+	}
+
+	/**
+	 * Shows an alert dialog on the device screen.
+	 * 
+	 * @param messageResourceId
+	 *            The resource id of the message string
+	 */
+	public void alert(int messageResourceId) {
+		this.alert(this.getResources().getString(messageResourceId));
+	}
+
+	/**
+	 * Shows an alert dialog on the device screen. The title of this alert is
+	 * the app's name
+	 * 
+	 * @param message
+	 *            The message to show
+	 */
+	public void alert(String message) {
+		this.alert(this.getResources().getString(R.string.app_name), message);
+	}
+
+	/**
+	 * Shows an alert dialog on the device screen.
+	 * 
+	 * @param title
+	 *            The title of the alert window
+	 * @param message
+	 *            The message to show
+	 */
+	public void alert(String title, String message) {
+		AlertDialog dialog = new AlertDialog.Builder(this).create();
+		dialog.setTitle(title);
+		dialog.setMessage(message);
+		dialog.show();
 	}
 }

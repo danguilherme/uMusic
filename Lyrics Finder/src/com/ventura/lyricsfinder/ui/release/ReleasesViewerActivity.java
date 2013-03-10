@@ -1,12 +1,10 @@
-package com.ventura.lyricsfinder.discogs.ui;
+package com.ventura.lyricsfinder.ui.release;
 
 import java.util.Collections;
 import java.util.List;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -19,21 +17,20 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.LinearLayout.LayoutParams;
 
-import com.ventura.lyricsfinder.R;
+import com.ventura.androidutils.exception.LazyInternetConnectionException;
+import com.ventura.androidutils.exception.NoInternetConnectionException;
+import com.ventura.androidutils.utils.InnerActivityAsyncTask;
+import com.ventura.musicexplorer.R;
+import com.ventura.lyricsfinder.business.ArtistService;
+import com.ventura.lyricsfinder.business.ReleaseService;
 import com.ventura.lyricsfinder.constants.GlobalConstants;
-import com.ventura.lyricsfinder.discogs.DiscogsService;
-import com.ventura.lyricsfinder.discogs.entity.Artist;
-import com.ventura.lyricsfinder.discogs.entity.ArtistRelease;
-import com.ventura.lyricsfinder.discogs.entity.BasicRelease;
-import com.ventura.lyricsfinder.discogs.entity.Label;
-import com.ventura.lyricsfinder.discogs.entity.Master;
-import com.ventura.lyricsfinder.discogs.entity.Release;
-import com.ventura.lyricsfinder.discogs.entity.Track;
 import com.ventura.lyricsfinder.discogs.entity.enumerator.SpecialEnums;
-import com.ventura.lyricsfinder.exception.LazyInternetConnectionException;
-import com.ventura.lyricsfinder.exception.NoInternetConnectionException;
+import com.ventura.lyricsfinder.entity.artist.Artist;
+import com.ventura.lyricsfinder.entity.release.ArtistRelease;
+import com.ventura.lyricsfinder.entity.release.Master;
+import com.ventura.lyricsfinder.entity.release.Release;
+import com.ventura.lyricsfinder.entity.release.Track;
 import com.ventura.lyricsfinder.ui.BaseActivity;
 import com.ventura.lyricsfinder.util.ImageLoader;
 
@@ -105,8 +102,7 @@ public class ReleasesViewerActivity extends BaseActivity {
 					LinearLayout tracksContainer = (LinearLayout) releasePanel
 							.findViewById(R.id.artist_release_info_container);
 
-					if (release.getChildRelease() != null
-							&& release.getChildRelease().getTracks().size() > 0) {
+					if (release.getCompleteRelease().getTrackList().size() > 0) {
 						if (tracksContainer.getVisibility() == View.VISIBLE) {
 							((Button) view)
 									.setCompoundDrawablesWithIntrinsicBounds(
@@ -129,7 +125,8 @@ public class ReleasesViewerActivity extends BaseActivity {
 
 			title.setText(release.getTitle());
 			year.setText(release.getYear() + "");
-			trackInfo.setText(release.getTrackInfo());
+			// TODO: Review trackinfo property
+			// trackInfo.setText(release.getTrackInfo());
 			format.setVisibility(View.GONE);
 			/*
 			 * if (release.getFormat().equals("")) {
@@ -152,7 +149,7 @@ public class ReleasesViewerActivity extends BaseActivity {
 				R.layout.release, null);
 
 		boolean hasContent = false;
-		
+
 		if (result.getLabels() != null && result.getLabels().size() != 0) {
 			TextView txtLabelName = (TextView) releasePanel
 					.findViewById(R.id.label);
@@ -191,7 +188,8 @@ public class ReleasesViewerActivity extends BaseActivity {
 
 		if (hasContent) {
 			LinearLayout.LayoutParams linearLayoutParams = new LinearLayout.LayoutParams(
-					LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+					android.view.ViewGroup.LayoutParams.FILL_PARENT,
+					android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
 			linearLayoutParams.setMargins(0, 0, 0, 10);
 			releasePanel.setLayoutParams(linearLayoutParams);
 
@@ -207,22 +205,22 @@ public class ReleasesViewerActivity extends BaseActivity {
 		this.buildTrackListView(result, parentReleaseView);
 	}
 
-	private void buildTrackListView(BasicRelease release,
+	private void buildTrackListView(ArtistRelease release,
 			LinearLayout parentReleaseView) {
 		LinearLayout tracksContainer = (LinearLayout) parentReleaseView
 				.findViewById(R.id.artist_release_info_container);
 
-		for (int j = 0; j < release.getTracks().size(); j++) {
-			Track track = release.getTracks().get(j);
+		for (int j = 0; j < release.getTrackList().size(); j++) {
+			Track track = release.getTrackList().get(j);
 			if (track.getPosition().equals("") && track.getTitle().equals("")
 					&& track.getDuration().equals("")) {
 				continue;
 			}
-			
+
 			if (track.getPosition().equals("0")) {
 				track.setPosition("");
 			}
-			
+
 			LinearLayout trackPanel = (LinearLayout) getLayoutInflater()
 					.inflate(R.layout.track, null);
 
@@ -245,51 +243,33 @@ public class ReleasesViewerActivity extends BaseActivity {
 	}
 
 	private class GetReleasesTask extends
-			AsyncTask<Void, Void, List<ArtistRelease>> {
-
-		private ProgressDialog mProgressDialog;
-		private Context mContext;
+			InnerActivityAsyncTask<Void, Void, List<ArtistRelease>> {
 		private Artist mArtist;
 
 		public GetReleasesTask(Context context, Artist artist) {
-
-			this.mProgressDialog = new ProgressDialog(context);
-			this.mProgressDialog
-					.setTitle(getString(R.string.message_fetching_releases_title));
-			this.mProgressDialog
-					.setMessage(getString(R.string.message_fetching_releases_body));
-			this.mProgressDialog.setCancelable(true);
-			this.mProgressDialog.setOnCancelListener(new OnCancelListener() {
-				public void onCancel(DialogInterface dialog) {
-					cancel(true);
-					finish();
-				}
-			});
-			this.mContext = context;
+			super(context, getString(R.string.app_name),
+					getString(R.string.message_fetching_releases_body));
 			this.mArtist = artist;
 		}
 
 		@Override
-		protected void onPreExecute() {
-			super.onPreExecute();
-			this.mProgressDialog.show();
-		}
-
-		@Override
 		protected List<ArtistRelease> doInBackground(Void... params) {
-
-			DiscogsService ds = new DiscogsService(getBaseContext(),
-					getConsumer(sharedPreferences));
+			/*
+			 * DiscogsService ds = new DiscogsService(getBaseContext(),
+			 * getConsumer(sharedPreferences));
+			 */
+			ArtistService as = new ArtistService(this.getContext());
 			List<ArtistRelease> releases = null;
 			try {
-				releases = ds.getArtistReleases(this.mArtist.getId());
+				releases = as.getArtistReleases(this.mArtist.getId());
 			} catch (NoInternetConnectionException e) {
 				e.printStackTrace();
 			} catch (LazyInternetConnectionException e) {
 				e.printStackTrace();
 			} catch (Exception e) {
-				Toast.makeText(this.mContext, "An error ocurred, try again...",
-						Toast.LENGTH_LONG).show();
+				Toast.makeText(this.getContext(),
+						"An error ocurred, try again...", Toast.LENGTH_LONG)
+						.show();
 				finish();
 				e.printStackTrace();
 			}
@@ -300,13 +280,18 @@ public class ReleasesViewerActivity extends BaseActivity {
 		protected void onPostExecute(List<ArtistRelease> result) {
 			super.onPostExecute(result);
 			buildArtistReleasesList(result);
-			mProgressDialog.dismiss();
+		}
+
+		@Override
+		public void onProgressDialogCancelled(DialogInterface progressDialog) {
+			cancel(true);
+			finish();
 		}
 
 	}
 
 	private class GetReleaseOrMasterTask extends
-			AsyncTask<Void, Void, BasicRelease> {
+			AsyncTask<Void, Void, ArtistRelease> {
 
 		private Context mContext;
 		private ArtistRelease mRelease;
@@ -325,33 +310,27 @@ public class ReleasesViewerActivity extends BaseActivity {
 		}
 
 		@Override
-		protected BasicRelease doInBackground(Void... params) {
-
-			DiscogsService ds = new DiscogsService(getBaseContext(),
-					getConsumer(sharedPreferences));
-			BasicRelease release = null;
+		protected ArtistRelease doInBackground(Void... params) {
+			ReleaseService rs = new ReleaseService(mContext);
+			ArtistRelease release = new ArtistRelease();
 			try {
 				if (this.mRelease.getType().equals(
 						SpecialEnums.ARTIST_RELEASE_TYPE_RELEASE)) {
-					release = ds.getRelease(this.mRelease);
+					release = rs.getRelease(this.mRelease.getId());
 				} else {
-					release = ds.getMaster(this.mRelease);
+					// release = ds.getMaster(this.mRelease);
 				}
-			} catch (NoInternetConnectionException e) {
-				e.printStackTrace();
-			} catch (LazyInternetConnectionException e) {
-				e.printStackTrace();
 			} catch (Exception e) {
 				Toast.makeText(this.mContext, "An error ocurred, try again...",
 						Toast.LENGTH_LONG).show();
 				e.printStackTrace();
 			}
-			this.mRelease.setChildRelease(release);
+			this.mRelease.setCompleteRelease(release);
 			return release;
 		}
 
 		@Override
-		protected void onPostExecute(BasicRelease result) {
+		protected void onPostExecute(ArtistRelease result) {
 			super.onPostExecute(result);
 			if (result.getType().equals(
 					SpecialEnums.ARTIST_RELEASE_TYPE_RELEASE)) {
@@ -365,7 +344,6 @@ public class ReleasesViewerActivity extends BaseActivity {
 	}
 
 	// ****** EVENT HANDLERS *******
-
 	public void onOpenTracksButtonClicked(View button) {
 	}
 }

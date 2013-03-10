@@ -1,5 +1,7 @@
 package com.ventura.lyricsfinder.discogs.oauth;
 
+import com.ventura.lyricsfinder.ui.artist.ArtistViewerActivity;
+
 import oauth.signpost.OAuth;
 import oauth.signpost.OAuthConsumer;
 import oauth.signpost.OAuthProvider;
@@ -10,8 +12,6 @@ import android.content.SharedPreferences.Editor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
-
-import com.ventura.lyricsfinder.discogs.ui.ArtistViewerActivity;
 
 public class RetrieveAccessTokenTask extends AsyncTask<Uri, Void, Void> {
 
@@ -37,7 +37,7 @@ public class RetrieveAccessTokenTask extends AsyncTask<Uri, Void, Void> {
 	@Override
 	protected Void doInBackground(Uri... params) {
 		Uri tempUri = params[0];
-		final Uri uri = Uri.parse(tempUri.decode(tempUri.toString()));
+		final Uri uri = Uri.parse(Uri.decode(tempUri.toString()));
 
 		final String oauth_verifier = uri
 				.getQueryParameter(OAuth.OAUTH_VERIFIER);

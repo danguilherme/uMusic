@@ -25,51 +25,19 @@
             android:src="@drawable/rihanna" />
     </LinearLayout>
 
-    <!-- Title Of Song -->
-
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/thumbnail"
-        android:layout_toRightOf="@+id/thumbnail"
-        android:background="#00000000"
-        android:text="Rihanna Love the way lie"
-        android:textColor="#040404"
-        android:textSize="15dip"
-        android:textStyle="bold"
-        android:typeface="sans" />
-
     <!-- Artist Name -->
 
     <TextView
         android:id="@+id/artist"
+        style="@style/Text16Bold"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/title"
         android:layout_centerVertical="true"
-        android:layout_marginTop="1dip"
         android:layout_toRightOf="@+id/thumbnail"
-        android:background="#00000000"
+        android:background="@android:color/transparent"
         android:text="Just gona stand there and ..."
         android:textColor="#343434"
-        android:textSize="10dip" />
-
-    <!-- Rightend Duration -->
-
-    <TextView
-        android:id="@+id/duration"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignTop="@id/title"
-        android:layout_marginRight="5dip"
-        android:background="#00000000"
-        android:gravity="right"
-        android:text="5:45"
-        android:textColor="#10bcc9"
-        android:textSize="10dip"
-        android:textStyle="bold" />
+        android:typeface="sans" />
 
     <!-- Rightend Arrow -->
 

@@ -1,12 +1,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.ventura.lyricsfinder"
+    package="com.ventura.musicexplorer"
     android:versionCode="1"
     android:versionName="1.0" >
 
     <uses-sdk
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:minSdkVersion="8"
-        android:targetSdkVersion="15" />
+        android:targetSdkVersion="17" />
 
     <uses-feature />
 
@@ -18,15 +18,10 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/Theme.Sherlock.Light" >
         <activity
-            android:name=".ui.MusicInfoActivity"
+            android:name="com.ventura.lyricsfinder.ui.MusicInfoActivity"
             android:label="@string/title_activity_music_info" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -43,7 +38,16 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.BindLyricsActivity"
+            android:name="com.ventura.lyricsfinder.ui.DashboardActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.ventura.lyricsfinder.ui.BindLyricsActivity"
             android:label="@string/title_activity_bind_lyrics" >
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
@@ -55,17 +59,29 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".discogs.ui.ArtistViewerActivity"
-            android:configChanges="orientation"
-            android:label="@string/title_activity_artist_viewer" >
+            android:name="com.ventura.lyricsfinder.ui.artist.ListArtistsActivity"
+            android:configChanges="orientation" >
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
         </activity>
         <activity
-            android:name=".discogs.ui.ReleasesViewerActivity"
+            android:name="com.ventura.lyricsfinder.ui.artist.ArtistViewerActivity"
+            android:configChanges="orientation"
+            android:label="@string/title_activity_artist_viewer"
+            android:parentActivityName=".ui.artist.ListArtistsActivity" >
+        </activity>
+        <activity
+            android:name="com.ventura.lyricsfinder.ui.release.ReleasesViewerActivity"
             android:configChanges="orientation"
             android:label="@string/title_activity_releases_viewer" >
         </activity>
         <activity
-            android:name=".oauth.PrepareRequestTokenActivity"
+            android:name="com.ventura.lyricsfinder.oauth.PrepareRequestTokenActivity"
             android:launchMode="singleTask" >
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -78,29 +94,18 @@
                     android:scheme="lyricsfinder-app" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".discogs.ui.ListArtistsActivity"
-            android:configChanges="orientation" >
-            <intent-filter>
-                <action android:name="android.intent.action.SEARCH" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.app.searchable"
-                android:resource="@xml/searchable" />
-        </activity>
 
         <!-- LyrDB-related activities -->
         <activity
-            android:name=".lyrdb.ui.ListLyricsActivity"
+            android:name="com.ventura.lyricsfinder.lyrdb.ui.ListLyricsActivity"
             android:configChanges="orientation" >
         </activity>
         <activity
-            android:name=".lyrdb.ui.LyricsViewerActivity"
+            android:name="com.ventura.lyricsfinder.lyrdb.ui.LyricsViewerActivity"
             android:configChanges="orientation" >
         </activity>
         <activity
-            android:name=".musixmatch.ui.LyricsViewerActivity"
+            android:name="com.ventura.lyricsfinder.musixmatch.ui.LyricsViewerActivity"
             android:configChanges="orientation" >
         </activity>
     </application>

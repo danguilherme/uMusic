@@ -1,7 +1,6 @@
 package com.ventura.lyricsfinder.discogs;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 
 import android.app.Activity;
@@ -13,7 +12,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.ventura.lyricsfinder.R;
+import com.ventura.musicexplorer.R;
 import com.ventura.lyricsfinder.util.ImageLoader;
 
 public class LazyAdapter extends BaseAdapter {
@@ -64,20 +63,16 @@ public class LazyAdapter extends BaseAdapter {
 		if (convertView == null)
 			vi = inflater.inflate(R.layout.list_item, null);
 
-		TextView title = (TextView) vi.findViewById(R.id.title); // title
-		TextView artist = (TextView) vi.findViewById(R.id.artist); // artist
-																	// name
-		TextView duration = (TextView) vi.findViewById(R.id.duration); // duration
-		ImageView thumb_image = (ImageView) vi.findViewById(R.id.list_image); // thumb
-																				// image
+		// artist name
+		TextView artist = (TextView) vi.findViewById(R.id.artist);
+		// thumb image
+		ImageView thumb_image = (ImageView) vi.findViewById(R.id.list_image);
 
 		HashMap<String, String> song = new HashMap<String, String>();
 		song = data.get(position);
 
 		// Setting all values in listview
-		title.setText(song.get(DiscogsConstants.KEY_TITLE));
 		artist.setText(song.get(DiscogsConstants.KEY_TITLE));
-		duration.setText(song.get(DiscogsConstants.KEY_ID));
 		imageLoader.displayImage(song.get(DiscogsConstants.KEY_THUMB),
 				thumb_image);
 		return vi;

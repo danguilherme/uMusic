@@ -17,12 +17,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.ventura.lyricsfinder.R;
+import com.ventura.androidutils.utils.ConnectionManager;
+import com.ventura.musicexplorer.R;
 import com.ventura.lyricsfinder.constants.GlobalConstants;
 import com.ventura.lyricsfinder.constants.RequestCodes;
 import com.ventura.lyricsfinder.lyrdb.ui.ListLyricsActivity;
 import com.ventura.lyricsfinder.lyrics.Lyric;
-import com.ventura.lyricsfinder.util.ConnectionManager;
 
 public class BindLyricsActivity extends BaseActivity {
 
@@ -103,7 +103,7 @@ public class BindLyricsActivity extends BaseActivity {
 				} else {
 					lyrics = mLyricsTextField.getText().toString();
 				}
-				
+
 				saveLyrics(mCurrentMP3File, new Lyric(null, null, lyrics));
 			}
 		});

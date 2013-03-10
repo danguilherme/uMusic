@@ -23,7 +23,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.ventura.lyricsfinder.R;
+import com.ventura.musicexplorer.R;
 import com.ventura.lyricsfinder.constants.GlobalConstants;
 import com.ventura.lyricsfinder.constants.RequestCodes;
 import com.ventura.lyricsfinder.lyrdb.CustomAdapter;
@@ -135,16 +135,16 @@ public class ListLyricsActivity extends ListActivity {
 
 		return super.onCreateOptionsMenu(menu);
 	}
-	
+
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		if (item.getItemId() == R.id.menu_set_music_tags) {
 			Log.i(TAG, item.getTitle() + " clicked");
 		}
-		
+
 		return super.onMenuItemSelected(featureId, item);
 	}
-	
+
 	private class ListLyricsTask extends AsyncTask<Lyric, Void, List<Lyric>> {
 
 		private Context mContext;
@@ -153,10 +153,9 @@ public class ListLyricsActivity extends ListActivity {
 
 		public ListLyricsTask(Context context, QueryType queryType) {
 			this.mProgressDialog = new ProgressDialog(context);
+			this.mProgressDialog.setTitle(getString(R.string.app_name));
 			this.mProgressDialog
-					.setTitle(getString(R.string.message_fetching_lyrics_list_body));
-			this.mProgressDialog
-					.setMessage(getString(R.string.message_fetching_lyrics_list_body));
+					.setMessage(getString(R.string.message_fetching_lyrics_list));
 			this.mProgressDialog.setCancelable(true);
 
 			this.mContext = context;

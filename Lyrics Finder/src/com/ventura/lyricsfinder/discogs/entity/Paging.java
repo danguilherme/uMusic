@@ -27,7 +27,7 @@ public class Paging {
 	public boolean isLast() {
 		return this.actualPage == this.pagesCount;
 	}
-	
+
 	public boolean isFirst() {
 		return this.actualPage == 1;
 	}
@@ -76,7 +76,7 @@ public class Paging {
 	public String toString() {
 		return "Page " + this.actualPage + " of " + this.pagesCount;
 	}
-	
+
 	public class PageNavigation {
 		public static final String KEY_PREV_PAGE = "prev";
 		public static final String KEY_NEXT_PAGE = "next";
@@ -91,7 +91,7 @@ public class Paging {
 		private URL lastPageUrl;
 		@SerializedName(KEY_FIRST_PAGE)
 		private URL firstPageUrl;
-		
+
 		public URL getPreviousPageUrl() {
 			return previousPageUrl;
 		}

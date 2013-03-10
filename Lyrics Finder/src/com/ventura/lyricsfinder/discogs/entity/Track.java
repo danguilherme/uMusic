@@ -1,8 +1,5 @@
 package com.ventura.lyricsfinder.discogs.entity;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 public class Track {
 
 	public final String KEY_TITLE = "title";
@@ -12,7 +9,7 @@ public class Track {
 	private String title;
 	private String duration;
 	private String position;
-	
+
 	public Track(String title, String position, String duration) {
 		this.title = title;
 		this.position = position;

@@ -20,7 +20,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.widget.ImageView;
 
-import com.ventura.lyricsfinder.R;
+import com.ventura.musicexplorer.R;
 
 public class ImageLoader {
 

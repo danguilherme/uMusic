@@ -1,10 +1,6 @@
 package com.ventura.lyricsfinder.discogs.entity;
 
-import java.net.MalformedURLException;
 import java.net.URL;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import com.google.gson.annotations.SerializedName;
 import com.ventura.lyricsfinder.discogs.entity.enumerator.QueryType;

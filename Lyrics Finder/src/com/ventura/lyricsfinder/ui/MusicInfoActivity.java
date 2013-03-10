@@ -15,20 +15,22 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.ventura.lyricsfinder.R;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
+import com.actionbarsherlock.view.SubMenu;
+import com.ventura.musicexplorer.R;
 import com.ventura.lyricsfinder.constants.GlobalConstants;
 import com.ventura.lyricsfinder.discogs.DiscogsConstants;
 import com.ventura.lyricsfinder.discogs.entity.enumerator.QueryType;
-import com.ventura.lyricsfinder.discogs.ui.ListArtistsActivity;
 import com.ventura.lyricsfinder.musixmatch.ui.LyricsViewerActivity;
+import com.ventura.lyricsfinder.ui.artist.ListArtistsActivity;
 
 public class MusicInfoActivity extends BaseActivity {
 	final String TAG = getClass().getName();
@@ -209,8 +211,8 @@ public class MusicInfoActivity extends BaseActivity {
 		if (musicMetadataSet == null) // perhaps no metadata
 		{
 			Toast.makeText(getApplicationContext(),
-					R.string.message_no_music_metadata_found, Toast.LENGTH_LONG)
-					.show();
+					R.string.message_music_metadata_not_found,
+					Toast.LENGTH_LONG).show();
 		} else {
 
 			String songTitle = null;
@@ -264,12 +266,29 @@ public class MusicInfoActivity extends BaseActivity {
 		}
 	}
 
+	/*
+	 * @Override public boolean onCreateOptionsMenu(Menu menu) { MenuInflater
+	 * menuInflater = new MenuInflater(this);
+	 * menuInflater.inflate(R.menu.music_info_menu, menu);
+	 * 
+	 * return super.onCreateOptionsMenu(menu); }
+	 */
+
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View v,
+			ContextMenuInfo menuInfo) {
+		super.onCreateContextMenu(menu, v, menuInfo);
+	}
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater menuInflater = new MenuInflater(this);
-		menuInflater.inflate(R.menu.music_info_menu, menu);
-
-		return super.onCreateOptionsMenu(menu);
+		SubMenu sub = menu.addSubMenu("Actions");
+		sub.add(0, R.id.menu_view_artist_info, 0, R.string.search_artist);
+		sub.add(0, R.id.menu_find_lyrics, 0, R.string.search_lyrics);
+		sub.getItem().setShowAsAction(
+				MenuItem.SHOW_AS_ACTION_ALWAYS
+						| MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+		return true;
 	}
 
 	@Override

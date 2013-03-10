@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res/com.ventura.lyricsfinder"
+    xmlns:app="http://schemas.android.com/apk/res/com.ventura.musicexplorer"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:background="#CCC"
@@ -48,7 +48,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:visibility="gone"
-                app:title="Band members:" >
+                app:title="@string/band_members" >
             </com.ventura.lyricsfinder.ui.widget.ButtonGroup>
 
             <com.ventura.lyricsfinder.ui.widget.ButtonGroup
@@ -57,7 +57,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:visibility="gone"
-                app:title="External URLs:" >
+                app:title="@string/external_urls" >
             </com.ventura.lyricsfinder.ui.widget.ButtonGroup>
         </LinearLayout>
     </ScrollView>

@@ -1,10 +1,8 @@
-package com.ventura.lyricsfinder.discogs.ui;
+package com.ventura.lyricsfinder.ui.artist;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -12,21 +10,19 @@ import java.util.Locale;
 
 import oauth.signpost.OAuthConsumer;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.ClipboardManager;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
-import android.view.Menu;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
@@ -42,19 +38,21 @@ import android.widget.SlidingDrawer.OnDrawerOpenListener;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.ventura.lyricsfinder.R;
+import com.actionbarsherlock.view.MenuItem;
+import com.ventura.androidutils.exception.LazyInternetConnectionException;
+import com.ventura.androidutils.exception.NoInternetConnectionException;
+import com.ventura.androidutils.utils.InnerActivityAsyncTask;
+import com.ventura.musicexplorer.R;
+import com.ventura.lyricsfinder.business.ArtistService;
 import com.ventura.lyricsfinder.constants.GlobalConstants;
-import com.ventura.lyricsfinder.discogs.DiscogsService;
-import com.ventura.lyricsfinder.discogs.ImageDownloaderTask;
-import com.ventura.lyricsfinder.discogs.OnImageDownloadListener;
-import com.ventura.lyricsfinder.discogs.entity.Artist;
-import com.ventura.lyricsfinder.discogs.entity.ExternalUrl;
-import com.ventura.lyricsfinder.discogs.entity.Image;
-import com.ventura.lyricsfinder.exception.LazyInternetConnectionException;
-import com.ventura.lyricsfinder.exception.NoInternetConnectionException;
+import com.ventura.lyricsfinder.entity.Image;
+import com.ventura.lyricsfinder.entity.artist.Artist;
 import com.ventura.lyricsfinder.ui.BaseActivity;
+import com.ventura.lyricsfinder.ui.release.ReleasesViewerActivity;
 import com.ventura.lyricsfinder.ui.widget.ButtonGroup;
+import com.ventura.lyricsfinder.util.ImageDownloaderTask;
 import com.ventura.lyricsfinder.util.ImageLoader;
+import com.ventura.lyricsfinder.util.OnImageDownloadListener;
 
 public class ArtistViewerActivity extends BaseActivity {
 	final String TAG = getClass().getName();
@@ -80,8 +78,9 @@ public class ArtistViewerActivity extends BaseActivity {
 		this.setContentView(mBaseLayout);
 
 		Intent intent = this.getIntent();
-		Artist artist = new Artist(intent.getIntExtra(Artist.KEY_ID, 0),
-				intent.getStringExtra(Artist.KEY_NAME), null);
+		Artist artist = new Artist(intent.getIntExtra(
+				GlobalConstants.EXTRA_ARTIST_ID, 0),
+				intent.getStringExtra(GlobalConstants.EXTRA_ARTIST_NAME), null);
 		OAuthConsumer consumer = this.getConsumer(this.sharedPreferences);
 
 		mArtistImageView = (ImageView) findViewById(R.id.artist_image);
@@ -110,6 +109,19 @@ public class ArtistViewerActivity extends BaseActivity {
 		mArtistName.setText(artist.getName());
 
 		new GetArtistTask(this, consumer, artist).execute();
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			// This is called when the Home (Up) button is pressed
+			// in the Action Bar.
+			finish();
+			return true;
+		}
+
+		return super.onOptionsItemSelected(item);
 	}
 
 	private void onArtistInfoDrawerOpened() {
@@ -142,13 +154,15 @@ public class ArtistViewerActivity extends BaseActivity {
 				View.VISIBLE);
 	}
 
-	private void fillView(Artist artist) {
+	private void fillView(com.ventura.lyricsfinder.entity.artist.Artist artist) {
 		mBaseLayout.setVisibility(View.VISIBLE);
 
 		final ProgressBar artistImageDownloadProgressBar = (ProgressBar) findViewById(android.R.id.progress);
 
 		this.mCurrentArtist = artist;
-		if (this.mCurrentArtist.getImages()!= null && this.mCurrentArtist.getImages().size() > 0) {
+
+		if (this.mCurrentArtist.getImages() != null
+				&& this.mCurrentArtist.getImages().size() > 0) {
 			final Image firstImage = this.mCurrentArtist.getImages().get(0);
 
 			new ImageLoader(this).displayImage(firstImage.getUrl().toString(),
@@ -185,13 +199,14 @@ public class ArtistViewerActivity extends BaseActivity {
 			mArtistImageView.setVisibility(View.GONE);
 			artistImageDownloadProgressBar.setVisibility(View.GONE);
 		}
-		mArtistName.setText(this.mCurrentArtist.getName());
-		String profile = this.mCurrentArtist.getProfile();
+
+		mArtistName.setText(artist.getName());
+		String profile = artist.getProfile();
 
 		if (profile != null && !profile.equals("")) {
 			mArtistBio.setText(profile);
 		} else {
-			mArtistBio.setText("This artist has no Bio. Add one!");
+			mArtistBio.setText(getString(R.string.no_biography));
 		}
 
 		buildAditionalInformationView();
@@ -227,6 +242,10 @@ public class ArtistViewerActivity extends BaseActivity {
 		if (artist.getMembers().size() > 0) {
 			this.buildBandMembersView();
 		}
+
+		if (artist.getGroups().size() > 0) {
+			this.buildGroupsView();
+		}
 	}
 
 	private void buildExternalUrlsView() {
@@ -246,10 +265,10 @@ public class ArtistViewerActivity extends BaseActivity {
 
 		for (int i = 0; i < externalUrlsLength; i++) {
 			final String currentExternalUrl = this.mCurrentArtist
-					.getExternalUrls().get(i).getExternalUrl().toString()
+					.getExternalUrls().get(i).getUrl().toString()
 					.toLowerCase(Locale.US);
 			String username = this.mCurrentArtist.getExternalUrls().get(i)
-					.getExternalUrl().toString()
+					.getUrl().toString()
 					.substring(currentExternalUrl.lastIndexOf("/") + 1);
 
 			externalUrlRow = (Button) this.getLayoutInflater().inflate(
@@ -378,8 +397,6 @@ public class ArtistViewerActivity extends BaseActivity {
 			externalUrlRow.setMovementMethod(LinkMovementMethod.getInstance());
 
 			externalUrlsArray.add(externalUrlRow);
-			Log.i(TAG, this.mCurrentArtist.getName() + "'s external url: "
-					+ this.mCurrentArtist.getExternalUrls().get(i));
 		}
 		externalUrlsContainer.addViews(externalUrlsArray);
 	}
@@ -394,7 +411,7 @@ public class ArtistViewerActivity extends BaseActivity {
 			TextView key = (TextView) keyValuePanel.findViewById(R.id.key);
 			TextView value = (TextView) keyValuePanel.findViewById(R.id.value);
 
-			key.setText("Real Name:");
+			key.setText(getString(R.string.real_name) + ":");
 			value.setText(this.mCurrentArtist.getRealName());
 
 			mArtistExtraInfoContent.addView(keyValuePanel);
@@ -410,8 +427,9 @@ public class ArtistViewerActivity extends BaseActivity {
 			TextView value = (TextView) nameVariationsKeyValuePanel
 					.findViewById(R.id.value);
 
-			key.setText("Known name variations:");
-			value.setText(this.createList(this.mCurrentArtist.getNameVariations()));
+			key.setText(getString(R.string.aliases) + ":");
+			value.setText(this.createList(this.mCurrentArtist
+					.getNameVariations()));
 
 			mArtistExtraInfoContent.addView(nameVariationsKeyValuePanel);
 		}
@@ -420,32 +438,30 @@ public class ArtistViewerActivity extends BaseActivity {
 	private void buildBandMembersView() {
 		if (this.mCurrentArtist.getMembers().size() > 0) {
 			Collections.sort(this.mCurrentArtist.getMembers());
-			// Add the name variations one by one, separated by comma and
-			// finalized with a dot.
+
 			ButtonGroup buttonGroup = (ButtonGroup) findViewById(R.id.members_container);
 
 			List<Button> buttonsToAdd = new ArrayList<Button>();
 			for (int i = 0; i < this.mCurrentArtist.getMembers().size(); i++) {
 				buttonGroup.setVisibility(View.VISIBLE);
-				final Artist actualMember = this.mCurrentArtist.getMembers()
-						.get(i);
+				final Artist member = this.mCurrentArtist.getMembers().get(i);
 
 				Button button = (Button) this.getLayoutInflater().inflate(
 						R.layout.button_group_item, null);
-				button.setText(actualMember.getName() + " - "
-						+ (actualMember.isActive() ? "Active" : "Left group"));
+
+				button.setText(member.getName());
+
+				if (member.isActive()) {
+					button.setCompoundDrawablesWithIntrinsicBounds(
+							R.drawable.green_mark, 0, 0, 0);
+				} else {
+					button.setCompoundDrawablesWithIntrinsicBounds(
+							R.drawable.red_mark, 0, 0, 0);
+				}
 
 				button.setOnClickListener(new OnClickListener() {
 					public void onClick(View v) {
-						Intent openArtistInfoIntent = new Intent(
-								v.getContext(), ArtistViewerActivity.class);
-
-						openArtistInfoIntent.setAction(Intent.ACTION_SEND);
-						openArtistInfoIntent.putExtra(Artist.KEY_ID,
-								actualMember.getId());
-						openArtistInfoIntent.putExtra(Artist.KEY_NAME,
-								actualMember.getName());
-						startActivity(openArtistInfoIntent);
+						openNewArtistInfo(member);
 					}
 				});
 				buttonsToAdd.add(button);
@@ -454,14 +470,61 @@ public class ArtistViewerActivity extends BaseActivity {
 		}
 	}
 
+	private void buildGroupsView() {
+		if (this.mCurrentArtist.getGroups().size() > 0) {
+			Collections.sort(this.mCurrentArtist.getGroups());
+
+			ButtonGroup buttonGroup = (ButtonGroup) findViewById(R.id.members_container);
+
+			buttonGroup.setTitle(getString(R.string.groups));
+			buttonGroup.setVisibility(View.VISIBLE);
+			List<Button> buttonsToAdd = new ArrayList<Button>();
+			for (int i = 0; i < this.mCurrentArtist.getGroups().size(); i++) {
+				final Artist group = this.mCurrentArtist.getGroups().get(i);
+
+				Button button = (Button) this.getLayoutInflater().inflate(
+						R.layout.button_group_item, null);
+
+				button.setText(group.getName());
+
+				if (group.isActive()) {
+					button.setCompoundDrawablesWithIntrinsicBounds(
+							R.drawable.green_mark, 0, 0, 0);
+				} else {
+					button.setCompoundDrawablesWithIntrinsicBounds(
+							R.drawable.red_mark, 0, 0, 0);
+				}
+
+				button.setOnClickListener(new OnClickListener() {
+					public void onClick(View v) {
+						openNewArtistInfo(group);
+					}
+				});
+				buttonsToAdd.add(button);
+			}
+			buttonGroup.addViews(buttonsToAdd);
+		}
+	}
+
+	private void openNewArtistInfo(Artist artist) {
+		Intent openArtistInfoIntent = new Intent(this,
+				ArtistViewerActivity.class);
+
+		openArtistInfoIntent.setAction(Intent.ACTION_SEND);
+		openArtistInfoIntent.putExtra(GlobalConstants.EXTRA_ARTIST_ID,
+				artist.getId());
+		openArtistInfoIntent.putExtra(GlobalConstants.EXTRA_ARTIST_NAME,
+				artist.getName());
+		startActivity(openArtistInfoIntent);
+	}
+
 	public void saveArtistImage() {
 		if (this.mCurrentArtist.getImages().size() == 0)
 			return;
 
 		if (this.imageDownloaderTask.isDownloading()) {
-			Toast.makeText(
-					ArtistViewerActivity.this,
-					"The image is already being downloaded. When it is finished, try again.",
+			Toast.makeText(ArtistViewerActivity.this,
+					getString(R.string.image_already_being_downloaded),
 					Toast.LENGTH_SHORT).show();
 			return;
 		}
@@ -484,11 +547,9 @@ public class ArtistViewerActivity extends BaseActivity {
 			}
 
 			public void onDownloadError(String error) {
-				Toast.makeText(
-						ArtistViewerActivity.this,
-						"It wasn't possible to bring your photo. Please try again later."
-								+ "Message: " + error, Toast.LENGTH_SHORT)
-						.show();
+				Toast.makeText(ArtistViewerActivity.this,
+						getString(R.string.image_not_possible_to_download),
+						Toast.LENGTH_SHORT).show();
 			}
 		};
 
@@ -508,12 +569,7 @@ public class ArtistViewerActivity extends BaseActivity {
 			directory += "/";
 		}
 
-		// Catch the status message here because we set fileName right after
-		// this line.
-		String statusMessage = "Image saved at " + directory + fileName;
-
 		fileName = directory + fileName;
-
 		File imgFile = new File(fileName);
 
 		FileOutputStream fos = null;
@@ -524,243 +580,66 @@ public class ArtistViewerActivity extends BaseActivity {
 		}
 		image.compress(Bitmap.CompressFormat.PNG, 90, fos);
 
-		Toast.makeText(this, statusMessage, Toast.LENGTH_SHORT).show();
+		Toast.makeText(this,
+				String.format(getString(R.string.image_saved), fileName),
+				Toast.LENGTH_SHORT).show();
 	}
 
+	@Override
 	public void onActivityResult(int reqCode, int resultCode, Intent data) {
 		super.onActivityResult(reqCode, resultCode, data);
 	}
 
-	private class GetArtistTask extends AsyncTask<Void, Void, Artist> {
-		private ProgressDialog mProgressDialog;
-		private Context mContext;
+	private class GetArtistTask extends
+			InnerActivityAsyncTask<Void, Void, Artist> {
 		private OAuthConsumer mConsumer;
 		private Artist mArtist;
 
 		public GetArtistTask(Context context, OAuthConsumer consumer,
 				Artist artist) {
+			super(context, getString(R.string.app_name),
+					getString(R.string.message_fetching_artists_list));
 
-			this.mProgressDialog = new ProgressDialog(context);
-			this.mProgressDialog
-					.setTitle(getString(R.string.message_fetching_artists_list_title));
-			this.mProgressDialog
-					.setMessage(getString(R.string.message_fetching_artists_list_body));
-			this.mProgressDialog.setCancelable(true);
-			this.mContext = context;
 			this.mConsumer = consumer;
 			this.mArtist = artist;
 		}
 
 		@Override
-		protected void onPreExecute() {
-			super.onPreExecute();
-			this.mProgressDialog.show();
-		}
-
-		@Override
 		protected Artist doInBackground(Void... params) {
-			boolean showMocked = false;
-
-			if (showMocked) {
-				Artist ladyGaga = null;
-				try {
-					ladyGaga = new Artist(1103159, "Lady Gaga", new URL(
-							"http://www.discogs.com/artist/Lady+Gaga"));
-					ladyGaga.setRealName("Stefani Joanne Angelina Germanotta");
-					ladyGaga.setProfileUrl(new URL(
-							"http://api.discogs.com/artists/1103159"));
-					ladyGaga.setProfile("[b]Lady Gaga[/b], born March 28, 1986 in New York City, New York, USA, of italian origins"
-							+ " (sometimes spelt in CamelCase as \"Lady GaGa\") is a theatrical dance-pop singer/songwriter/pianist"
-							+ " who created a buzz for herself in the New York underground before making her major-label debut on"
-							+ " Interscope Records in 2008.");
-					ladyGaga.getExternalUrls().add(
-							new ExternalUrl(
-									new URL("http://www.ladygaga.com/"),
-									ladyGaga));
-					ladyGaga.getExternalUrls().add(
-							new ExternalUrl(new URL(
-									"http://www.ladygaga.co.uk/"), ladyGaga));
-					ladyGaga.getExternalUrls().add(
-							new ExternalUrl(new URL(
-									"http://ladygagaonline.net/"), ladyGaga));
-					ladyGaga.getExternalUrls().add(
-							new ExternalUrl(new URL(
-									"http://www.myspace.com/ladygaga"),
-									ladyGaga));
-					ladyGaga.getExternalUrls().add(
-							new ExternalUrl(new URL(
-									"http://www.facebook.com/ladygaga"),
-									ladyGaga));
-					ladyGaga.getExternalUrls().add(
-							new ExternalUrl(new URL(
-									"http://twitter.com/ladygaga"), ladyGaga));
-					ladyGaga.getExternalUrls().add(
-							new ExternalUrl(new URL(
-									"http://en.wikipedia.org/wiki/Lady_Gaga"),
-									ladyGaga));
-					ladyGaga.getExternalUrls().add(
-							new ExternalUrl(new URL(
-									"http://www.youtube.com/ladygagaofficial"),
-									ladyGaga));
-					ladyGaga.getExternalUrls().add(
-							new ExternalUrl(new URL(
-									"http://www.youtube.com/LadyGagaVEVO"),
-									ladyGaga));
-					ladyGaga.getExternalUrls().add(
-							new ExternalUrl(new URL("http://gagadaily.com/"),
-									ladyGaga));
-					ladyGaga.getExternalUrls().add(
-							new ExternalUrl(new URL(
-									"http://www.facebook.com/gagadaily"),
-									ladyGaga));
-					ladyGaga.getExternalUrls().add(
-							new ExternalUrl(new URL(
-									"http://twitter.com/gagadaily"), ladyGaga));
-					ladyGaga.getExternalUrls().add(
-							new ExternalUrl(new URL(
-									"http://ladygaga.tumblr.com/"), ladyGaga));
-					ladyGaga.getExternalUrls().add(
-							new ExternalUrl(new URL(
-									"http://www.muzu.tv/ladygaga/"), ladyGaga));
-
-					ladyGaga.getNameVariations().add("Gaga");
-					ladyGaga.getNameVariations().add("Lady Ga Ga");
-					ladyGaga.getNameVariations().add("Lady Gagging");
-					ladyGaga.getNameVariations().add("LGG");
-					ladyGaga.getNameVariations().add("S. Germanotta");
-
-					ladyGaga.getImages()
-							.add(new Image(
-									new URL(
-											"http://api.discogs.com/image/A-1103159-1272566620.jpeg"),
-									460, 296, "primary"));
-					// Secondary Images:
-					/*
-					 * secondary image
-					 * (http://api.discogs.com/image/A-1103159-1329717112.jpeg,
-					 * 540x554), secondary image
-					 * (http://api.discogs.com/image/A-1103159-1329716922.jpeg,
-					 * 395x594), secondary image
-					 * (http://api.discogs.com/image/A-1103159-1306589056.jpeg,
-					 * 266x400), secondary image
-					 * (http://api.discogs.com/image/A-1103159-1307320883.png,
-					 * 500x511), secondary image
-					 * (http://api.discogs.com/image/A-1103159-1307320923.jpeg,
-					 * 391x500), secondary image
-					 * (http://api.discogs.com/image/A-1103159-1214806539.jpeg,
-					 * 600x450), secondary image
-					 * (http://api.discogs.com/image/A-1103159-1260998707.jpeg,
-					 * 442x653), secondary image
-					 * (http://api.discogs.com/image/A-1103159-1252600502.jpeg,
-					 * 526x474), secondary image
-					 * (http://api.discogs.com/image/A-1103159-1252600491.jpeg,
-					 * 455x600), secondary image
-					 * (http://api.discogs.com/image/A-1103159-1263291693.jpeg,
-					 * 200x320), secondary image
-					 * (http://api.discogs.com/image/A-1103159-1329716950.jpeg,
-					 * 396x594), secondary image
-					 * (http://api.discogs.com/image/A-1103159-1305062263.jpeg,
-					 * 600x758), secondary image
-					 * (http://api.discogs.com/image/A-1103159-1273194478.jpeg,
-					 * 600x404), secondary image
-					 * (http://api.discogs.com/image/A-1103159-1212081753.jpeg,
-					 * 590x458), secondary image
-					 * (http://api.discogs.com/image/A-1103159-1270308741.jpeg,
-					 * 376x490), secondary image
-					 * (http://api.discogs.com/image/A-1103159-1265113163.jpeg,
-					 * 390x559), secondary image
-					 * (http://api.discogs.com/image/A-1103159-1259173913.jpeg,
-					 * 500x379), secondary image
-					 * (http://api.discogs.com/image/A-1103159-1233855014.jpeg,
-					 * 333x500), secondary image
-					 * (http://api.discogs.com/image/A-1103159-1226919528.jpeg,
-					 * 470x313), secondary image
-					 * (http://api.discogs.com/image/A-1103159-1225988647.jpeg,
-					 * 267x399), secondary image
-					 * (http://api.discogs.com/image/A-1103159-1270308713.jpeg,
-					 * 376x490), secondary image
-					 * (http://api.discogs.com/image/A-1103159-1270308724.jpeg,
-					 * 376x490), secondary image
-					 * (http://api.discogs.com/image/A-1103159-1270308733.jpeg,
-					 * 376x490), secondary image
-					 * (http://api.discogs.com/image/A-1103159-1270308750.jpeg,
-					 * 376x490), secondary image
-					 * (http://api.discogs.com/image/A-1103159-1270308759.jpeg,
-					 * 376x490), secondary image
-					 * (http://api.discogs.com/image/A-1103159-1270308770.jpeg,
-					 * 600x400), secondary image
-					 * (http://api.discogs.com/image/A-1103159-1270308779.jpeg,
-					 * 376x490), secondary image
-					 * (http://api.discogs.com/image/A-1103159-1270308791.jpeg,
-					 * 376x490), secondary image
-					 * (http://api.discogs.com/image/A-1103159-1270308799.jpeg,
-					 * 376x490), secondary image
-					 * (http://api.discogs.com/image/A-1103159-1270308808.jpeg,
-					 * 376x490), secondary image
-					 * (http://api.discogs.com/image/A-1103159-1270308816.jpeg,
-					 * 376x490), secondary image
-					 * (http://api.discogs.com/image/A-1103159-1270308826.jpeg,
-					 * 376x490), secondary image
-					 * (http://api.discogs.com/image/A-1103159-1270308834.jpeg,
-					 * 600x450), secondary image
-					 * (http://api.discogs.com/image/A-1103159-1270308840.jpeg,
-					 * 376x490), secondary image
-					 * (http://api.discogs.com/image/A-
-					 * 1103159-1355396246-2824.jpeg, 600x410), secondary image
-					 * (http
-					 * ://api.discogs.com/image/A-1103159-1355396262-5998.jpeg,
-					 * 600x380), secondary image
-					 * (http://api.discogs.com/image/A-
-					 * 1103159-1355396268-2247.jpeg, 600x430), secondary image
-					 * (http
-					 * ://api.discogs.com/image/A-1103159-1355396273-5411.jpeg,
-					 * 419x580), secondary image
-					 * (http://api.discogs.com/image/A-
-					 * 1103159-1355396279-8752.jpeg, 600x371), secondary image
-					 * (http
-					 * ://api.discogs.com/image/A-1103159-1355396285-8086.jpeg,
-					 * 600x439), secondary image
-					 * (http://api.discogs.com/image/A-
-					 * 1103159-1355396290-6339.jpeg, 600x449), secondary image
-					 * (http
-					 * ://api.discogs.com/image/A-1103159-1355396294-9312.jpeg,
-					 * 443x579), secondary image
-					 * (http://api.discogs.com/image/A-
-					 * 1103159-1355396300-1813.jpeg, 600x449)
-					 */
-				} catch (MalformedURLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				return ladyGaga;
-			} else {
-				DiscogsService discogsService = new DiscogsService(
-						this.mContext, this.mConsumer);
-
-				try {
-					return discogsService.getArtistInfo(this.mArtist.getId());
-				} catch (NoInternetConnectionException e) {
-					Toast.makeText(mContext, "No internet connection...",
-							Toast.LENGTH_LONG).show();
-					e.printStackTrace();
-				} catch (LazyInternetConnectionException e) {
-					Toast.makeText(mContext,
-							"Your connection is lazy! Try again?",
-							Toast.LENGTH_LONG).show();
-					e.printStackTrace();
-				} catch (Exception e) {
-					Log.e(TAG, e.getMessage());
-				}
-
-				return null;
+			ArtistService artistService = new ArtistService(this.getContext());
+			try {
+				return artistService.getArtist(this.mArtist.getId());// discogsService.getArtistInfo(this.mArtist.getId());
+			} catch (NoInternetConnectionException e) {
+				/*
+				 * Toast.makeText( mContext, mContext.getResources().getString(
+				 * R.string.message_no_internet_connection),
+				 * Toast.LENGTH_LONG).show();
+				 */
+				e.printStackTrace();
+			} catch (LazyInternetConnectionException e) {
+				/*
+				 * Toast.makeText( mContext, mContext.getResources().getString(
+				 * R.string.message_lazy_internet_connection),
+				 * Toast.LENGTH_LONG).show();
+				 */
+				e.printStackTrace();
+			} catch (Exception e) {
+				Log.e(TAG, e.getMessage());
 			}
+
+			return null;
 		}
 
 		@Override
-		protected void onPostExecute(Artist result) {
+		protected void onPostExecute(
+				com.ventura.lyricsfinder.entity.artist.Artist result) {
 			super.onPostExecute(result);
-			this.mProgressDialog.dismiss();
 			fillView(result);
+		}
+
+		@Override
+		public void onProgressDialogCancelled(DialogInterface progressDialog) {
+
 		}
 	}
 
@@ -775,11 +654,19 @@ public class ArtistViewerActivity extends BaseActivity {
 	}
 
 	// Menu
+	/*
+	 * @Override public final boolean onCreateOptionsMenu(Menu menu) {
+	 * MenuInflater menuInflater = new MenuInflater(this);
+	 * menuInflater.inflate(R.menu.artist_info_menu, menu); return
+	 * super.onCreateOptionsMenu(menu); }
+	 */
+
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
+	public void onCreateContextMenu(ContextMenu menu, View v,
+			ContextMenuInfo menuInfo) {
 		MenuInflater menuInflater = new MenuInflater(this);
 		menuInflater.inflate(R.menu.artist_info_menu, menu);
-		return true;
+		super.onCreateContextMenu(menu, v, menuInfo);
 	}
 
 	@Override

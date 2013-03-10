@@ -31,10 +31,11 @@ public class Label {
 	@SerializedName(KEY_ENTITY_TYPE)
 	private String entityType;
 
-	public String toString(){
+	@Override
+	public String toString() {
 		return name;
 	}
-	
+
 	public int getId() {
 		return id;
 	}

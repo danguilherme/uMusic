@@ -21,23 +21,23 @@ public class ArtistRelease implements Comparable<ArtistRelease> {
 	public static final String KEY_LABEL = "label";
 	public static final String KEY_TRACK_INFO = "trackinfo";
 	public static final String KEY_FORMAT = "format";
-	
+
 	// Mandatory fields
 	@SerializedName(KEY_ID)
 	private int id;
-	
+
 	@SerializedName(KEY_TITLE)
 	private String title;
-	
+
 	@SerializedName(KEY_TYPE)
 	private String type;
-	
+
 	@SerializedName(KEY_ROLE)
 	private String role;
-	
+
 	@SerializedName(KEY_RESOURCE_URL)
 	private URL url;
-	
+
 	@SerializedName(KEY_YEAR)
 	private int year;
 
@@ -45,34 +45,35 @@ public class ArtistRelease implements Comparable<ArtistRelease> {
 	@SerializedName(KEY_IMAGE)
 	private URL thumb;
 	private Image thumbImage = new Image();
-	
+
 	@SerializedName(KEY_STATUS)
 	private String status;
-	
+
 	@SerializedName(KEY_MAIN_RELEASE)
 	private int mainRelease;
-	
+
 	@SerializedName(KEY_LABEL)
 	private String label;
-	
+
 	@SerializedName(KEY_TRACK_INFO)
 	private String trackInfo;
-	
+
 	@SerializedName(KEY_FORMAT)
 	private String format;
-	
+
 	private BasicRelease childRelease;
 
 	public void loadThumb() {
 		if (thumb != null) {
-			thumbImage.setUrl(thumb);	
+			thumbImage.setUrl(thumb);
 		}
 	}
 
-	public String toString(){
+	@Override
+	public String toString() {
 		return "Release " + this.title;
 	}
-	
+
 	public int getId() {
 		return id;
 	}
@@ -88,7 +89,7 @@ public class ArtistRelease implements Comparable<ArtistRelease> {
 	public void setTitle(String title) {
 		this.title = title;
 	}
-	
+
 	public Image getThumbImage() {
 		return thumbImage;
 	}

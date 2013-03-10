@@ -8,13 +8,12 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.ventura.lyricsfinder.R;
+import com.ventura.musicexplorer.R;
 
 public class ButtonGroup extends LinearLayout {
 
@@ -45,10 +44,13 @@ public class ButtonGroup extends LinearLayout {
 		this.setPadding(20, 10, 20, 10);
 		this.setOrientation(LinearLayout.VERTICAL);
 
-		TypedArray typedArray = context.obtainStyledAttributes(attributeSet,
-				R.styleable.ButtonGroup);
-		String groupTitle = typedArray.getString(R.styleable.ButtonGroup_title);
+		/*
+		 * TypedArray typedArray = context.obtainStyledAttributes(attributeSet,
+		 * R.styleable.ButtonGroup); String groupTitle =
+		 * typedArray.getString(R.styleable.ButtonGroup_title);
+		 */
 
+		String groupTitle = null;
 		this.buildTitle();
 
 		if (groupTitle != null && !groupTitle.equals("")) {
@@ -60,9 +62,11 @@ public class ButtonGroup extends LinearLayout {
 		for (int i = 0; i < children.size(); i++) {
 			if (Button.class.equals(children.get(i).getClass())) {
 				if (children.get(i).getLayoutParams() == null) {
-					children.get(i).setLayoutParams(
-							new LayoutParams(LayoutParams.FILL_PARENT,
-									LayoutParams.WRAP_CONTENT));
+					children.get(i)
+							.setLayoutParams(
+									new LayoutParams(
+											android.view.ViewGroup.LayoutParams.FILL_PARENT,
+											android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
 				}
 
 				this.addView(children.get(i), new LayoutParams(children.get(i)
@@ -119,12 +123,13 @@ public class ButtonGroup extends LinearLayout {
 
 	private void buildTitle() {
 		mTitleTextView = new TextView(this.getContext());
-		
+
 		LinearLayout.LayoutParams layoutParams = new LayoutParams(
-				LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+				android.view.ViewGroup.LayoutParams.FILL_PARENT,
+				android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
 		layoutParams.bottomMargin = 7;
 		mTitleTextView.setLayoutParams(layoutParams);
-		
+
 		mTitleTextView.setVisibility(View.GONE);
 		mTitleTextView.setId(TITLE_ID);
 		mTitleTextView.setTypeface(null, Typeface.BOLD);
@@ -177,7 +182,7 @@ public class ButtonGroup extends LinearLayout {
 			super(context);
 
 			LayoutParams separatorLayoutParams = new LayoutParams(
-					LayoutParams.FILL_PARENT, 2);
+					android.view.ViewGroup.LayoutParams.FILL_PARENT, 2);
 			separatorLayoutParams.setMargins(0, 0, 0, 0);
 			this.setPadding(0, 0, 0, 0);
 			this.setLayoutParams(separatorLayoutParams);

@@ -17,7 +17,7 @@ public class Group {
 	@SerializedName(KEY_URI)
 	private URL uri;
 	@SerializedName(KEY_ACTIVE)
-	private boolean isActive; 
+	private boolean isActive;
 
 	public Group(int id, String name, URL uri) {
 		this.id = id;
