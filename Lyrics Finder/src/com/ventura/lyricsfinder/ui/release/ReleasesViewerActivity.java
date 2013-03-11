@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -16,23 +17,23 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.actionbarsherlock.view.MenuItem;
 import com.ventura.androidutils.exception.LazyInternetConnectionException;
 import com.ventura.androidutils.exception.NoInternetConnectionException;
 import com.ventura.androidutils.utils.InnerActivityAsyncTask;
-import com.ventura.musicexplorer.R;
 import com.ventura.lyricsfinder.business.ArtistService;
 import com.ventura.lyricsfinder.business.ReleaseService;
 import com.ventura.lyricsfinder.constants.GlobalConstants;
-import com.ventura.lyricsfinder.discogs.entity.enumerator.SpecialEnums;
 import com.ventura.lyricsfinder.entity.artist.Artist;
+import com.ventura.lyricsfinder.entity.enumerator.ReleaseType;
 import com.ventura.lyricsfinder.entity.release.ArtistRelease;
 import com.ventura.lyricsfinder.entity.release.Master;
 import com.ventura.lyricsfinder.entity.release.Release;
 import com.ventura.lyricsfinder.entity.release.Track;
 import com.ventura.lyricsfinder.ui.BaseActivity;
 import com.ventura.lyricsfinder.util.ImageLoader;
+import com.ventura.musicexplorer.R;
 
 public class ReleasesViewerActivity extends BaseActivity {
 
@@ -42,6 +43,9 @@ public class ReleasesViewerActivity extends BaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		this.setContentView(R.layout.releases_view);
+
+		// Enable navigation to parentActivity.
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 		Intent initialIntent = this.getIntent();
 
@@ -99,34 +103,13 @@ public class ReleasesViewerActivity extends BaseActivity {
 
 			openTracksButton.setOnClickListener(new OnClickListener() {
 				public void onClick(View view) {
-					LinearLayout tracksContainer = (LinearLayout) releasePanel
-							.findViewById(R.id.artist_release_info_container);
-
-					if (release.getCompleteRelease().getTrackList().size() > 0) {
-						if (tracksContainer.getVisibility() == View.VISIBLE) {
-							((Button) view)
-									.setCompoundDrawablesWithIntrinsicBounds(
-											R.drawable.arrow_right, 0, 0, 0);
-							tracksContainer.setVisibility(View.GONE);
-							return;
-						}
-
-					} else {
-						new GetReleaseOrMasterTask(getBaseContext(), release,
-								releasePanel).execute();
-					}
-
-					((Button) view).setCompoundDrawablesWithIntrinsicBounds(
-							R.drawable.arrow_down, 0, 0, 0);
-
-					tracksContainer.setVisibility(View.VISIBLE);
+					showReleaseInfo((Button) view, release, releasePanel);
 				}
 			});
 
 			title.setText(release.getTitle());
 			year.setText(release.getYear() + "");
-			// TODO: Review trackinfo property
-			// trackInfo.setText(release.getTrackInfo());
+			trackInfo.setText(release.getTrackInfo());
 			format.setVisibility(View.GONE);
 			/*
 			 * if (release.getFormat().equals("")) {
@@ -137,6 +120,34 @@ public class ReleasesViewerActivity extends BaseActivity {
 			((LinearLayout) this.findViewById(R.id.container))
 					.addView(releasePanel);
 		}
+	}
+
+	private void showReleaseInfo(Button showInfoButton, ArtistRelease release,
+			LinearLayout releasePanel) {
+		LinearLayout tracksContainer = (LinearLayout) releasePanel
+				.findViewById(R.id.artist_release_info_container);
+
+		// Verify if this release's tracks weren't already
+		// downloaded.
+		if (release.isComplete() && release.getTrackList().size() > 0) {
+			// if yes, just reopen the container.
+			if (tracksContainer.getVisibility() == View.VISIBLE) {
+				showInfoButton.setCompoundDrawablesWithIntrinsicBounds(
+						R.drawable.arrow_right, 0, 0, 0);
+				tracksContainer.setVisibility(View.GONE);
+				return;
+			}
+
+		} else {
+			// else, load the release's tracks
+			new GetReleaseOrMasterTask(getBaseContext(), release, releasePanel)
+					.execute();
+		}
+
+		showInfoButton.setCompoundDrawablesWithIntrinsicBounds(
+				R.drawable.arrow_down, 0, 0, 0);
+
+		tracksContainer.setVisibility(View.VISIBLE);
 	}
 
 	private void buildReleaseInfoView(Release result,
@@ -188,7 +199,7 @@ public class ReleasesViewerActivity extends BaseActivity {
 
 		if (hasContent) {
 			LinearLayout.LayoutParams linearLayoutParams = new LinearLayout.LayoutParams(
-					android.view.ViewGroup.LayoutParams.FILL_PARENT,
+					android.view.ViewGroup.LayoutParams.MATCH_PARENT,
 					android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
 			linearLayoutParams.setMargins(0, 0, 0, 10);
 			releasePanel.setLayoutParams(linearLayoutParams);
@@ -267,9 +278,10 @@ public class ReleasesViewerActivity extends BaseActivity {
 			} catch (LazyInternetConnectionException e) {
 				e.printStackTrace();
 			} catch (Exception e) {
-				Toast.makeText(this.getContext(),
-						"An error ocurred, try again...", Toast.LENGTH_LONG)
-						.show();
+				/*
+				 * Toast.makeText(this.getContext(),
+				 * "An error ocurred, try again...", Toast.LENGTH_LONG) .show();
+				 */
 				finish();
 				e.printStackTrace();
 			}
@@ -296,6 +308,7 @@ public class ReleasesViewerActivity extends BaseActivity {
 		private Context mContext;
 		private ArtistRelease mRelease;
 		private LinearLayout mParentReleaseView;
+		private String TAG = getClass().getName();
 
 		public GetReleaseOrMasterTask(Context context, ArtistRelease release,
 				LinearLayout parentReleaseView) {
@@ -311,33 +324,43 @@ public class ReleasesViewerActivity extends BaseActivity {
 
 		@Override
 		protected ArtistRelease doInBackground(Void... params) {
-			ReleaseService rs = new ReleaseService(mContext);
+			ReleaseService releaseService = new ReleaseService(mContext);
 			ArtistRelease release = new ArtistRelease();
 			try {
-				if (this.mRelease.getType().equals(
-						SpecialEnums.ARTIST_RELEASE_TYPE_RELEASE)) {
-					release = rs.getRelease(this.mRelease.getId());
-				} else {
-					// release = ds.getMaster(this.mRelease);
+				switch (this.mRelease.getType()) {
+				case Release:
+					release = releaseService.getRelease(this.mRelease.getId());
+					break;
+				case Master:
+					release = releaseService.getMaster(this.mRelease.getId());
+					break;
+				default:
+					throw new Exception("Release type not supported");
 				}
+				release.isComplete(true);
 			} catch (Exception e) {
-				Toast.makeText(this.mContext, "An error ocurred, try again...",
-						Toast.LENGTH_LONG).show();
-				e.printStackTrace();
+				Log.e(TAG, "Error on getting detailed release info.", e);
 			}
-			this.mRelease.setCompleteRelease(release);
 			return release;
 		}
 
 		@Override
 		protected void onPostExecute(ArtistRelease result) {
 			super.onPostExecute(result);
-			if (result.getType().equals(
-					SpecialEnums.ARTIST_RELEASE_TYPE_RELEASE)) {
+			if (result == null) {
+				finish();
+				result = new ArtistRelease();
+				result.setType(ReleaseType.Master);
+			}
+			switch (result.getType()) {
+			case Release:
 				buildReleaseInfoView((Release) result, this.mParentReleaseView);
-			} else if (result.getType().equals(
-					SpecialEnums.ARTIST_RELEASE_TYPE_MASTER)) {
+				break;
+			case Master:
 				buildMasterInfoView((Master) result, this.mParentReleaseView);
+				break;
+			default:
+				break;
 			}
 		}
 
@@ -345,5 +368,19 @@ public class ReleasesViewerActivity extends BaseActivity {
 
 	// ****** EVENT HANDLERS *******
 	public void onOpenTracksButtonClicked(View button) {
+
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			// This is called when the Home (Up) button is pressed
+			// in the Action Bar.
+			finish();
+			return true;
+		}
+
+		return super.onOptionsItemSelected(item);
 	}
 }

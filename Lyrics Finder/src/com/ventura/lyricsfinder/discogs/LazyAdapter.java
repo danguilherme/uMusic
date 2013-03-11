@@ -12,8 +12,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.ventura.musicexplorer.R;
 import com.ventura.lyricsfinder.util.ImageLoader;
+import com.ventura.musicexplorer.R;
 
 public class LazyAdapter extends BaseAdapter {
 	private Activity activity;

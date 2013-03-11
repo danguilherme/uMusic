@@ -23,13 +23,13 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.ventura.musicexplorer.R;
 import com.ventura.lyricsfinder.constants.GlobalConstants;
 import com.ventura.lyricsfinder.constants.RequestCodes;
 import com.ventura.lyricsfinder.lyrdb.CustomAdapter;
 import com.ventura.lyricsfinder.lyrdb.LyrDBService;
 import com.ventura.lyricsfinder.lyrdb.QueryType;
 import com.ventura.lyricsfinder.lyrdb.entities.Lyric;
+import com.ventura.musicexplorer.R;
 
 public class ListLyricsActivity extends ListActivity {
 	final String TAG = getClass().getName();

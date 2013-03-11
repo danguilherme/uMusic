@@ -16,8 +16,8 @@ import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.ventura.musicexplorer.R;
 import com.ventura.lyricsfinder.constants.GlobalConstants;
+import com.ventura.musicexplorer.R;
 
 public class LyricsViewerActivity extends Activity {
 	final String TAG = getClass().getName();

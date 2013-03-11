@@ -7,9 +7,9 @@ import android.content.Context;
 
 import com.ventura.androidutils.exception.LazyInternetConnectionException;
 import com.ventura.androidutils.exception.NoInternetConnectionException;
-import com.ventura.musicexplorer.R;
 import com.ventura.lyricsfinder.entity.artist.Artist;
 import com.ventura.lyricsfinder.entity.release.ArtistRelease;
+import com.ventura.musicexplorer.R;
 
 public class ArtistService extends BaseService {
 	public ArtistService(Context context) {
@@ -23,7 +23,6 @@ public class ArtistService extends BaseService {
 		String url = String.format(
 				this.getStringResource(R.string.search_artist_url), query);
 
-		
 		String jsonResponse = this.doGet(url);
 
 		List<Artist> artists = new ArrayList<Artist>();

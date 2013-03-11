@@ -20,9 +20,6 @@ import android.os.Environment;
 import android.text.ClipboardManager;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
-import android.view.ContextMenu;
-import android.view.ContextMenu.ContextMenuInfo;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
@@ -38,11 +35,12 @@ import android.widget.SlidingDrawer.OnDrawerOpenListener;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+import com.actionbarsherlock.view.SubMenu;
 import com.ventura.androidutils.exception.LazyInternetConnectionException;
 import com.ventura.androidutils.exception.NoInternetConnectionException;
 import com.ventura.androidutils.utils.InnerActivityAsyncTask;
-import com.ventura.musicexplorer.R;
 import com.ventura.lyricsfinder.business.ArtistService;
 import com.ventura.lyricsfinder.constants.GlobalConstants;
 import com.ventura.lyricsfinder.entity.Image;
@@ -53,7 +51,10 @@ import com.ventura.lyricsfinder.ui.widget.ButtonGroup;
 import com.ventura.lyricsfinder.util.ImageDownloaderTask;
 import com.ventura.lyricsfinder.util.ImageLoader;
 import com.ventura.lyricsfinder.util.OnImageDownloadListener;
+import com.ventura.musicexplorer.R;
 
+// TODO: Review SlidingDrawer's deprecation
+@SuppressWarnings("deprecation")
 public class ArtistViewerActivity extends BaseActivity {
 	final String TAG = getClass().getName();
 
@@ -72,6 +73,9 @@ public class ArtistViewerActivity extends BaseActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+		// Enable navigation to parent activity
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 		mBaseLayout = (FrameLayout) this.getLayoutInflater().inflate(
 				R.layout.artist_info, null);
@@ -213,9 +217,16 @@ public class ArtistViewerActivity extends BaseActivity {
 	}
 
 	private void openArtistDiscogsProfile() {
-		Intent profileIntent = new Intent(Intent.ACTION_VIEW,
-				Uri.parse(this.mCurrentArtist.getDiscogsUrl().toString()));
-		this.startActivity(profileIntent);
+		try {
+			if (this.mCurrentArtist.getDiscogsUrl() != null) {
+				Intent profileIntent = new Intent(Intent.ACTION_VIEW,
+						Uri.parse(this.mCurrentArtist.getDiscogsUrl()
+								.toString()));
+				this.startActivity(profileIntent);
+			}
+		} catch (Exception e) {
+			Log.e(TAG, "Error opening artist's profile on Discogs", e);
+		}
 	}
 
 	private void showArtistReleasesActivity() {
@@ -476,7 +487,7 @@ public class ArtistViewerActivity extends BaseActivity {
 
 			ButtonGroup buttonGroup = (ButtonGroup) findViewById(R.id.members_container);
 
-			buttonGroup.setTitle(getString(R.string.groups));
+			buttonGroup.setGroupTitle(getString(R.string.groups));
 			buttonGroup.setVisibility(View.VISIBLE);
 			List<Button> buttonsToAdd = new ArrayList<Button>();
 			for (int i = 0; i < this.mCurrentArtist.getGroups().size(); i++) {
@@ -654,19 +665,16 @@ public class ArtistViewerActivity extends BaseActivity {
 	}
 
 	// Menu
-	/*
-	 * @Override public final boolean onCreateOptionsMenu(Menu menu) {
-	 * MenuInflater menuInflater = new MenuInflater(this);
-	 * menuInflater.inflate(R.menu.artist_info_menu, menu); return
-	 * super.onCreateOptionsMenu(menu); }
-	 */
 
 	@Override
-	public void onCreateContextMenu(ContextMenu menu, View v,
-			ContextMenuInfo menuInfo) {
-		MenuInflater menuInflater = new MenuInflater(this);
-		menuInflater.inflate(R.menu.artist_info_menu, menu);
-		super.onCreateContextMenu(menu, v, menuInfo);
+	public final boolean onCreateOptionsMenu(Menu menu) {
+		SubMenu subMenu = menu.addSubMenu("Actions");
+		subMenu.add(0, R.id.menu_download_artist_image, 0,
+				R.string.menu_download_artist_image);
+		subMenu.getItem().setShowAsAction(
+				MenuItem.SHOW_AS_ACTION_ALWAYS
+						| MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+		return super.onCreateOptionsMenu(menu);
 	}
 
 	@Override

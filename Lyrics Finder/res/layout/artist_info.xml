@@ -48,7 +48,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:visibility="gone"
-                app:title="@string/band_members" >
+                app:groupTitle="@string/band_members" >
             </com.ventura.lyricsfinder.ui.widget.ButtonGroup>
 
             <com.ventura.lyricsfinder.ui.widget.ButtonGroup
@@ -57,7 +57,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:visibility="gone"
-                app:title="@string/external_urls" >
+                app:groupTitle="@string/external_urls" >
             </com.ventura.lyricsfinder.ui.widget.ButtonGroup>
         </LinearLayout>
     </ScrollView>

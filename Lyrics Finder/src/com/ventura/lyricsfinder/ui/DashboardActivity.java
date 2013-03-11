@@ -11,9 +11,9 @@ import android.view.Window;
 
 import com.ventura.androidutils.exception.LazyInternetConnectionException;
 import com.ventura.androidutils.exception.NoInternetConnectionException;
-import com.ventura.musicexplorer.R;
 import com.ventura.lyricsfinder.business.ArtistService;
 import com.ventura.lyricsfinder.entity.artist.Artist;
+import com.ventura.musicexplorer.R;
 
 public class DashboardActivity extends BaseActivity {
 	@Override

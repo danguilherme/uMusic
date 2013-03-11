@@ -25,12 +25,12 @@ import android.widget.Toast;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.SubMenu;
-import com.ventura.musicexplorer.R;
 import com.ventura.lyricsfinder.constants.GlobalConstants;
 import com.ventura.lyricsfinder.discogs.DiscogsConstants;
 import com.ventura.lyricsfinder.discogs.entity.enumerator.QueryType;
 import com.ventura.lyricsfinder.musixmatch.ui.LyricsViewerActivity;
 import com.ventura.lyricsfinder.ui.artist.ListArtistsActivity;
+import com.ventura.musicexplorer.R;
 
 public class MusicInfoActivity extends BaseActivity {
 	final String TAG = getClass().getName();

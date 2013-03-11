@@ -4,8 +4,9 @@ import android.content.Context;
 
 import com.ventura.androidutils.exception.LazyInternetConnectionException;
 import com.ventura.androidutils.exception.NoInternetConnectionException;
-import com.ventura.musicexplorer.R;
+import com.ventura.lyricsfinder.entity.release.Master;
 import com.ventura.lyricsfinder.entity.release.Release;
+import com.ventura.musicexplorer.R;
 
 public class ReleaseService extends BaseService {
 
@@ -32,5 +33,25 @@ public class ReleaseService extends BaseService {
 		}
 
 		return release;
+	}
+
+	public Master getMaster(int masterId) throws NoInternetConnectionException,
+			LazyInternetConnectionException {
+
+		String requestUrl = String.format(
+				this.getStringResource(R.string.get_master_by_id_url),
+				String.valueOf(masterId));
+
+		String jsonResponse = this.doGet(requestUrl);
+
+		Master master = null;
+
+		try {
+			master = this.deserialize(jsonResponse, Master.class);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return master;
 	}
 }

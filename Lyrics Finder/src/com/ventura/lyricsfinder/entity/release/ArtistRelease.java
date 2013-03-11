@@ -22,10 +22,11 @@ public class ArtistRelease implements Comparable<ArtistRelease> {
 	private List<String> genres = new ArrayList<String>();
 	private List<Artist> artists = new ArrayList<Artist>();
 	private List<Track> trackList = new ArrayList<Track>();
+	private String trackInfo;
 
 	private String dataQuality;
-	
-	private ArtistRelease completeRelease;
+
+	private boolean isComplete = false;
 
 	public String getTitle() {
 		return title;
@@ -115,6 +116,14 @@ public class ArtistRelease implements Comparable<ArtistRelease> {
 		this.trackList = trackList;
 	}
 
+	public String getTrackInfo() {
+		return trackInfo;
+	}
+
+	public void setTrackInfo(String trackInfo) {
+		this.trackInfo = trackInfo;
+	}
+
 	public String getDataQuality() {
 		return dataQuality;
 	}
@@ -127,12 +136,29 @@ public class ArtistRelease implements Comparable<ArtistRelease> {
 		return id;
 	}
 
-	public ArtistRelease getCompleteRelease() {
-		return completeRelease;
+	/**
+	 * Return <code>true</code> if this release is complete, which means that it
+	 * has a track list, envolved artists list, etc. In other words, if
+	 * isComplete is <code>false</code>, this release is coming from a search,
+	 * otherwise, if it's <code>true</code>, the release was directly retrieved
+	 * by its ID.
+	 * 
+	 * @return The status of this release
+	 */
+	public boolean isComplete() {
+		return this.isComplete;
 	}
 
-	public void setCompleteRelease(ArtistRelease completeRelease) {
-		this.completeRelease = completeRelease;
+	/**
+	 * Set the complete status of this release
+	 * 
+	 * @param isComplete
+	 *            The complete status. <code>true</code> to flag that this
+	 *            release is with full information or <code>false</code>
+	 *            otherwise;
+	 */
+	public void isComplete(boolean isComplete) {
+		this.isComplete = isComplete;
 	}
 
 	@Override

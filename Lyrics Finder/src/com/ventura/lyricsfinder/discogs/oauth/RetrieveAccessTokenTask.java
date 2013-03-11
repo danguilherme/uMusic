@@ -1,7 +1,5 @@
 package com.ventura.lyricsfinder.discogs.oauth;
 
-import com.ventura.lyricsfinder.ui.artist.ArtistViewerActivity;
-
 import oauth.signpost.OAuth;
 import oauth.signpost.OAuthConsumer;
 import oauth.signpost.OAuthProvider;
@@ -12,6 +10,8 @@ import android.content.SharedPreferences.Editor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
+
+import com.ventura.lyricsfinder.ui.artist.ArtistViewerActivity;
 
 public class RetrieveAccessTokenTask extends AsyncTask<Uri, Void, Void> {
 

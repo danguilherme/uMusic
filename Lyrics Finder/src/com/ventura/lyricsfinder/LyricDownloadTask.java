@@ -7,7 +7,6 @@ import android.widget.TextView;
 import com.ventura.lyricsfinder.lyrics.Lyric;
 import com.ventura.lyricsfinder.lyrics.LyricNotFoundException;
 import com.ventura.lyricsfinder.lyrics.provider.LyricProvider;
-import com.ventura.musicexplorer.R;
 
 public class LyricDownloadTask extends AsyncTask<Lyric, Integer, Lyric> {
 	private LyricProvider mLyricProvider;

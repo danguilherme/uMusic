@@ -29,19 +29,24 @@
     <string name="search_lyrics">Search Lyrics</string>
     <string name="about">About</string>
 
+    <!-- Artists List Activity -->
+    <string name="title_activity_artists_list">Artists Search</string>
+    
     <!-- Artist Viewer Activity -->
-    <string name="title_activity_artist_viewer">Artist information</string>
+    <string name="title_activity_artist_viewer">Artist Information</string>
     <string name="external_urls">External URLs</string>
     <string name="band_members">Band Members</string>
     <string name="groups">Groups</string>
     <string name="no_biography">This artist has no Bio.</string>
     <string name="real_name">Real Name</string>
     <string name="aliases">Aliases</string>
-    <!-- Image download -->
+    <string name="discogs_view_artist_profile">View artist profile on Discogs</string>
+    <string name="discogs_view_artist_releases">View artist\'s releases</string>
+    <!-- Artist image download -->
     <string name="image_already_being_downloaded">The image is already being downloaded. When it is finished, try again.</string>
     <string name="image_not_possible_to_download">It wasn\'t possible to bring your photo. Please try again later.</string>
     <string name="image_saved">Image saved at %1$s.</string>
-    
+    <string name="menu_download_artist_image">Download artist image</string>
 
     <!-- Releases Viewer Activity [START] -->
     <string name="title_activity_releases_viewer">Releases</string>
@@ -49,7 +54,7 @@
 
 
     <!-- Music Info Activity [START] -->
-    <string name="title_activity_music_info">Music information</string>
+    <string name="title_activity_music_info">Music Information</string>
     <string name="btn_save_file">Save File</string>
     <string name="menu_find_lyrics">Find Lyrics</string>
     <string name="menu_view_artist_info">View Artist Information</string>
@@ -96,13 +101,6 @@
     <string name="provider_azlyrics_name">A-Z Lyrics Universe</string>
     <string name="provider_azlyrics_url">http://www.azlyrics.com/lyrics/%1$s/%2$s.html</string>
 
-    <!-- Artist Viewer [START] -->
-    <string name="discogs_view_artist_profile">View artist profile on Discogs</string>
-    <string name="discogs_view_artist_releases">View artist\'s releases</string>
-    <string name="menu_download_artist_image">Download artist image</string>
-    <!-- Artist Viewer [END] -->
-
-
     <!-- Releases Viewer [START] -->
     <string name="message_fetching_releases_title">Fetching artist\'s releases...</string>
     <string name="message_fetching_releases_body">Searching for the artist\'s release, please wait.</string>
@@ -136,9 +134,10 @@
     </string-array>
 
     <!-- API urls -->
-    <string name="get_release_by_id_url" formatted="false">http://aspspider.ws/Danguilherme/api/releases/%1$s</string>
     <string name="search_artist_url" formatted="false">http://aspspider.ws/Danguilherme/api/artists/search?q=%1$s</string>
     <string name="get_artist_by_id_url" formatted="false">http://aspspider.ws/Danguilherme/api/artists/%1$s</string>
     <string name="get_release_by_artist_id_url" formatted="false">http://aspspider.ws/Danguilherme/api/artists/listreleases/%1$s</string>
+    <string name="get_release_by_id_url" formatted="false">http://aspspider.ws/Danguilherme/api/releases/%1$s</string>
+    <string name="get_master_by_id_url" formatted="false">http://aspspider.ws/Danguilherme/api/releases/getmaster/%1$s</string>
 
 </resources>

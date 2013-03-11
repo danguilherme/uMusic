@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import oauth.signpost.OAuthConsumer;
-import android.app.ListActivity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -23,10 +22,10 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.actionbarsherlock.app.SherlockListActivity;
 import com.ventura.androidutils.exception.LazyInternetConnectionException;
 import com.ventura.androidutils.exception.NoInternetConnectionException;
 import com.ventura.androidutils.utils.InnerActivityAsyncTask;
-import com.ventura.musicexplorer.R;
 import com.ventura.lyricsfinder.constants.GlobalConstants;
 import com.ventura.lyricsfinder.discogs.DiscogsConstants;
 import com.ventura.lyricsfinder.discogs.DiscogsService;
@@ -36,8 +35,9 @@ import com.ventura.lyricsfinder.discogs.entity.SearchItem;
 import com.ventura.lyricsfinder.discogs.entity.SearchResult;
 import com.ventura.lyricsfinder.discogs.entity.enumerator.QueryType;
 import com.ventura.lyricsfinder.entity.artist.Artist;
+import com.ventura.musicexplorer.R;
 
-public class ListArtistsActivity extends ListActivity implements
+public class ListArtistsActivity extends SherlockListActivity implements
 		OnScrollListener, OnItemClickListener {
 	final String TAG = getClass().getName();
 
@@ -182,7 +182,8 @@ public class ListArtistsActivity extends ListActivity implements
 		protected SearchResult doInBackground(String... params) {
 			DiscogsService discogsService = new DiscogsService(
 					this.getContext(), this.mConsumer);
-
+			// ArtistService artistService = new
+			// ArtistService(this.getContext());
 			try {
 				return discogsService.search(this.mQueryType, params[0]);
 			} catch (NoInternetConnectionException e) {

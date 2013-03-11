@@ -21,8 +21,8 @@ import android.content.res.Resources;
 import android.content.res.Resources.NotFoundException;
 import android.util.Log;
 
-import com.ventura.musicexplorer.R;
 import com.ventura.lyricsfinder.lyrdb.entities.Lyric;
+import com.ventura.musicexplorer.R;
 
 public class LyrDBService {
 

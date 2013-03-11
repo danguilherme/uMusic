@@ -6,10 +6,8 @@ import java.util.List;
 import oauth.signpost.OAuth;
 import oauth.signpost.OAuthConsumer;
 import oauth.signpost.commonshttp.CommonsHttpOAuthConsumer;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ContentResolver;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.database.Cursor;
@@ -19,9 +17,8 @@ import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 
 import com.actionbarsherlock.app.SherlockActivity;
-import com.actionbarsherlock.view.MenuItem;
-import com.ventura.musicexplorer.R;
 import com.ventura.lyricsfinder.discogs.oauth.Constants;
+import com.ventura.musicexplorer.R;
 
 public abstract class BaseActivity extends SherlockActivity {
 	final String TAG = getClass().getName();
@@ -32,17 +29,6 @@ public abstract class BaseActivity extends SherlockActivity {
 		super.onCreate(savedInstanceState);
 		this.sharedPreferences = PreferenceManager
 				.getDefaultSharedPreferences(this);
-
-		Intent intent = this.getIntent();
-		String action = intent.getAction();
-
-		if (action == null) {
-			getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-		} else {
-			if (!action.equals(Intent.ACTION_MAIN)) {
-				getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-			}
-		}
 	}
 
 	protected void clearCredentials() {

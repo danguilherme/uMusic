@@ -42,8 +42,8 @@ public abstract class BaseService extends NetworkUtils {
 		List<T> list = new ArrayList<T>();
 		try {
 			for (int i = 0; i < jsonArray.length(); i++) {
-				list.add(this.deserialize(jsonArray.getJSONObject(i).toString(),
-						targetType));
+				list.add(this.deserialize(
+						jsonArray.getJSONObject(i).toString(), targetType));
 			}
 		} catch (JsonSyntaxException e) {
 			e.printStackTrace();

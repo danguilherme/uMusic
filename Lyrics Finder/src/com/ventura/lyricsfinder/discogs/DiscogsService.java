@@ -22,7 +22,6 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.ventura.androidutils.exception.LazyInternetConnectionException;
 import com.ventura.androidutils.exception.NoInternetConnectionException;
-import com.ventura.musicexplorer.R;
 import com.ventura.lyricsfinder.business.BaseService;
 import com.ventura.lyricsfinder.discogs.entity.Artist;
 import com.ventura.lyricsfinder.discogs.entity.ArtistRelease;
@@ -33,6 +32,7 @@ import com.ventura.lyricsfinder.discogs.entity.SearchResult;
 import com.ventura.lyricsfinder.discogs.entity.enumerator.QueryType;
 import com.ventura.lyricsfinder.discogs.entity.enumerator.SpecialEnums;
 import com.ventura.lyricsfinder.discogs.oauth.Constants;
+import com.ventura.musicexplorer.R;
 
 public class DiscogsService extends BaseService {
 	final String TAG = getClass().getName();

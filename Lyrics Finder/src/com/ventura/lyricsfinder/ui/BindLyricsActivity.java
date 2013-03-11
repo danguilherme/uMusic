@@ -18,11 +18,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ventura.androidutils.utils.ConnectionManager;
-import com.ventura.musicexplorer.R;
 import com.ventura.lyricsfinder.constants.GlobalConstants;
 import com.ventura.lyricsfinder.constants.RequestCodes;
 import com.ventura.lyricsfinder.lyrdb.ui.ListLyricsActivity;
 import com.ventura.lyricsfinder.lyrics.Lyric;
+import com.ventura.musicexplorer.R;
 
 public class BindLyricsActivity extends BaseActivity {
 

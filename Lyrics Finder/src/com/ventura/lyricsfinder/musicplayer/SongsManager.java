@@ -31,25 +31,22 @@ public class SongsManager {
 	public ArrayList<HashMap<String, String>> getPlayList() {
 		ContentResolver contentResolver = this.context.getContentResolver();
 
-		String[] columns = new String[] { BaseColumns._ID,
-				MediaColumns.TITLE, MediaColumns.MIME_TYPE,
-				AudioColumns.ARTIST, AudioColumns.ALBUM,
-				MediaColumns.SIZE };
+		String[] columns = new String[] { BaseColumns._ID, MediaColumns.TITLE,
+				MediaColumns.MIME_TYPE, AudioColumns.ARTIST,
+				AudioColumns.ALBUM, MediaColumns.SIZE };
 
 		Uri uri = MediaStore.Audio.Media.getContentUriForPath(Environment
 				.getExternalStorageDirectory().getPath());
 		String whereSentence = new StringBuilder()
-				.append(MediaColumns.MIME_TYPE)
-				.append(" = \"audio/mpeg\" OR ")
-				.append(MediaColumns.MIME_TYPE)
-				.append(" = \"audio/mp4\"").toString();
+				.append(MediaColumns.MIME_TYPE).append(" = \"audio/mpeg\" OR ")
+				.append(MediaColumns.MIME_TYPE).append(" = \"audio/mp4\"")
+				.toString();
 
 		Cursor cursor = contentResolver.query(uri, columns, whereSentence,
 				null, null);
 
 		int titleIndex = cursor.getColumnIndex(MediaColumns.TITLE);
-		int mimeTypeIndex = cursor
-				.getColumnIndex(MediaColumns.MIME_TYPE);
+		int mimeTypeIndex = cursor.getColumnIndex(MediaColumns.MIME_TYPE);
 
 		while (cursor.moveToNext()) {
 			System.out.println(cursor.getString(titleIndex));

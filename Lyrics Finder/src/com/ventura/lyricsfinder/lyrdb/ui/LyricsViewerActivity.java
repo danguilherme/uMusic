@@ -12,9 +12,9 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.ventura.musicexplorer.R;
 import com.ventura.lyricsfinder.constants.GlobalConstants;
 import com.ventura.lyricsfinder.lyrdb.LyrDBService;
+import com.ventura.musicexplorer.R;
 
 public class LyricsViewerActivity extends Activity {
 
