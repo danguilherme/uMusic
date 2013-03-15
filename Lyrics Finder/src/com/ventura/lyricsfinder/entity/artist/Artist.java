@@ -1,5 +1,6 @@
 package com.ventura.lyricsfinder.entity.artist;
 
+import java.io.Serializable;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -7,7 +8,14 @@ import java.util.List;
 import com.ventura.lyricsfinder.entity.ExternalUrl;
 import com.ventura.lyricsfinder.entity.Image;
 
-public class Artist implements Comparable<Artist> {
+public class Artist implements Comparable<Artist>, Serializable {
+	private static final long serialVersionUID = -4612597445422159086L;
+
+	public static final String KEY = Artist.class.getName();
+	public static final String KEY_ID = Artist.class.getName() + ".KEY_ID";
+	public static final String KEY_NAME = Artist.class.getName() + ".KEY_NAME";
+	public static final String KEY_THUMB = Artist.class.getName() + ".KEY_THUMB";
+	
 	private int id;
 	private boolean isActive;
 	private String name;

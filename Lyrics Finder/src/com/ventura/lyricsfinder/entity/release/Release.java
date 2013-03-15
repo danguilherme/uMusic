@@ -7,8 +7,10 @@ import java.util.List;
 import com.ventura.lyricsfinder.entity.artist.Artist;
 
 public class Release extends ArtistRelease {
+	private static final long serialVersionUID = -8772328584459335059L;
+
 	// ???
-	private int releasedFormatted;
+	private String releasedFormatted;
 	private int masterId;
 	private URL masterUrl;
 
@@ -16,11 +18,11 @@ public class Release extends ArtistRelease {
 	private List<Artist> extraArtists = new ArrayList<Artist>();
 	private String country;
 
-	public int getReleasedFormatted() {
+	public String getReleasedFormatted() {
 		return releasedFormatted;
 	}
 
-	public void setReleasedFormatted(int releasedFormatted) {
+	public void setReleasedFormatted(String releasedFormatted) {
 		this.releasedFormatted = releasedFormatted;
 	}
 

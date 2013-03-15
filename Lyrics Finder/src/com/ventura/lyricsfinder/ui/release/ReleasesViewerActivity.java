@@ -6,7 +6,6 @@ import java.util.List;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -65,25 +64,15 @@ public class ReleasesViewerActivity extends BaseActivity {
 
 		for (int i = mCurrentReleases.size() - 1; i >= 0; i--) {
 			final ArtistRelease release = mCurrentReleases.get(i);
-			final String releaseUrl = release.getUrl().toString();
 			final LinearLayout releasePanel = (LinearLayout) this
 					.getLayoutInflater().inflate(R.layout.artist_release, null);
 
-			ImageView thumb = (ImageView) releasePanel
-					.findViewById(R.id.release_thumb);
-			if (release.getThumbImage().getUrl() != null) {
-				thumb = (ImageView) releasePanel
+			if (release.getThumbImage() != null
+					&& release.getThumbImage().getUrl() != null) {
+				ImageView thumb = (ImageView) releasePanel
 						.findViewById(R.id.release_thumb);
 				new ImageLoader(this).displayImage(release.getThumbImage()
 						.getUrl().toString(), thumb);
-
-				thumb.setOnClickListener(new OnClickListener() {
-					public void onClick(View v) {
-						Intent i = new Intent(Intent.ACTION_VIEW, Uri
-								.parse(releaseUrl));
-						startActivity(i);
-					}
-				});
 			} else {
 				LinearLayout thumbContainer = (LinearLayout) releasePanel
 						.findViewById(R.id.thumbnail);

@@ -1,8 +1,11 @@
 package com.ventura.lyricsfinder.entity.release;
 
+import java.io.Serializable;
 import java.net.URL;
 
-public class Label {
+public class Label implements Serializable {
+	private static final long serialVersionUID = 969427184161868101L;
+	
 	private int id;
 	private String name;
 	private URL resourceUrl;

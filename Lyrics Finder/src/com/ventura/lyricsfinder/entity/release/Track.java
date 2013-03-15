@@ -1,6 +1,10 @@
 package com.ventura.lyricsfinder.entity.release;
 
-public class Track {
+import java.io.Serializable;
+
+public class Track implements Serializable {
+	private static final long serialVersionUID = -388508670290173431L;
+	
 	private String title;
 	private String duration;
 	private String position;

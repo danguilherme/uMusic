@@ -1,5 +1,6 @@
 package com.ventura.lyricsfinder.entity.release;
 
+import java.io.Serializable;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,7 +9,9 @@ import com.ventura.lyricsfinder.entity.Image;
 import com.ventura.lyricsfinder.entity.artist.Artist;
 import com.ventura.lyricsfinder.entity.enumerator.ReleaseType;
 
-public class ArtistRelease implements Comparable<ArtistRelease> {
+public class ArtistRelease implements Comparable<ArtistRelease>, Serializable {
+	private static final long serialVersionUID = 4281097578238872681L;
+	
 	private int id;
 	private String title;
 	private ReleaseType type;

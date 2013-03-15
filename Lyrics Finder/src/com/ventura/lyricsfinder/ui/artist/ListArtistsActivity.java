@@ -1,7 +1,7 @@
 package com.ventura.lyricsfinder.ui.artist;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
 
 import oauth.signpost.OAuthConsumer;
 import android.app.SearchManager;
@@ -26,14 +26,13 @@ import com.actionbarsherlock.app.SherlockListActivity;
 import com.ventura.androidutils.exception.LazyInternetConnectionException;
 import com.ventura.androidutils.exception.NoInternetConnectionException;
 import com.ventura.androidutils.utils.InnerActivityAsyncTask;
-import com.ventura.lyricsfinder.constants.GlobalConstants;
 import com.ventura.lyricsfinder.discogs.DiscogsConstants;
 import com.ventura.lyricsfinder.discogs.DiscogsService;
-import com.ventura.lyricsfinder.discogs.LazyAdapter;
 import com.ventura.lyricsfinder.discogs.OnContentDownloadListener;
 import com.ventura.lyricsfinder.discogs.entity.SearchItem;
 import com.ventura.lyricsfinder.discogs.entity.SearchResult;
 import com.ventura.lyricsfinder.discogs.entity.enumerator.QueryType;
+import com.ventura.lyricsfinder.entity.Image;
 import com.ventura.lyricsfinder.entity.artist.Artist;
 import com.ventura.musicexplorer.R;
 
@@ -44,7 +43,7 @@ public class ListArtistsActivity extends SherlockListActivity implements
 	private SharedPreferences prefs;
 
 	private ListView list;
-	private LazyAdapter adapter;
+	private ArtistsListAdapter adapter;
 	private OAuthConsumer discogsCustomer;
 	private SearchResult currentSearchResult;
 	private LinearLayout loadMoreProgress;
@@ -97,7 +96,7 @@ public class ListArtistsActivity extends SherlockListActivity implements
 	}
 
 	private void updateListView(SearchResult data) {
-		ArrayList<HashMap<String, String>> artistsList = new ArrayList<HashMap<String, String>>();
+		List<Artist> artistsList = new ArrayList<Artist>();
 
 		if (data.getCount() <= 0) {
 			Toast.makeText(this, "No singer was found", Toast.LENGTH_SHORT)
@@ -107,14 +106,14 @@ public class ListArtistsActivity extends SherlockListActivity implements
 		}
 
 		currentSearchResult = data;
-		artistsList = this.getArtistsHashMapList(currentSearchResult);
+		artistsList = this.getArtistsFromSearchResult(currentSearchResult);
 		list = (ListView) findViewById(android.R.id.list);
 
 		// If the adapter doesn't exist, we create one with the initial data.
 		// If it exists, we update it.
 		int currentPosition = -1;
 		if (adapter == null) {
-			adapter = new LazyAdapter(this, artistsList);
+			adapter = new ArtistsListAdapter(this, artistsList);
 		} else {
 			currentPosition = list.getFirstVisiblePosition();
 			adapter.add(artistsList);
@@ -129,22 +128,14 @@ public class ListArtistsActivity extends SherlockListActivity implements
 		}
 	}
 
-	private ArrayList<HashMap<String, String>> getArtistsHashMapList(
-			SearchResult items) {
-		ArrayList<HashMap<String, String>> artistsList = new ArrayList<HashMap<String, String>>();
+	private List<Artist> getArtistsFromSearchResult(SearchResult items) {
+		ArrayList<Artist> artistsList = new ArrayList<Artist>();
 
 		for (int i = 0; i < items.getCount(); i++) {
-			HashMap<String, String> map = new HashMap<String, String>();
 			SearchItem item = items.getResults().get(i);
-
-			// Artist ID
-			map.put(DiscogsConstants.KEY_ID, String.valueOf(item.getId()));
-			// Artist name
-			map.put(DiscogsConstants.KEY_TITLE, item.getTitle());
-			// Artist image
-			map.put(DiscogsConstants.KEY_THUMB, item.getThumbURL().toString());
-
-			artistsList.add(map);
+			Artist artist = new Artist(item.getId(), item.getTitle(), null);
+			artist.getImages().add(new Image(item.getThumbURL()));
+			artistsList.add(artist);
 		}
 
 		return artistsList;
@@ -272,18 +263,11 @@ public class ListArtistsActivity extends SherlockListActivity implements
 			return;
 		}
 
-		Intent intent = new Intent(view.getContext(),
-				ArtistViewerActivity.class);
+		Intent intent = new Intent(this, ArtistViewerActivity.class);
 
-		@SuppressWarnings("unchecked")
-		HashMap<String, String> objArtist = (HashMap<String, String>) adapter
-				.getItem(position);
-		Artist artist = new Artist(Integer.parseInt(objArtist
-				.get(DiscogsConstants.KEY_ID)),
-				objArtist.get(DiscogsConstants.KEY_TITLE), null);
+		Artist artist = (Artist) adapter.getItem(position);
 		intent.setAction(Intent.ACTION_SEND);
-		intent.putExtra(GlobalConstants.EXTRA_ARTIST_ID, artist.getId());
-		intent.putExtra(GlobalConstants.EXTRA_ARTIST_NAME, artist.getName());
+		intent.putExtra(Artist.KEY, artist);
 		startActivity(intent);
 	}
 }

@@ -1,10 +1,13 @@
 package com.ventura.lyricsfinder.entity;
 
+import java.io.Serializable;
 import java.net.URL;
 
 import android.graphics.Bitmap;
 
-public class Image {
+public class Image implements Serializable {
+	private static final long serialVersionUID = -6428170031436031037L;
+	
 	private URL url;
 	private int height = 0;
 	private int width = 0;

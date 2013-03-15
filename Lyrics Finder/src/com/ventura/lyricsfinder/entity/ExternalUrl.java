@@ -1,10 +1,13 @@
 package com.ventura.lyricsfinder.entity;
 
+import java.io.Serializable;
 import java.net.URL;
 
 import com.ventura.lyricsfinder.discogs.entity.enumerator.ExternalUrlTypes;
 
-public class ExternalUrl implements Comparable<ExternalUrl> {
+public class ExternalUrl implements Comparable<ExternalUrl>, Serializable {
+	private static final long serialVersionUID = 4059668315765780683L;
+	
 	private ExternalUrlTypes type;
 	private URL url;
 

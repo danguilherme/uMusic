@@ -82,9 +82,7 @@ public class ArtistViewerActivity extends BaseActivity {
 		this.setContentView(mBaseLayout);
 
 		Intent intent = this.getIntent();
-		Artist artist = new Artist(intent.getIntExtra(
-				GlobalConstants.EXTRA_ARTIST_ID, 0),
-				intent.getStringExtra(GlobalConstants.EXTRA_ARTIST_NAME), null);
+		Artist artist = (Artist) intent.getSerializableExtra(Artist.KEY);
 		OAuthConsumer consumer = this.getConsumer(this.sharedPreferences);
 
 		mArtistImageView = (ImageView) findViewById(R.id.artist_image);
@@ -522,10 +520,7 @@ public class ArtistViewerActivity extends BaseActivity {
 				ArtistViewerActivity.class);
 
 		openArtistInfoIntent.setAction(Intent.ACTION_SEND);
-		openArtistInfoIntent.putExtra(GlobalConstants.EXTRA_ARTIST_ID,
-				artist.getId());
-		openArtistInfoIntent.putExtra(GlobalConstants.EXTRA_ARTIST_NAME,
-				artist.getName());
+		openArtistInfoIntent.putExtra(Artist.KEY, artist);
 		startActivity(openArtistInfoIntent);
 	}
 
