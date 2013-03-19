@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical" >
 
-            <com.ventura.lyricsfinder.ui.widget.ButtonGroup
+            <com.ventura.musicexplorer.ui.widget.ButtonGroup
                 android:id="@+id/profile_and_releases_buttons_container"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -40,25 +40,25 @@
                     android:gravity="center_vertical|center_horizontal"
                     android:onClick="onOpenReleasesButtonClicked"
                     android:text="@string/discogs_view_artist_releases" />
-            </com.ventura.lyricsfinder.ui.widget.ButtonGroup>
+            </com.ventura.musicexplorer.ui.widget.ButtonGroup>
 
-            <com.ventura.lyricsfinder.ui.widget.ButtonGroup
+            <com.ventura.musicexplorer.ui.widget.ButtonGroup
                 android:id="@+id/members_container"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:visibility="gone"
                 app:groupTitle="@string/band_members" >
-            </com.ventura.lyricsfinder.ui.widget.ButtonGroup>
+            </com.ventura.musicexplorer.ui.widget.ButtonGroup>
 
-            <com.ventura.lyricsfinder.ui.widget.ButtonGroup
+            <com.ventura.musicexplorer.ui.widget.ButtonGroup
                 android:id="@+id/external_urls_container"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:visibility="gone"
                 app:groupTitle="@string/external_urls" >
-            </com.ventura.lyricsfinder.ui.widget.ButtonGroup>
+            </com.ventura.musicexplorer.ui.widget.ButtonGroup>
         </LinearLayout>
     </ScrollView>
 
