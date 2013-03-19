@@ -256,7 +256,7 @@ public class ArtistViewerActivity extends BaseActivity {
 
 		if (artist.getMembers().size() > 0) {
 			this.buildBandMembersView();
-		} 
+		}
 
 		if (artist.getGroups().size() > 0) {
 			this.buildGroupsView();

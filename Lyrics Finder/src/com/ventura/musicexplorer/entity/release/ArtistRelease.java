@@ -11,7 +11,7 @@ import com.ventura.musicexplorer.entity.enumerator.ReleaseType;
 
 public class ArtistRelease implements Comparable<ArtistRelease>, Serializable {
 	private static final long serialVersionUID = 4281097578238872681L;
-	
+
 	private int id;
 	private String title;
 	private ReleaseType type;

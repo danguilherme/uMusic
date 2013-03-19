@@ -14,8 +14,9 @@ public class Artist implements Comparable<Artist>, Serializable {
 	public static final String KEY = Artist.class.getName();
 	public static final String KEY_ID = Artist.class.getName() + ".KEY_ID";
 	public static final String KEY_NAME = Artist.class.getName() + ".KEY_NAME";
-	public static final String KEY_THUMB = Artist.class.getName() + ".KEY_THUMB";
-	
+	public static final String KEY_THUMB = Artist.class.getName()
+			+ ".KEY_THUMB";
+
 	private int id;
 	private boolean isActive;
 	private String name;

@@ -82,7 +82,7 @@ public class ListArtistsActivity extends SherlockListActivity implements
 
 		if (queryText == null || queryType == null)
 			finish();
-		
+
 		new ListArtistsTask(this, discogsCustomer, queryType)
 				.execute(queryText);
 
@@ -263,7 +263,7 @@ public class ListArtistsActivity extends SherlockListActivity implements
 			// do nothing.
 			return;
 		}
-		
+
 		// Verifying internet connection...
 		if (!ConnectionManager.isConnected(this)) {
 			Toast.makeText(this,

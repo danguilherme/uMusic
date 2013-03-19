@@ -40,9 +40,9 @@ public class ArtistService extends BaseService {
 	public Artist getArtist(int artistId) throws NoInternetConnectionException,
 			LazyInternetConnectionException {
 
-		String url = String
-				.format(this.getContext().getString(R.string.get_artist_by_id_url),
-						artistId);
+		String url = String.format(
+				this.getContext().getString(R.string.get_artist_by_id_url),
+				artistId);
 
 		String jsonResponse = this.doGet(url);
 
@@ -61,7 +61,8 @@ public class ArtistService extends BaseService {
 			LazyInternetConnectionException {
 
 		String requestUrl = String.format(
-				this.getContext().getString(R.string.get_release_by_artist_id_url),
+				this.getContext().getString(
+						R.string.get_release_by_artist_id_url),
 				String.valueOf(artistId));
 
 		String jsonResponse = this.doGet(requestUrl);
