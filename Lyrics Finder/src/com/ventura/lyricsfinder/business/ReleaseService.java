@@ -19,7 +19,7 @@ public class ReleaseService extends BaseService {
 			LazyInternetConnectionException {
 
 		String requestUrl = String.format(
-				this.getStringResource(R.string.get_release_by_id_url),
+				this.getContext().getString(R.string.get_release_by_id_url),
 				String.valueOf(releaseId));
 
 		String jsonResponse = this.doGet(requestUrl);
@@ -39,7 +39,7 @@ public class ReleaseService extends BaseService {
 			LazyInternetConnectionException {
 
 		String requestUrl = String.format(
-				this.getStringResource(R.string.get_master_by_id_url),
+				this.getContext().getString(R.string.get_master_by_id_url),
 				String.valueOf(masterId));
 
 		String jsonResponse = this.doGet(requestUrl);

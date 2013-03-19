@@ -25,6 +25,7 @@ import android.widget.Toast;
 import com.actionbarsherlock.app.SherlockListActivity;
 import com.ventura.androidutils.exception.LazyInternetConnectionException;
 import com.ventura.androidutils.exception.NoInternetConnectionException;
+import com.ventura.androidutils.utils.ConnectionManager;
 import com.ventura.androidutils.utils.InnerActivityAsyncTask;
 import com.ventura.lyricsfinder.discogs.DiscogsConstants;
 import com.ventura.lyricsfinder.discogs.DiscogsService;
@@ -81,7 +82,7 @@ public class ListArtistsActivity extends SherlockListActivity implements
 
 		if (queryText == null || queryType == null)
 			finish();
-
+		
 		new ListArtistsTask(this, discogsCustomer, queryType)
 				.execute(queryText);
 
@@ -261,6 +262,13 @@ public class ListArtistsActivity extends SherlockListActivity implements
 			// If the user clicked at the load more progress indicator,
 			// do nothing.
 			return;
+		}
+		
+		// Verifying internet connection...
+		if (!ConnectionManager.isConnected(this)) {
+			Toast.makeText(this,
+					this.getString(R.string.message_no_internet_connection),
+					Toast.LENGTH_LONG).show();
 		}
 
 		Intent intent = new Intent(this, ArtistViewerActivity.class);

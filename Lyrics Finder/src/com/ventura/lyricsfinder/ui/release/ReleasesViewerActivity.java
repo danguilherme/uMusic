@@ -16,10 +16,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.actionbarsherlock.view.MenuItem;
 import com.ventura.androidutils.exception.LazyInternetConnectionException;
 import com.ventura.androidutils.exception.NoInternetConnectionException;
+import com.ventura.androidutils.utils.ConnectionManager;
 import com.ventura.androidutils.utils.InnerActivityAsyncTask;
 import com.ventura.lyricsfinder.business.ArtistService;
 import com.ventura.lyricsfinder.business.ReleaseService;
@@ -115,6 +117,14 @@ public class ReleasesViewerActivity extends BaseActivity {
 			LinearLayout releasePanel) {
 		LinearLayout tracksContainer = (LinearLayout) releasePanel
 				.findViewById(R.id.artist_release_info_container);
+
+		// If the user is not connected, do nothing
+		if (!ConnectionManager.isConnected(this)) {
+			Toast.makeText(this,
+					this.getString(R.string.message_no_internet_connection),
+					Toast.LENGTH_LONG).show();
+			return;
+		}
 
 		// Verify if this release's tracks weren't already
 		// downloaded.
@@ -309,6 +319,11 @@ public class ReleasesViewerActivity extends BaseActivity {
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
+			if (!ConnectionManager.isConnected(mContext)) {
+				alert(mContext
+						.getString(R.string.message_no_internet_connection));
+				this.cancel(true);
+			}
 		}
 
 		@Override
@@ -336,20 +351,32 @@ public class ReleasesViewerActivity extends BaseActivity {
 		@Override
 		protected void onPostExecute(ArtistRelease result) {
 			super.onPostExecute(result);
-			if (result == null) {
-				finish();
-				result = new ArtistRelease();
-				result.setType(ReleaseType.Master);
-			}
-			switch (result.getType()) {
-			case Release:
-				buildReleaseInfoView((Release) result, this.mParentReleaseView);
-				break;
-			case Master:
-				buildMasterInfoView((Master) result, this.mParentReleaseView);
-				break;
-			default:
-				break;
+			try {
+				if (result == null) {
+					finish();
+					result = new ArtistRelease();
+					result.setType(ReleaseType.Master);
+				}
+				switch (result.getType()) {
+				case Release:
+					buildReleaseInfoView((Release) result,
+							this.mParentReleaseView);
+					break;
+				case Master:
+					buildMasterInfoView((Master) result,
+							this.mParentReleaseView);
+					break;
+				default:
+					break;
+				}
+
+			} catch (Exception e) {
+				Toast.makeText(
+						ReleasesViewerActivity.this,
+						mContext.getString(R.string.error_bringing_release_info),
+						Toast.LENGTH_LONG).show();
+				Log.e(TAG, "Error when showing release/master info", e);
+				// finish();
 			}
 		}
 

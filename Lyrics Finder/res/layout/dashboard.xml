@@ -16,6 +16,7 @@
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
             android:drawableTop="@drawable/headphones"
+            android:onClick="onMusicPlayerButtonClick"
             android:text="@string/music_player" />
 
         <Button
@@ -42,6 +43,7 @@
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
             android:drawableTop="@drawable/info"
+            android:onClick="onAboutButtonClick"
             android:text="@string/about" />
     </com.ventura.lyricsfinder.ui.widget.DashboardLayout>
 </LinearLayout>

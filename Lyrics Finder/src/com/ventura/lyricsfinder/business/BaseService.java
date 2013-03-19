@@ -8,7 +8,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.util.Log;
 
 import com.google.gson.FieldNamingPolicy;
@@ -95,8 +94,4 @@ public abstract class BaseService extends NetworkUtils {
 		return array;
 	}
 
-	protected String getStringResource(int resourceId) {
-		Resources res = this.getContext().getResources();
-		return res.getString(resourceId);
-	}
 }

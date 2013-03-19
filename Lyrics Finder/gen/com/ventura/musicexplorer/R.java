@@ -10,6 +10,7 @@ package com.ventura.musicexplorer;
 public final class R {
     public static final class array {
         /**  LyrDB [END] 
+ LyrDB [END] 
          */
         public static final int external_urls_context_menu_items=0x7f0c0000;
     }
@@ -1180,49 +1181,50 @@ containing a value of this type.
         public static final int abs__max_action_buttons=0x7f090000;
     }
     public static final class layout {
-        public static final int abs__action_bar_home=0x7f030000;
-        public static final int abs__action_bar_tab=0x7f030001;
-        public static final int abs__action_bar_tab_bar_view=0x7f030002;
-        public static final int abs__action_bar_title_item=0x7f030003;
-        public static final int abs__action_menu_item_layout=0x7f030004;
-        public static final int abs__action_menu_layout=0x7f030005;
-        public static final int abs__action_mode_bar=0x7f030006;
-        public static final int abs__action_mode_close_item=0x7f030007;
-        public static final int abs__activity_chooser_view=0x7f030008;
-        public static final int abs__activity_chooser_view_list_item=0x7f030009;
-        public static final int abs__dialog_title_holo=0x7f03000a;
-        public static final int abs__list_menu_item_checkbox=0x7f03000b;
-        public static final int abs__list_menu_item_icon=0x7f03000c;
-        public static final int abs__list_menu_item_layout=0x7f03000d;
-        public static final int abs__list_menu_item_radio=0x7f03000e;
-        public static final int abs__popup_menu_item_layout=0x7f03000f;
-        public static final int abs__screen_action_bar=0x7f030010;
-        public static final int abs__screen_action_bar_overlay=0x7f030011;
-        public static final int abs__screen_simple=0x7f030012;
-        public static final int abs__screen_simple_overlay_action_mode=0x7f030013;
-        public static final int abs__search_dropdown_item_icons_2line=0x7f030014;
-        public static final int abs__search_view=0x7f030015;
-        public static final int abs__simple_dropdown_hint=0x7f030016;
-        public static final int actionbar=0x7f030017;
-        public static final int activity_bind_lyrics=0x7f030018;
-        public static final int artist_info=0x7f030019;
-        public static final int artist_list_item=0x7f03001a;
-        public static final int artist_release=0x7f03001b;
-        public static final int button_group=0x7f03001c;
-        public static final int button_group_item=0x7f03001d;
-        public static final int dashboard=0x7f03001e;
-        public static final int default_list=0x7f03001f;
-        public static final int key_value_panel=0x7f030020;
-        public static final int list_item=0x7f030021;
-        public static final int list_item_lyric=0x7f030022;
-        public static final int load_more_progress=0x7f030023;
-        public static final int lyric_view=0x7f030024;
-        public static final int music_info=0x7f030025;
-        public static final int release=0x7f030026;
-        public static final int releases_view=0x7f030027;
-        public static final int sherlock_spinner_dropdown_item=0x7f030028;
-        public static final int sherlock_spinner_item=0x7f030029;
-        public static final int track=0x7f03002a;
+        public static final int about=0x7f030000;
+        public static final int abs__action_bar_home=0x7f030001;
+        public static final int abs__action_bar_tab=0x7f030002;
+        public static final int abs__action_bar_tab_bar_view=0x7f030003;
+        public static final int abs__action_bar_title_item=0x7f030004;
+        public static final int abs__action_menu_item_layout=0x7f030005;
+        public static final int abs__action_menu_layout=0x7f030006;
+        public static final int abs__action_mode_bar=0x7f030007;
+        public static final int abs__action_mode_close_item=0x7f030008;
+        public static final int abs__activity_chooser_view=0x7f030009;
+        public static final int abs__activity_chooser_view_list_item=0x7f03000a;
+        public static final int abs__dialog_title_holo=0x7f03000b;
+        public static final int abs__list_menu_item_checkbox=0x7f03000c;
+        public static final int abs__list_menu_item_icon=0x7f03000d;
+        public static final int abs__list_menu_item_layout=0x7f03000e;
+        public static final int abs__list_menu_item_radio=0x7f03000f;
+        public static final int abs__popup_menu_item_layout=0x7f030010;
+        public static final int abs__screen_action_bar=0x7f030011;
+        public static final int abs__screen_action_bar_overlay=0x7f030012;
+        public static final int abs__screen_simple=0x7f030013;
+        public static final int abs__screen_simple_overlay_action_mode=0x7f030014;
+        public static final int abs__search_dropdown_item_icons_2line=0x7f030015;
+        public static final int abs__search_view=0x7f030016;
+        public static final int abs__simple_dropdown_hint=0x7f030017;
+        public static final int actionbar=0x7f030018;
+        public static final int activity_bind_lyrics=0x7f030019;
+        public static final int artist_info=0x7f03001a;
+        public static final int artist_list_item=0x7f03001b;
+        public static final int artist_release=0x7f03001c;
+        public static final int button_group=0x7f03001d;
+        public static final int button_group_item=0x7f03001e;
+        public static final int dashboard=0x7f03001f;
+        public static final int default_list=0x7f030020;
+        public static final int key_value_panel=0x7f030021;
+        public static final int list_item=0x7f030022;
+        public static final int list_item_lyric=0x7f030023;
+        public static final int load_more_progress=0x7f030024;
+        public static final int lyric_view=0x7f030025;
+        public static final int music_info=0x7f030026;
+        public static final int release=0x7f030027;
+        public static final int releases_view=0x7f030028;
+        public static final int sherlock_spinner_dropdown_item=0x7f030029;
+        public static final int sherlock_spinner_item=0x7f03002a;
+        public static final int track=0x7f03002b;
     }
     public static final class menu {
         public static final int artist_info_menu=0x7f0d0000;
@@ -1231,49 +1233,64 @@ containing a value of this type.
     }
     public static final class string {
         public static final int about=0x7f0a0024;
-        /**  Content description for the action bar "home" affordance. [CHAR LIMIT=NONE] 
+        /**   Content description for the action bar "home" affordance. [CHAR LIMIT=NONE] 
+ Content description for the action bar "home" affordance. [CHAR LIMIT=NONE] 
          */
         public static final int abs__action_bar_home_description=0x7f0a0000;
         /**  Content description for the action bar "up" affordance. [CHAR LIMIT=NONE] 
+ Content description for the action bar "up" affordance. [CHAR LIMIT=NONE] 
          */
         public static final int abs__action_bar_up_description=0x7f0a0001;
         /**  Content description for the action menu overflow button. [CHAR LIMIT=NONE] 
+ Content description for the action menu overflow button. [CHAR LIMIT=NONE] 
          */
         public static final int abs__action_menu_overflow_description=0x7f0a0002;
         /**  Label for the "Done" button on the far left of action mode toolbars. 
+ Label for the "Done" button on the far left of action mode toolbars. 
          */
         public static final int abs__action_mode_done=0x7f0a0003;
         /**  Title default for a dialog showing possible activities in ActivityChooserView [CHAR LIMIT=25] 
+ Title default for a dialog showing possible activities in ActivityChooserView [CHAR LIMIT=25] 
          */
         public static final int abs__activity_chooser_view_dialog_title_default=0x7f0a0005;
         /**  Title for a button to expand the list of activities in ActivityChooserView [CHAR LIMIT=25] 
+ Title for a button to expand the list of activities in ActivityChooserView [CHAR LIMIT=25] 
          */
         public static final int abs__activity_chooser_view_see_all=0x7f0a0004;
         /**  Description of the shwoing of a popup window with activities to choose from. [CHAR LIMIT=NONE] 
+ Description of the shwoing of a popup window with activities to choose from. [CHAR LIMIT=NONE] 
          */
         public static final int abs__activitychooserview_choose_application=0x7f0a0007;
         /**  SearchView accessibility description for clear button [CHAR LIMIT=NONE] 
+ SearchView accessibility description for clear button [CHAR LIMIT=NONE] 
          */
         public static final int abs__searchview_description_clear=0x7f0a000c;
         /**  SearchView accessibility description for search text field [CHAR LIMIT=NONE] 
+ SearchView accessibility description for search text field [CHAR LIMIT=NONE] 
          */
         public static final int abs__searchview_description_query=0x7f0a000b;
         /**  SearchView accessibility description for search button [CHAR LIMIT=NONE] 
+ SearchView accessibility description for search button [CHAR LIMIT=NONE] 
          */
         public static final int abs__searchview_description_search=0x7f0a000a;
         /**  SearchView accessibility description for submit button [CHAR LIMIT=NONE] 
+ SearchView accessibility description for submit button [CHAR LIMIT=NONE] 
          */
         public static final int abs__searchview_description_submit=0x7f0a000d;
         /**  SearchView accessibility description for voice button [CHAR LIMIT=NONE] 
+ SearchView accessibility description for voice button [CHAR LIMIT=NONE] 
          */
         public static final int abs__searchview_description_voice=0x7f0a000e;
         /**  Title for a dialog showing possible activities for sharing in ShareActionProvider [CHAR LIMIT=25] 
+ Title for a dialog showing possible activities for sharing in ShareActionProvider [CHAR LIMIT=25] 
          */
         public static final int abs__share_action_provider_share_with=0x7f0a0006;
         /**  Description of the choose target button in a ShareActionProvider (share UI). [CHAR LIMIT=NONE] 
+ Description of the choose target button in a ShareActionProvider (share UI). [CHAR LIMIT=NONE] 
          */
         public static final int abs__shareactionprovider_share_with=0x7f0a0008;
         /**  Description of a share target (both in the list of such or the default share button) in a ShareActionProvider (share UI). [CHAR LIMIT=NONE] 
+ Description of a share target (both in the list of such or the default share button) in a ShareActionProvider (share UI). [CHAR LIMIT=NONE] 
          */
         public static final int abs__shareactionprovider_share_with_application=0x7f0a0009;
         public static final int aliases=0x7f0a002c;
@@ -1284,59 +1301,75 @@ containing a value of this type.
         public static final int btn_edit_lyrics=0x7f0a003b;
         public static final int btn_lyrics_is_ok=0x7f0a003a;
         public static final int btn_save_file=0x7f0a0035;
-        public static final int btn_select_lyric=0x7f0a0059;
+        public static final int btn_select_lyric=0x7f0a005b;
         /**  Song Properties [END] 
+ Dashboard 
+ Song Properties [END] 
  Dashboard 
          */
         public static final int dashboard_title=0x7f0a0020;
-        public static final int discogs_url_artists=0x7f0a005c;
-        public static final int discogs_url_releases=0x7f0a005d;
+        public static final int discogs_url_artists=0x7f0a005e;
+        public static final int discogs_url_releases=0x7f0a005f;
         /**  Lyrics Viewer [END] 
  Discogs [START] 
+ Lyrics Viewer [END] 
+ TODO: Set urls to constants 
+ Discogs [START] 
          */
-        public static final int discogs_url_search=0x7f0a005b;
-        public static final int discogs_url_tracks_masters=0x7f0a005f;
-        public static final int discogs_url_tracks_releases=0x7f0a005e;
+        public static final int discogs_url_search=0x7f0a005d;
+        public static final int discogs_url_tracks_masters=0x7f0a0061;
+        public static final int discogs_url_tracks_releases=0x7f0a0060;
         public static final int discogs_view_artist_profile=0x7f0a002d;
         public static final int discogs_view_artist_releases=0x7f0a002e;
+        /**  Error Messages 
+ Error Messages 
+         */
+        public static final int error_bringing_release_info=0x7f0a0051;
         public static final int external_urls=0x7f0a0027;
         public static final int facebook=0x7f0a003d;
-        public static final int get_artist_by_id_url=0x7f0a0064;
-        public static final int get_master_by_id_url=0x7f0a0067;
-        public static final int get_release_by_artist_id_url=0x7f0a0065;
-        public static final int get_release_by_id_url=0x7f0a0066;
+        public static final int get_artist_by_id_url=0x7f0a0066;
+        public static final int get_master_by_id_url=0x7f0a0069;
+        public static final int get_release_by_artist_id_url=0x7f0a0067;
+        public static final int get_release_by_id_url=0x7f0a0068;
         public static final int googleplus=0x7f0a0040;
         public static final int groups=0x7f0a0029;
         /**  Artist image download 
+ Artist image download 
          */
         public static final int image_already_being_downloaded=0x7f0a002f;
         public static final int image_not_possible_to_download=0x7f0a0030;
         public static final int image_saved=0x7f0a0031;
         /**  Discogs [END] 
  LyrDB [START] 
+ Discogs [END] 
+ LyrDB [START] 
          */
-        public static final int lyrdb_url_base=0x7f0a0060;
-        public static final int lyrdb_url_lyrics=0x7f0a0062;
-        public static final int lyrdb_url_search=0x7f0a0061;
+        public static final int lyrdb_url_base=0x7f0a0062;
+        public static final int lyrdb_url_lyrics=0x7f0a0064;
+        public static final int lyrdb_url_search=0x7f0a0063;
         public static final int menu_download_artist_image=0x7f0a0032;
         public static final int menu_find_lyrics=0x7f0a0036;
-        public static final int menu_set_music_tags=0x7f0a005a;
+        public static final int menu_set_music_tags=0x7f0a005c;
         public static final int menu_view_artist_info=0x7f0a0037;
         public static final int menu_view_artist_info_condensed=0x7f0a0038;
         public static final int message_artist_not_found=0x7f0a004c;
+        public static final int message_coming_soon=0x7f0a0050;
         public static final int message_fetching_artists_list=0x7f0a004b;
         public static final int message_fetching_lyrics=0x7f0a0049;
         public static final int message_fetching_lyrics_list=0x7f0a0048;
-        public static final int message_fetching_releases_body=0x7f0a0057;
+        public static final int message_fetching_releases_body=0x7f0a0059;
         /**  Releases Viewer [START] 
+ Releases Viewer [START] 
          */
-        public static final int message_fetching_releases_title=0x7f0a0056;
+        public static final int message_fetching_releases_title=0x7f0a0058;
         public static final int message_file_not_supported=0x7f0a004f;
         public static final int message_lazy_internet_connection=0x7f0a0047;
         public static final int message_lyric_not_found=0x7f0a004a;
         public static final int message_lyrics_saved=0x7f0a004d;
         public static final int message_music_metadata_not_found=0x7f0a004e;
         /**  External URLs [END] 
+ Messages 
+ External URLs [END] 
  Messages 
          */
         public static final int message_no_internet_connection=0x7f0a0046;
@@ -1345,20 +1378,22 @@ containing a value of this type.
         public static final int no_biography=0x7f0a002a;
         public static final int other_website=0x7f0a0045;
         public static final int own_website=0x7f0a0044;
-        public static final int provider_azlyrics_name=0x7f0a0054;
-        public static final int provider_azlyrics_url=0x7f0a0055;
-        public static final int provider_lyrster_name=0x7f0a0052;
-        public static final int provider_lyrster_url=0x7f0a0053;
-        public static final int provider_terra_name=0x7f0a0050;
-        public static final int provider_terra_url=0x7f0a0051;
+        public static final int provider_azlyrics_name=0x7f0a0056;
+        public static final int provider_azlyrics_url=0x7f0a0057;
+        public static final int provider_lyrster_name=0x7f0a0054;
+        public static final int provider_lyrster_url=0x7f0a0055;
+        public static final int provider_terra_name=0x7f0a0052;
+        public static final int provider_terra_url=0x7f0a0053;
         public static final int real_name=0x7f0a002b;
         public static final int search_artist=0x7f0a0022;
         /**  API urls 
+ API urls 
          */
-        public static final int search_artist_url=0x7f0a0063;
+        public static final int search_artist_url=0x7f0a0065;
         public static final int search_lyrics=0x7f0a0023;
         public static final int song_album=0x7f0a0014;
         /**  Song Properties [START] 
+ Song Properties [START] 
          */
         public static final int song_artist=0x7f0a0012;
         public static final int song_comment=0x7f0a0015;
@@ -1374,28 +1409,39 @@ containing a value of this type.
         public static final int song_track_number=0x7f0a001e;
         public static final int song_year=0x7f0a001f;
         /**  Artist Viewer Activity 
+ Artist Viewer Activity 
          */
         public static final int title_activity_artist_viewer=0x7f0a0026;
         /**  Artists List Activity 
+ Artists List Activity 
          */
         public static final int title_activity_artists_list=0x7f0a0025;
         /**  Music Info Activity [END] 
+ Bind Lyrics Activity [START] 
+ Music Info Activity [END] 
  Bind Lyrics Activity [START] 
          */
         public static final int title_activity_bind_lyrics=0x7f0a0039;
         /**  Releases Viewer [END] 
  Lyrics Viewer [START] 
+ Releases Viewer [END] 
+ Lyrics Viewer [START] 
          */
-        public static final int title_activity_lyrics_viewer=0x7f0a0058;
+        public static final int title_activity_lyrics_viewer=0x7f0a005a;
         /**  Releases Viewer Activity [END] 
+ Music Info Activity [START] 
+ Releases Viewer Activity [END] 
  Music Info Activity [START] 
          */
         public static final int title_activity_music_info=0x7f0a0034;
         /**  Releases Viewer Activity [START] 
+ Releases Viewer Activity [START] 
          */
         public static final int title_activity_releases_viewer=0x7f0a0033;
         public static final int tumblr=0x7f0a0041;
         /**  Bind Lyrics Activity [END] 
+ External URLs [START] 
+ Bind Lyrics Activity [END] 
  External URLs [START] 
          */
         public static final int twitter=0x7f0a003c;

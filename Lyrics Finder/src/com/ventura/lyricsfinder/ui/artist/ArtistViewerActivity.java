@@ -202,8 +202,8 @@ public class ArtistViewerActivity extends BaseActivity {
 			artistImageDownloadProgressBar.setVisibility(View.GONE);
 		}
 
-		mArtistName.setText(artist.getName());
-		String profile = artist.getProfile();
+		mArtistName.setText(this.mCurrentArtist.getName());
+		String profile = this.mCurrentArtist.getProfile();
 
 		if (profile != null && !profile.equals("")) {
 			mArtistBio.setText(profile);
@@ -227,14 +227,20 @@ public class ArtistViewerActivity extends BaseActivity {
 		}
 	}
 
-	private void showArtistReleasesActivity() {
-		Intent releasesIntent = new Intent(this, ReleasesViewerActivity.class);
-		releasesIntent.putExtra(GlobalConstants.EXTRA_ARTIST_ID,
-				this.mCurrentArtist.getId());
-		releasesIntent.putExtra(GlobalConstants.EXTRA_ARTIST_NAME,
-				this.mCurrentArtist.getName());
+	private void openArtistReleases() {
+		if (this.isConnected()) {
+			Intent releasesIntent = new Intent(this,
+					ReleasesViewerActivity.class);
+			releasesIntent.putExtra(GlobalConstants.EXTRA_ARTIST_ID,
+					this.mCurrentArtist.getId());
+			releasesIntent.putExtra(GlobalConstants.EXTRA_ARTIST_NAME,
+					this.mCurrentArtist.getName());
 
-		this.startActivity(releasesIntent);
+			this.startActivity(releasesIntent);
+		} else {
+			Toast.makeText(this, R.string.message_no_internet_connection,
+					Toast.LENGTH_LONG).show();
+		}
 	}
 
 	private void buildAditionalInformationView() {
@@ -250,7 +256,7 @@ public class ArtistViewerActivity extends BaseActivity {
 
 		if (artist.getMembers().size() > 0) {
 			this.buildBandMembersView();
-		}
+		} 
 
 		if (artist.getGroups().size() > 0) {
 			this.buildGroupsView();
@@ -516,12 +522,16 @@ public class ArtistViewerActivity extends BaseActivity {
 	}
 
 	private void openNewArtistInfo(Artist artist) {
-		Intent openArtistInfoIntent = new Intent(this,
-				ArtistViewerActivity.class);
-
-		openArtistInfoIntent.setAction(Intent.ACTION_SEND);
-		openArtistInfoIntent.putExtra(Artist.KEY, artist);
-		startActivity(openArtistInfoIntent);
+		if (this.isConnected()) {
+			Intent openArtistInfoIntent = new Intent(this,
+					ArtistViewerActivity.class);
+			openArtistInfoIntent.setAction(Intent.ACTION_SEND);
+			openArtistInfoIntent.putExtra(Artist.KEY, artist);
+			startActivity(openArtistInfoIntent);
+		} else {
+			Toast.makeText(this, R.string.message_no_internet_connection,
+					Toast.LENGTH_LONG).show();
+		}
 	}
 
 	public void saveArtistImage() {
@@ -640,7 +650,9 @@ public class ArtistViewerActivity extends BaseActivity {
 		protected void onPostExecute(
 				com.ventura.lyricsfinder.entity.artist.Artist result) {
 			super.onPostExecute(result);
-			fillView(result);
+			if (result != null) {
+				fillView(result);
+			}
 		}
 
 		@Override
@@ -688,6 +700,6 @@ public class ArtistViewerActivity extends BaseActivity {
 	}
 
 	public void onOpenReleasesButtonClicked(View button) {
-		this.showArtistReleasesActivity();
+		this.openArtistReleases();
 	}
 }

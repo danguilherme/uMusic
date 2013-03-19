@@ -25,6 +25,7 @@ import android.widget.Toast;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.SubMenu;
+import com.ventura.androidutils.utils.ConnectionManager;
 import com.ventura.lyricsfinder.constants.GlobalConstants;
 import com.ventura.lyricsfinder.discogs.DiscogsConstants;
 import com.ventura.lyricsfinder.discogs.entity.enumerator.QueryType;
@@ -317,7 +318,12 @@ public class MusicInfoActivity extends BaseActivity {
 	}
 
 	private void viewArtistInfo(String artistName) {
-		if (artistName != null && !artistName.equals("")) {
+		// Verifying internet connection...
+		if (!ConnectionManager.isConnected(this)) {
+			Toast.makeText(this,
+					this.getString(R.string.message_no_internet_connection),
+					Toast.LENGTH_LONG).show();
+		} else if (artistName != null && !artistName.equals("")) {
 			Intent intent = new Intent(this, ListArtistsActivity.class);
 			intent.setAction(Intent.ACTION_SEND);
 			intent.putExtra(DiscogsConstants.KEY_QUERY_TYPE,

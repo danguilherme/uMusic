@@ -17,6 +17,7 @@ import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 
 import com.actionbarsherlock.app.SherlockActivity;
+import com.ventura.androidutils.utils.ConnectionManager;
 import com.ventura.lyricsfinder.discogs.oauth.Constants;
 import com.ventura.musicexplorer.R;
 
@@ -153,5 +154,15 @@ public abstract class BaseActivity extends SherlockActivity {
 		dialog.setTitle(title);
 		dialog.setMessage(message);
 		dialog.show();
+	}
+
+	/**
+	 * Verify if the activity is connected to the internet
+	 * 
+	 * @return The connection status. <code>true</code> if connected and
+	 *         <code>false</code> otherwise.
+	 */
+	public boolean isConnected() {
+		return ConnectionManager.isConnected(this);
 	}
 }
