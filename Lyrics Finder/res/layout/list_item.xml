@@ -35,7 +35,6 @@
         android:layout_centerVertical="true"
         android:layout_toRightOf="@+id/thumbnail"
         android:background="@android:color/transparent"
-        android:text="Just gona stand there and ..."
         android:textColor="#343434"
         android:typeface="sans" />
 

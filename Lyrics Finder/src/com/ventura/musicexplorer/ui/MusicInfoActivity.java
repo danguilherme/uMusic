@@ -17,14 +17,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
-import com.actionbarsherlock.view.SubMenu;
 import com.ventura.androidutils.utils.ConnectionManager;
 import com.ventura.musicexplorer.R;
 import com.ventura.musicexplorer.constants.GlobalConstants;
@@ -281,7 +280,7 @@ public class MusicInfoActivity extends BaseActivity {
 		super.onCreateContextMenu(menu, v, menuInfo);
 	}
 
-	@Override
+	/*@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		SubMenu sub = menu.addSubMenu("Actions");
 		sub.add(0, R.id.menu_view_artist_info, 0, R.string.search_artist);
@@ -306,6 +305,19 @@ public class MusicInfoActivity extends BaseActivity {
 			return super.onMenuItemSelected(featureId, item);
 		}
 		return true;
+	}*/
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		menu.add(R.string.search_artist);
+		return super.onCreateOptionsMenu(menu);
+	}
+	@Override
+	public boolean onMenuItemSelected(int featureId, MenuItem item) {
+		if (item.getTitle() == getString(R.string.search_artist)) {
+			this.viewArtistInfo(mArtistTextField.getText().toString());
+		}
+		return super.onMenuItemSelected(featureId, item);
 	}
 
 	private void findLyrics(String artistName, String musicTitle) {

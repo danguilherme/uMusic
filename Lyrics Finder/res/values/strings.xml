@@ -50,6 +50,7 @@
 
     <!-- Releases Viewer Activity [START] -->
     <string name="title_activity_releases_viewer">Releases</string>
+    <string name="show_info_btn">Show Info</string>
     <!-- Releases Viewer Activity [END] -->
 
 
@@ -94,6 +95,7 @@
     <string name="message_lyrics_saved">Lyrics saved.</string>
     <string name="message_music_metadata_not_found">The music you are trying to load has no metadata.</string>
     <string name="message_file_not_supported">Sorry, file not supported.</string>
+    <string name="loading">Loading...</string>
     <string name="message_coming_soon">Coming soon...</string>
     
     <!-- Error Messages -->
@@ -137,12 +139,5 @@
     <string-array name="external_urls_context_menu_items">
         <item name="copy">@android:string/copyUrl</item>
     </string-array>
-
-    <!-- API urls -->
-    <string name="search_artist_url" formatted="false">http://aspspider.ws/Danguilherme/api/artists/search?q=%1$s</string>
-    <string name="get_artist_by_id_url" formatted="false">http://aspspider.ws/Danguilherme/api/artists/%1$s</string>
-    <string name="get_release_by_artist_id_url" formatted="false">http://aspspider.ws/Danguilherme/api/artists/listreleases/%1$s</string>
-    <string name="get_release_by_id_url" formatted="false">http://aspspider.ws/Danguilherme/api/releases/%1$s</string>
-    <string name="get_master_by_id_url" formatted="false">http://aspspider.ws/Danguilherme/api/releases/getmaster/%1$s</string>
 
 </resources>

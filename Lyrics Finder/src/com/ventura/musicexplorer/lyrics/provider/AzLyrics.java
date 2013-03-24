@@ -1,5 +1,7 @@
 package com.ventura.musicexplorer.lyrics.provider;
 
+import java.util.Locale;
+
 import com.ventura.musicexplorer.lyrics.Lyric;
 import com.ventura.musicexplorer.lyrics.LyricNotFoundException;
 
@@ -29,7 +31,7 @@ public class AzLyrics extends LyricProvider {
 
 	@Override
 	public String encodeToUrl(String target) {
-		return target.trim().replace(" ", "").toLowerCase();
+		return target.trim().replace(" ", "").toLowerCase(Locale.ENGLISH);
 	}
 
 }

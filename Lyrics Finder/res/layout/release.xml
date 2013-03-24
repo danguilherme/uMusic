@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:baselineAligned="false"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal" >
@@ -20,15 +21,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="7dp"
-                android:text="Genres:"
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/genres"
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Rock" />
+                android:layout_weight="1" />
         </LinearLayout>
 
         <LinearLayout
@@ -41,15 +40,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="7dp"
-                android:text="Styles:"
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/styles"
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Alternative Rock" />
+                android:layout_weight="1" />
         </LinearLayout>
 
         <LinearLayout
@@ -62,15 +59,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="7dp"
-                android:text="Label:"
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/label"
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Wind-Up" />
+                android:layout_weight="1" />
         </LinearLayout>
     </LinearLayout>
 
@@ -84,14 +79,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="7dp"
-            android:text="Country:"
             android:textStyle="bold" />
 
         <TextView
             android:id="@+id/country"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="US" />
+            android:layout_height="wrap_content" />
     </LinearLayout>
 
 </LinearLayout>

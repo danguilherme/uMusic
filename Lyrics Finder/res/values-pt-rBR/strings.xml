@@ -50,6 +50,7 @@
 
     <!-- Releases Viewer Activity [START] -->
     <string name="title_activity_releases_viewer">Lançamentos</string>
+    <string name="show_info_btn">Mostrar Informações</string>
     <!-- Releases Viewer Activity [END] -->
 
 
@@ -94,6 +95,7 @@
     <string name="message_lyrics_saved">Letra salva.</string>
     <string name="message_music_metadata_not_found">A música que você está tentando abrir não tem metadados.</string>
     <string name="message_file_not_supported">Desculpe, arquivo não suportado.</string>
+    <string name="loading">Carregando...</string>
     <string name="message_coming_soon">Em breve...</string>
 
     <!-- Error Messages -->

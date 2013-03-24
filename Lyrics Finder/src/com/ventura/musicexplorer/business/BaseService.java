@@ -14,15 +14,17 @@ import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
-import com.ventura.androidutils.utils.NetworkUtils;
+import com.ventura.androidutils.utils.Service;
 
-public abstract class BaseService extends NetworkUtils {
+public abstract class BaseService extends Service {
 	final String TAG = getClass().getName();
 	private final String KEY_PAGINATED_CONTENT = "Data";
 
 	public final String KEY_DATA = "data";
 	public final String KEY_SUCCESS = "success";
 	public final String KEY_MESSAGE = "message";
+
+	protected static final String URL_BASE_API = "http://www.musicexplorer.somee.com/api";
 
 	private Gson deserializer;
 

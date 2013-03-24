@@ -18,7 +18,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.actionbarsherlock.view.MenuItem;
 import com.ventura.androidutils.exception.LazyInternetConnectionException;
 import com.ventura.androidutils.exception.NoInternetConnectionException;
 import com.ventura.androidutils.utils.ConnectionManager;
@@ -46,7 +45,7 @@ public class ReleasesViewerActivity extends BaseActivity {
 		this.setContentView(R.layout.releases_view);
 
 		// Enable navigation to parentActivity.
-		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		//getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 		Intent initialIntent = this.getIntent();
 
@@ -387,7 +386,7 @@ public class ReleasesViewerActivity extends BaseActivity {
 
 	}
 
-	@Override
+	/*@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case android.R.id.home:
@@ -398,5 +397,5 @@ public class ReleasesViewerActivity extends BaseActivity {
 		}
 
 		return super.onOptionsItemSelected(item);
-	}
+	}*/
 }

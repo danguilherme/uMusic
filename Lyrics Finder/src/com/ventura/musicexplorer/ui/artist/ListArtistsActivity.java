@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import oauth.signpost.OAuthConsumer;
+import android.app.ListActivity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -22,7 +23,6 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.actionbarsherlock.app.SherlockListActivity;
 import com.ventura.androidutils.exception.LazyInternetConnectionException;
 import com.ventura.androidutils.exception.NoInternetConnectionException;
 import com.ventura.androidutils.utils.ConnectionManager;
@@ -37,7 +37,7 @@ import com.ventura.musicexplorer.discogs.entity.enumerator.QueryType;
 import com.ventura.musicexplorer.entity.Image;
 import com.ventura.musicexplorer.entity.artist.Artist;
 
-public class ListArtistsActivity extends SherlockListActivity implements
+public class ListArtistsActivity extends ListActivity implements
 		OnScrollListener, OnItemClickListener {
 	final String TAG = getClass().getName();
 

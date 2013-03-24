@@ -1,6 +1,7 @@
 package com.ventura.musicexplorer.discogs.entity;
 
 import java.net.URL;
+import java.util.Locale;
 
 import com.ventura.musicexplorer.discogs.entity.enumerator.ExternalUrlTypes;
 
@@ -38,12 +39,12 @@ public class ExternalUrl implements Comparable<ExternalUrl> {
 
 		if (artist != null
 				&& (sURL.contains(artist.getName().replace(" ", "")
-						.toLowerCase()
+						.toLowerCase(Locale.ENGLISH)
 						+ ".com")
 						|| sURL.contains(artist.getName().replace(" ", "-")
-								.toLowerCase()
+								.toLowerCase(Locale.ENGLISH)
 								+ ".com") || sURL.contains(artist.getName()
-						.replace(" ", "").toLowerCase()
+						.replace(" ", "").toLowerCase(Locale.ENGLISH)
 						+ ".net"))) {
 			// is a official website
 			externalUrl.setType(ExternalUrlTypes.ArtistWebsite);

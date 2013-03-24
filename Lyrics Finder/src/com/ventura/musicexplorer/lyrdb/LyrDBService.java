@@ -6,8 +6,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -49,8 +51,13 @@ public class LyrDBService {
 	}
 
 	public List<Lyric> search(QueryType type, Lyric lyric) {
-		lyric.setArtistName(URLEncoder.encode(lyric.getArtistName()));
-		lyric.setMusicName(URLEncoder.encode(lyric.getMusicName()));
+		try {
+			lyric.setArtistName(URLEncoder.encode(lyric.getArtistName(), "UTF-8"));
+			lyric.setMusicName(URLEncoder.encode(lyric.getMusicName(), "UTF-8"));
+		} catch (UnsupportedEncodingException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
 
 		Resources res = this.mContext.getResources();
 		String url = null, lyrDBUrl = res.getString(R.string.lyrdb_url_base)
@@ -60,7 +67,7 @@ public class LyrDBService {
 		case FullT:
 			url = String.format(lyrDBUrl,
 					lyric.getArtistName() + "+" + lyric.getMusicName(), type
-							.toString().toLowerCase());
+							.toString().toLowerCase(Locale.ENGLISH));
 			break;
 		case Match:
 			try {
@@ -69,7 +76,7 @@ public class LyrDBService {
 						lyric.getArtistName()
 								+ URLEncoder.encode("|", "ISO8859-2")
 								+ lyric.getMusicName(), type.toString()
-								.toLowerCase());
+								.toLowerCase(Locale.ENGLISH));
 			} catch (NotFoundException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -80,15 +87,15 @@ public class LyrDBService {
 			break;
 		case Artist:
 			url = String.format(lyrDBUrl, lyric.getArtistName(), type
-					.toString().toLowerCase());
+					.toString().toLowerCase(Locale.ENGLISH));
 			break;
 		case TrackName:
 			url = String.format(lyrDBUrl, lyric.getMusicName(), type.toString()
-					.toLowerCase());
+					.toLowerCase(Locale.ENGLISH));
 			break;
 		case InLyrics:
 			url = String.format(lyrDBUrl, lyric.getLyric(), type.toString()
-					.toLowerCase());
+					.toLowerCase(Locale.ENGLISH));
 			break;
 		default:
 			break;
@@ -159,7 +166,7 @@ public class LyrDBService {
 				if (wasError) {
 					throw new Exception(responseLine);
 				}
-				if (firstLine && responseLine.toLowerCase().equals("error")) {
+				if (firstLine && responseLine.toLowerCase(Locale.ENGLISH).equals("error")) {
 					wasError = true;
 				}
 				firstLine = false;

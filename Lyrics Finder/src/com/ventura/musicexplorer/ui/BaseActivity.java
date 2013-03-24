@@ -6,6 +6,7 @@ import java.util.List;
 import oauth.signpost.OAuth;
 import oauth.signpost.OAuthConsumer;
 import oauth.signpost.commonshttp.CommonsHttpOAuthConsumer;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ContentResolver;
 import android.content.SharedPreferences;
@@ -16,12 +17,11 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 
-import com.actionbarsherlock.app.SherlockActivity;
 import com.ventura.androidutils.utils.ConnectionManager;
 import com.ventura.musicexplorer.R;
 import com.ventura.musicexplorer.discogs.oauth.Constants;
 
-public abstract class BaseActivity extends SherlockActivity {
+public abstract class BaseActivity extends Activity {
 	final String TAG = getClass().getName();
 	protected SharedPreferences sharedPreferences;
 

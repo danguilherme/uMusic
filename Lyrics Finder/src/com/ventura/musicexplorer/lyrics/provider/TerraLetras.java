@@ -1,5 +1,7 @@
 package com.ventura.musicexplorer.lyrics.provider;
 
+import java.util.Locale;
+
 import com.ventura.musicexplorer.lyrics.Lyric;
 import com.ventura.musicexplorer.lyrics.LyricNotFoundException;
 
@@ -33,6 +35,6 @@ public class TerraLetras extends LyricProvider {
 	@Override
 	public String encodeToUrl(String target) {
 		return target.trim().replace(' ', '+').replace("%26", "&")
-				.toLowerCase();
+				.toLowerCase(Locale.ENGLISH);
 	}
 }

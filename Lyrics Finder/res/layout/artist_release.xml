@@ -33,7 +33,6 @@
                 android:id="@+id/release_title"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="Bad Romance"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
@@ -44,7 +43,7 @@
 
                 <TextView
                     android:id="@+id/release_trackinfo"
-                    android:layout_width="fill_parent"
+                    android:layout_width="0dip"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:textStyle="normal" />
@@ -54,7 +53,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
-                    android:text="2008"
                     android:textSize="15sp"
                     android:textStyle="normal" />
             </LinearLayout>
@@ -63,7 +61,6 @@
                 android:id="@+id/release_status"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="Accepted"
                 android:textStyle="italic" />
         </LinearLayout>
     </LinearLayout>
@@ -76,7 +73,7 @@
         android:layout_marginTop="3dp"
         android:drawableLeft="@drawable/arrow_right"
         android:drawablePadding="5dp"
-        android:text="Show info" />
+        android:text="@string/show_info_btn" />
 
     <LinearLayout
         android:id="@+id/artist_release_info_container"

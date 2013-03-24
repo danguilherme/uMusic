@@ -4,11 +4,13 @@ import android.content.Context;
 
 import com.ventura.androidutils.exception.LazyInternetConnectionException;
 import com.ventura.androidutils.exception.NoInternetConnectionException;
-import com.ventura.musicexplorer.R;
 import com.ventura.musicexplorer.entity.release.Master;
 import com.ventura.musicexplorer.entity.release.Release;
 
 public class ReleaseService extends BaseService {
+
+	protected static final String URL_GET_RELEASE_BY_ID = "/releases/%1$s";
+	protected static final String URL_GET_MASTER_BY_ID = "/releases/getmaster/%1$s";
 
 	public ReleaseService(Context context) {
 		super(context);
@@ -18,8 +20,8 @@ public class ReleaseService extends BaseService {
 			throws NoInternetConnectionException,
 			LazyInternetConnectionException {
 
-		String requestUrl = String.format(
-				this.getContext().getString(R.string.get_release_by_id_url),
+		String requestUrl = String.format(ReleaseService.URL_BASE_API
+				+ ReleaseService.URL_GET_RELEASE_BY_ID,
 				String.valueOf(releaseId));
 
 		String jsonResponse = this.doGet(requestUrl);
@@ -38,8 +40,8 @@ public class ReleaseService extends BaseService {
 	public Master getMaster(int masterId) throws NoInternetConnectionException,
 			LazyInternetConnectionException {
 
-		String requestUrl = String.format(
-				this.getContext().getString(R.string.get_master_by_id_url),
+		String requestUrl = String.format(ReleaseService.URL_BASE_API
+				+ ReleaseService.URL_GET_MASTER_BY_ID,
 				String.valueOf(masterId));
 
 		String jsonResponse = this.doGet(requestUrl);

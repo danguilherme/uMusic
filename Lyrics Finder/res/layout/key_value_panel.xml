@@ -12,7 +12,6 @@
         android:layout_weight="4"
         android:orientation="horizontal"
         android:padding="3dp"
-        android:text="Key:"
         android:textSize="16sp"
         android:textStyle="bold" >
     </TextView>
@@ -23,8 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="7"
         android:orientation="horizontal"
-        android:padding="3dp"
-        android:text="Value" >
+        android:padding="3dp" >
     </TextView>
 
 </LinearLayout>
