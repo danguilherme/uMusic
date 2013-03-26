@@ -35,6 +35,9 @@ import android.widget.SlidingDrawer.OnDrawerOpenListener;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
+import com.actionbarsherlock.view.SubMenu;
 import com.ventura.androidutils.exception.LazyInternetConnectionException;
 import com.ventura.androidutils.exception.NoInternetConnectionException;
 import com.ventura.androidutils.utils.InnerActivityAsyncTask;
@@ -72,7 +75,7 @@ public class ArtistViewerActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 
 		// Enable navigation to parent activity
-		//getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 		mBaseLayout = (FrameLayout) this.getLayoutInflater().inflate(
 				R.layout.artist_info, null);
@@ -110,7 +113,7 @@ public class ArtistViewerActivity extends BaseActivity {
 		new GetArtistTask(this, consumer, artist).execute();
 	}
 
-	/*@Override
+	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case android.R.id.home:
@@ -121,7 +124,7 @@ public class ArtistViewerActivity extends BaseActivity {
 		}
 
 		return super.onOptionsItemSelected(item);
-	}*/
+	}
 
 	private void onArtistInfoDrawerOpened() {
 		LinearLayout.LayoutParams linearLayoutParams = new LinearLayout.LayoutParams(
@@ -670,7 +673,7 @@ public class ArtistViewerActivity extends BaseActivity {
 
 	// Menu
 
-	/*@Override
+	@Override
 	public final boolean onCreateOptionsMenu(Menu menu) {
 		SubMenu subMenu = menu.addSubMenu("Actions");
 		subMenu.add(0, R.id.menu_download_artist_image, 0,
@@ -689,7 +692,7 @@ public class ArtistViewerActivity extends BaseActivity {
 			return super.onMenuItemSelected(featureId, item);
 		}
 		return true;
-	}*/
+	}
 
 	// UI buttons
 	public void onOpenProfileButtonClicked(View button) {

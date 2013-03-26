@@ -1,13 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.ventura.musicexplorer"
-    android:versionCode="2"
-    android:versionName="1.0.0.1" >
+    android:versionCode="4"
+    android:versionName="1.0.2.1" >
 
     <uses-sdk
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:minSdkVersion="7"
-        android:targetSdkVersion="17"/>
+        android:targetSdkVersion="17" />
+
+    <supports-screens
+        android:anyDensity="true"
+        android:largeScreens="true"
+        android:normalScreens="true"
+        android:resizeable="true"
+        android:smallScreens="true"
+        android:xlargeScreens="true" />
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -17,9 +24,10 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@android:style/Theme.Light" >
+        android:theme="@style/Theme.Sherlock.Light.DarkActionBar" >
         <activity
             android:name=".ui.MusicInfoActivity"
+            android:exported="false"
             android:label="@string/title_activity_music_info" >
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -47,6 +55,7 @@
         </activity>
         <activity
             android:name=".ui.BindLyricsActivity"
+            android:exported="false"
             android:label="@string/title_activity_bind_lyrics" >
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
@@ -60,6 +69,7 @@
         <activity
             android:name=".ui.artist.ListArtistsActivity"
             android:configChanges="orientation"
+            android:exported="false"
             android:label="@string/title_activity_artists_list" >
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
@@ -82,6 +92,7 @@
         </activity>
         <activity
             android:name=".discogs.oauth.PrepareRequestTokenActivity"
+            android:exported="false"
             android:launchMode="singleTask" >
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />

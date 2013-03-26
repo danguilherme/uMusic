@@ -15,15 +15,14 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.ContextMenu;
-import android.view.ContextMenu.ContextMenuInfo;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
+import com.actionbarsherlock.view.SubMenu;
 import com.ventura.androidutils.utils.ConnectionManager;
 import com.ventura.musicexplorer.R;
 import com.ventura.musicexplorer.constants.GlobalConstants;
@@ -266,21 +265,7 @@ public class MusicInfoActivity extends BaseActivity {
 		}
 	}
 
-	/*
-	 * @Override public boolean onCreateOptionsMenu(Menu menu) { MenuInflater
-	 * menuInflater = new MenuInflater(this);
-	 * menuInflater.inflate(R.menu.music_info_menu, menu);
-	 * 
-	 * return super.onCreateOptionsMenu(menu); }
-	 */
-
 	@Override
-	public void onCreateContextMenu(ContextMenu menu, View v,
-			ContextMenuInfo menuInfo) {
-		super.onCreateContextMenu(menu, v, menuInfo);
-	}
-
-	/*@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		SubMenu sub = menu.addSubMenu("Actions");
 		sub.add(0, R.id.menu_view_artist_info, 0, R.string.search_artist);
@@ -290,34 +275,21 @@ public class MusicInfoActivity extends BaseActivity {
 						| MenuItem.SHOW_AS_ACTION_WITH_TEXT);
 		return true;
 	}
-
+	
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		switch (item.getItemId()) {
+		case R.id.menu_view_artist_info:
+			this.viewArtistInfo(mArtistTextField.getText().toString());
+			break;
 		case R.id.menu_find_lyrics:
 			this.findLyrics(this.mArtistTextField.getText().toString(),
 					this.mMusicTitleTextField.getText().toString());
-			break;
-		case R.id.menu_view_artist_info:
-			this.viewArtistInfo(mArtistTextField.getText().toString());
 			break;
 		default:
 			return super.onMenuItemSelected(featureId, item);
 		}
 		return true;
-	}*/
-	
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		menu.add(R.string.search_artist);
-		return super.onCreateOptionsMenu(menu);
-	}
-	@Override
-	public boolean onMenuItemSelected(int featureId, MenuItem item) {
-		if (item.getTitle() == getString(R.string.search_artist)) {
-			this.viewArtistInfo(mArtistTextField.getText().toString());
-		}
-		return super.onMenuItemSelected(featureId, item);
 	}
 
 	private void findLyrics(String artistName, String musicTitle) {

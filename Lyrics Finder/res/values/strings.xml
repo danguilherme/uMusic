@@ -95,8 +95,8 @@
     <string name="message_lyrics_saved">Lyrics saved.</string>
     <string name="message_music_metadata_not_found">The music you are trying to load has no metadata.</string>
     <string name="message_file_not_supported">Sorry, file not supported.</string>
-    <string name="loading">Loading...</string>
-    <string name="message_coming_soon">Coming soon...</string>
+    <string name="loading">Loading…</string>
+    <string name="message_coming_soon">Coming soon…</string>
     
     <!-- Error Messages -->
     <string name="error_bringing_release_info">There was an error when bringing the release\'s info.</string>
@@ -109,7 +109,7 @@
     <string name="provider_azlyrics_url">http://www.azlyrics.com/lyrics/%1$s/%2$s.html</string>
 
     <!-- Releases Viewer [START] -->
-    <string name="message_fetching_releases_title">Fetching artist\'s releases...</string>
+    <string name="message_fetching_releases_title">Fetching artist\'s releases…</string>
     <string name="message_fetching_releases_body">Searching for the artist\'s release, please wait.</string>
     <!-- Releases Viewer [END] -->
 

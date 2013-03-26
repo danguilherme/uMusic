@@ -95,8 +95,8 @@
     <string name="message_lyrics_saved">Letra salva.</string>
     <string name="message_music_metadata_not_found">A música que você está tentando abrir não tem metadados.</string>
     <string name="message_file_not_supported">Desculpe, arquivo não suportado.</string>
-    <string name="loading">Carregando...</string>
-    <string name="message_coming_soon">Em breve...</string>
+    <string name="loading">Carregando…</string>
+    <string name="message_coming_soon">Em breve…</string>
 
     <!-- Error Messages -->
     <string name="error_bringing_release_info">Houve um erro ao trazer os detalhes do lançamento.</string>
@@ -109,7 +109,7 @@
     <string name="provider_azlyrics_url">http://www.azlyrics.com/lyrics/%1$s/%2$s.html</string>
 
     <!-- Releases Viewer [START] -->
-    <string name="message_fetching_releases_title">Trazendo lançamentos do artista...</string>
+    <string name="message_fetching_releases_title">Trazendo lançamentos do artista…</string>
     <string name="message_fetching_releases_body">Procurando pelos lançamentos do artista, por favor aguarde.</string>
     <!-- Releases Viewer [END] -->
 
@@ -140,12 +140,5 @@
     <string-array name="external_urls_context_menu_items">
         <item name="copy">@android:string/copyUrl</item>
     </string-array>
-
-    <!-- API urls -->
-    <string name="search_artist_url" formatted="false">http://aspspider.ws/Danguilherme/api/artists/search?q=%1$s</string>
-    <string name="get_artist_by_id_url" formatted="false">http://aspspider.ws/Danguilherme/api/artists/%1$s</string>
-    <string name="get_release_by_artist_id_url" formatted="false">http://aspspider.ws/Danguilherme/api/artists/listreleases/%1$s</string>
-    <string name="get_release_by_id_url" formatted="false">http://aspspider.ws/Danguilherme/api/releases/%1$s</string>
-    <string name="get_master_by_id_url" formatted="false">http://aspspider.ws/Danguilherme/api/releases/getmaster/%1$s</string>
 
 </resources>
