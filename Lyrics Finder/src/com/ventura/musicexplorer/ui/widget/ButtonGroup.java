@@ -137,19 +137,20 @@ public class ButtonGroup extends LinearLayout {
 
 	private void refreshButtonGroupPanel() {
 
-		boolean first = true, isLast = false;
+		boolean first = true, last = false;
 		int childCount = this.getChildCount();
 
 		for (int i = 0; i < childCount; i++, childCount = this.getChildCount()) {
 			View child = this.getChildAt(i);
 
-			if (child.getId() == TITLE_ID)
+			// Verify if it is the title TextView or if it is hidden
+			if (child.getId() == TITLE_ID || child.getVisibility() == View.GONE)
 				continue;
 
-			isLast = (i + 1) == childCount;
+			last = (i + 1) == childCount;
 			if (first) {
 				// If there's only one child
-				if (isLast) {
+				if (last) {
 					// Set its 'class' to single button
 					child.setBackgroundResource(R.drawable.button_list_single_selector);
 				} else {
@@ -157,7 +158,7 @@ public class ButtonGroup extends LinearLayout {
 					child.setBackgroundResource(R.drawable.button_list_first_selector);
 					first = false;
 				}
-			} else if (isLast) {
+			} else if (last) {
 				this.getChildAt(childCount - 1).setBackgroundResource(
 						R.drawable.button_list_last_selector);
 			} else {
@@ -165,7 +166,7 @@ public class ButtonGroup extends LinearLayout {
 			}
 			// If it's not the last button of the group and if there's not a
 			// button separator already
-			if (!isLast
+			if (!last
 					&& this.getChildAt(i + 1).getClass() != ButtonSeparator.class) {
 				this.addView(new ButtonSeparator(getContext()), ++i);
 			}

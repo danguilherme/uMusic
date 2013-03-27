@@ -49,6 +49,7 @@ import com.ventura.musicexplorer.entity.artist.Artist;
 import com.ventura.musicexplorer.ui.BaseActivity;
 import com.ventura.musicexplorer.ui.release.ReleasesViewerActivity;
 import com.ventura.musicexplorer.ui.widget.ButtonGroup;
+import com.ventura.musicexplorer.ui.widget.KeyValuePanel;
 import com.ventura.musicexplorer.util.ImageDownloaderTask;
 import com.ventura.musicexplorer.util.ImageLoader;
 import com.ventura.musicexplorer.util.OnImageDownloadListener;
@@ -419,34 +420,20 @@ public class ArtistViewerActivity extends BaseActivity {
 	private void buildNameVariationsView() {
 		if (mCurrentArtist.getRealName() != null
 				&& mCurrentArtist.getRealName() != "") {
+			KeyValuePanel keyValuePanel = (KeyValuePanel) findViewById(R.id.real_name);
+			keyValuePanel.setKeyValue(getString(R.string.real_name),
+					this.mCurrentArtist.getRealName());
 
-			LinearLayout keyValuePanel = (LinearLayout) this
-					.getLayoutInflater()
-					.inflate(R.layout.key_value_panel, null);
-			TextView key = (TextView) keyValuePanel.findViewById(R.id.key);
-			TextView value = (TextView) keyValuePanel.findViewById(R.id.value);
-
-			key.setText(getString(R.string.real_name) + ":");
-			value.setText(this.mCurrentArtist.getRealName());
-
-			mArtistExtraInfoContent.addView(keyValuePanel);
+			keyValuePanel.setVisibility(View.VISIBLE);
 		}
 
 		if (this.mCurrentArtist.getNameVariations().size() > 0) {
-			LinearLayout nameVariationsKeyValuePanel = (LinearLayout) this
-					.getLayoutInflater()
-					.inflate(R.layout.key_value_panel, null);
+			KeyValuePanel nameVariationsKeyValuePanel = (KeyValuePanel) findViewById(R.id.aliases);
+			nameVariationsKeyValuePanel.setKeyValue(
+					getString(R.string.aliases),
+					this.createList(this.mCurrentArtist.getNameVariations()));
 
-			TextView key = (TextView) nameVariationsKeyValuePanel
-					.findViewById(R.id.key);
-			TextView value = (TextView) nameVariationsKeyValuePanel
-					.findViewById(R.id.value);
-
-			key.setText(getString(R.string.aliases) + ":");
-			value.setText(this.createList(this.mCurrentArtist
-					.getNameVariations()));
-
-			mArtistExtraInfoContent.addView(nameVariationsKeyValuePanel);
+			nameVariationsKeyValuePanel.setVisibility(View.VISIBLE);
 		}
 	}
 

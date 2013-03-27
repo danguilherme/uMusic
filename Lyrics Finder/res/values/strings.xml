@@ -1,8 +1,7 @@
 <resources>
-
-    <string name="app_name">Music Explorer</string>
+    <string name="app_name">uMusic</string>
     <string name="app_code_name">TurnUpTheMusic</string>
-    <string name="app_version">0.1</string>
+    <string name="app_version">1.0.3.0</string>
 
     <!-- Song Properties [START] -->
     <string name="song_artist">Artist</string>
@@ -22,16 +21,28 @@
     <!-- Song Properties [END] -->
 
 
-    <!-- Dashboard -->
+    <!-- Dashboard Activity -->
     <string name="dashboard_title">Dashboard</string>
     <string name="music_player">Music Player</string>
     <string name="search_artist">Search Artist</string>
     <string name="search_lyrics">Search Lyrics</string>
     <string name="about">About</string>
 
+    <!-- About Activity -->
+    <string name="about_title">About</string>
+    <string name="app_description">The app is made for music lovers. It makes your life easier when searching for an artist\'s biography, which groups he passed, his releases, from promo singles to full albums, musics\' lyrics and so on. It is, basic and essentially, an explorer of the Music Universe. You are in, then enjoy and make good use of it!</string>
+    <string name="developed_by_title">Developer Name</string>
+    <string name="developer_name">Guilherme Ventura</string>
+    <string name="developer_email">guilhermeventura2@gmail.com</string>
+    <string name="app_version_title">App Version</string>
+    <string name="rate_app">Rate App</string>
+    <string name="send_email">Email me with a feature idea, bug report, or anything you want to write</string>
+    <!-- Email -->
+    <string name="email_subject">Subject (Feature, Bug, Compliment or other)</string>
+
     <!-- Artists List Activity -->
     <string name="title_activity_artists_list">Artists Search</string>
-    
+
     <!-- Artist Viewer Activity -->
     <string name="title_activity_artist_viewer">Artist Information</string>
     <string name="external_urls">External URLs</string>
@@ -97,10 +108,9 @@
     <string name="message_file_not_supported">Sorry, file not supported.</string>
     <string name="loading">Loading…</string>
     <string name="message_coming_soon">Coming soon…</string>
-    
+
     <!-- Error Messages -->
     <string name="error_bringing_release_info">There was an error when bringing the release\'s info.</string>
-    
     <string name="provider_terra_name">Terra Letras</string>
     <string name="provider_terra_url">http://letras.mus.br/winamp.php?artista=%1$s%26musica=%2$s</string>
     <string name="provider_lyrster_name">Lyrster</string>

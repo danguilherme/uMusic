@@ -225,4 +225,12 @@
         </TableLayout>
     </ScrollView>
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="onViewArtistInfoBtnClick"
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:text="@string/menu_view_artist_info" >
+    </Button>
+
 </LinearLayout>

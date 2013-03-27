@@ -268,10 +268,10 @@ public class ReleasesViewerActivity extends BaseActivity {
 			 * DiscogsService ds = new DiscogsService(getBaseContext(),
 			 * getConsumer(sharedPreferences));
 			 */
-			ArtistService as = new ArtistService(this.getContext());
+			ArtistService artistService = new ArtistService(this.getContext());
 			List<ArtistRelease> releases = null;
 			try {
-				releases = as.getArtistReleases(this.mArtist.getId());
+				releases = artistService.getArtistReleases(this.mArtist.getId());
 			} catch (NoInternetConnectionException e) {
 				e.printStackTrace();
 			} catch (LazyInternetConnectionException e) {

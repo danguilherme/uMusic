@@ -29,7 +29,7 @@ public class DashboardActivity extends BaseActivity {
 	}
 
 	public void onAboutButtonClick(View button) {
-		alert(R.string.message_coming_soon);
+		this.startActivity(new Intent(this, AboutActivity_.class));
 	}
 
 	@Override

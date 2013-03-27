@@ -275,12 +275,12 @@ public class MusicInfoActivity extends BaseActivity {
 						| MenuItem.SHOW_AS_ACTION_WITH_TEXT);
 		return true;
 	}
-	
+
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.menu_view_artist_info:
-			this.viewArtistInfo(mArtistTextField.getText().toString());
+			this.openArtistInfo(mArtistTextField.getText().toString());
 			break;
 		case R.id.menu_find_lyrics:
 			this.findLyrics(this.mArtistTextField.getText().toString(),
@@ -301,7 +301,7 @@ public class MusicInfoActivity extends BaseActivity {
 		}
 	}
 
-	private void viewArtistInfo(String artistName) {
+	private void openArtistInfo(String artistName) {
 		// Verifying internet connection...
 		if (!ConnectionManager.isConnected(this)) {
 			Toast.makeText(this,
@@ -326,5 +326,9 @@ public class MusicInfoActivity extends BaseActivity {
 		} catch (TagException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public void onViewArtistInfoBtnClick(View button) {
+		this.openArtistInfo(mArtistTextField.getText().toString());
 	}
 }

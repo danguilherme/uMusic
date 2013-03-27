@@ -1,9 +1,8 @@
 <resources>
-
-    <string name="app_name">Music Explorer</string>
+    <string name="app_name">uMusic</string>
     <string name="app_code_name">TurnUpTheMusic</string>
-    <string name="app_version">0.1</string>
-
+    <string name="app_version">1.0.3.0</string>
+    
     <!-- Song Properties [START] -->
     <string name="song_artist">Artista</string>
     <string name="song_title">Música</string>
@@ -28,6 +27,18 @@
     <string name="search_artist">Procurar Artista</string>
     <string name="search_lyrics">Procurar Letra</string>
     <string name="about">Sobre</string>
+
+    <!-- About Activity -->
+    <string name="about_title">Sobre</string>
+    <string name="app_description">O aplicativo é feito para amantes da música. Ele torna sua vida mais fácil quando você vai procurar pela biografia de um artista, saber por quais grupos ele passou, seus lançamentos, de singles promocionais à álbuns completos, letras de músicas, e assim vai. Ele é, básica e essencialmente, um explorador do Universo da Música. Você está nele, então aproveite e faça bom proveito!</string>
+    <string name="developed_by_title">Desenvolvedor</string>
+    <string name="developer_name">Guilherme Ventura</string>
+    <string name="developer_email">guilhermeventura2@gmail.com</string>
+    <string name="app_version_title">Versão do Aplicativo</string>
+    <string name="rate_app">Avaliar Aplicativo</string>
+    <string name="send_email">Me mande um e-mail com uma ideia de funcionalidade, um bug, ou o que você quiser escrever</string>
+    <!-- Email -->
+    <string name="email_subject">Assunto (Funcionalidade, Bug, Elogio ou outro)</string>
 
     <!-- Artists List Activity -->
     <string name="title_activity_artists_list">Artistas</string>

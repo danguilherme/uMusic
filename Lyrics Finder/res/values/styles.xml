@@ -52,6 +52,10 @@
     </style>
     
     <!-- ALL NEW -->
+    <style name="GrayBackground" parent="android:Theme.Light">
+        <item name="android:background">#CCCCCC</item>
+    </style>
+    
     <style name="Title" parent="android:Theme.Light">
         <item name="android:textColor">@color/dark_blue</item>
         <item name="android:textStyle">bold</item>

@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res/com.ventura.musicexplorer"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:background="#CCC"
+        style="@style/GrayBackground"
     android:visibility="gone" >
 
     <ScrollView
@@ -30,7 +30,8 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical|center_horizontal"
                     android:onClick="onOpenProfileButtonClicked"
-                    android:text="@string/discogs_view_artist_profile" />
+                    android:text="@string/discogs_view_artist_profile"
+                    android:visibility="gone" />
 
                 <Button
                     android:id="@+id/btn_open_artist_releases"
@@ -59,6 +60,18 @@
                 android:visibility="gone"
                 app:groupTitle="@string/external_urls" >
             </com.ventura.musicexplorer.ui.widget.ButtonGroup>
+
+            <com.ventura.musicexplorer.ui.widget.KeyValuePanel_
+                android:id="@+id/real_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone" />
+
+            <com.ventura.musicexplorer.ui.widget.KeyValuePanel_
+                android:id="@+id/aliases"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone" />
         </LinearLayout>
     </ScrollView>
 
