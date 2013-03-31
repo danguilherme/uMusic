@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.ventura.androidutils.exception.LazyInternetConnectionException;
 import com.ventura.androidutils.exception.NoInternetConnectionException;
+import com.ventura.musicexplorer.entity.enumerator.ReleaseType;
 import com.ventura.musicexplorer.entity.release.Master;
 import com.ventura.musicexplorer.entity.release.Release;
 
@@ -30,6 +31,7 @@ public class ReleaseService extends BaseService {
 
 		try {
 			release = this.deserialize(jsonResponse, Release.class);
+			release.setType(ReleaseType.Release);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -50,6 +52,7 @@ public class ReleaseService extends BaseService {
 
 		try {
 			master = this.deserialize(jsonResponse, Master.class);
+			master.setType(ReleaseType.Master);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

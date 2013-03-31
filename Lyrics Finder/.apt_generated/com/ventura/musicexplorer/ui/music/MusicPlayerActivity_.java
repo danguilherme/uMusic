@@ -3,7 +3,7 @@
 //
 
 
-package com.ventura.musicexplorer.ui;
+package com.ventura.musicexplorer.ui.music;
 
 import android.app.Activity;
 import android.content.Context;
@@ -12,12 +12,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
+import android.widget.ImageButton;
+import android.widget.SeekBar;
+import android.widget.TextView;
 import com.ventura.musicexplorer.R.id;
 import com.ventura.musicexplorer.R.layout;
-import com.ventura.musicexplorer.ui.widget.KeyValuePanel;
 
-public final class AboutActivity_
-    extends AboutActivity
+public final class MusicPlayerActivity_
+    extends MusicPlayerActivity
 {
 
 
@@ -25,24 +27,31 @@ public final class AboutActivity_
     public void onCreate(Bundle savedInstanceState) {
         init_(savedInstanceState);
         super.onCreate(savedInstanceState);
-        setContentView(layout.about);
+        setContentView(layout.musicplayer);
     }
 
     private void init_(Bundle savedInstanceState) {
     }
 
     private void afterSetContentView_() {
-        appVersion = ((KeyValuePanel) findViewById(id.app_version));
-        developerName = ((KeyValuePanel) findViewById(id.developer_name));
+        btnPause = ((ImageButton) findViewById(id.btnPause));
+        lblArtistName = ((TextView) findViewById(id.artist_name));
+        lblSongTitle = ((TextView) findViewById(id.songTitle));
+        btnNext = ((ImageButton) findViewById(id.btnNext));
+        lblSongTotalDurationLabel = ((TextView) findViewById(id.songTotalDurationLabel));
+        lblSongCurrentDuration = ((TextView) findViewById(id.songCurrentDurationLabel));
+        btnPlay = ((ImageButton) findViewById(id.btnPlay));
+        songProgressBar = ((SeekBar) findViewById(id.songProgressBar));
+        btnPrevious = ((ImageButton) findViewById(id.btnPrevious));
         {
-            View view = findViewById(id.btn_send_email);
+            View view = findViewById(id.btnNext);
             if (view!= null) {
                 view.setOnClickListener(new OnClickListener() {
 
 
                     @Override
                     public void onClick(View view) {
-                        AboutActivity_.this.sendEmail();
+                        MusicPlayerActivity_.this.next();
                     }
 
                 }
@@ -50,21 +59,51 @@ public final class AboutActivity_
             }
         }
         {
-            View view = findViewById(id.btn_rate_app);
+            View view = findViewById(id.btnPause);
             if (view!= null) {
                 view.setOnClickListener(new OnClickListener() {
 
 
                     @Override
                     public void onClick(View view) {
-                        AboutActivity_.this.openGooglePlayPage();
+                        MusicPlayerActivity_.this.pause();
                     }
 
                 }
                 );
             }
         }
-        updateText();
+        {
+            View view = findViewById(id.btnPrevious);
+            if (view!= null) {
+                view.setOnClickListener(new OnClickListener() {
+
+
+                    @Override
+                    public void onClick(View view) {
+                        MusicPlayerActivity_.this.prev();
+                    }
+
+                }
+                );
+            }
+        }
+        {
+            View view = findViewById(id.btnPlay);
+            if (view!= null) {
+                view.setOnClickListener(new OnClickListener() {
+
+
+                    @Override
+                    public void onClick(View view) {
+                        MusicPlayerActivity_.this.play();
+                    }
+
+                }
+                );
+            }
+        }
+        afterViews();
     }
 
     @Override
@@ -85,8 +124,8 @@ public final class AboutActivity_
         afterSetContentView_();
     }
 
-    public static AboutActivity_.IntentBuilder_ intent(Context context) {
-        return new AboutActivity_.IntentBuilder_(context);
+    public static MusicPlayerActivity_.IntentBuilder_ intent(Context context) {
+        return new MusicPlayerActivity_.IntentBuilder_(context);
     }
 
     public static class IntentBuilder_ {
@@ -96,14 +135,14 @@ public final class AboutActivity_
 
         public IntentBuilder_(Context context) {
             context_ = context;
-            intent_ = new Intent(context, AboutActivity_.class);
+            intent_ = new Intent(context, MusicPlayerActivity_.class);
         }
 
         public Intent get() {
             return intent_;
         }
 
-        public AboutActivity_.IntentBuilder_ flags(int flags) {
+        public MusicPlayerActivity_.IntentBuilder_ flags(int flags) {
             intent_.setFlags(flags);
             return this;
         }

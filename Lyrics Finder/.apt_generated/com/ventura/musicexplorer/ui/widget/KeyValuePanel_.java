@@ -51,8 +51,8 @@ public final class KeyValuePanel_
     }
 
     private void afterSetContentView_() {
-        value = ((TextView) findViewById(id.value));
         key = ((TextView) findViewById(id.key));
+        value = ((TextView) findViewById(id.value));
         setViewData();
     }
 

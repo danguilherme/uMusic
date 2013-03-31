@@ -5,10 +5,11 @@ import java.io.IOException;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.widget.ImageView;
 
 import com.ventura.musicexplorer.entity.Image;
 
-public class ImageDownloaderTask extends AsyncTask<Void, Void, Bitmap> {
+public class ImageDownloaderTask extends AsyncTask<ImageView, Void, Bitmap> {
 
 	private boolean isDownloading = false;
 
@@ -31,7 +32,7 @@ public class ImageDownloaderTask extends AsyncTask<Void, Void, Bitmap> {
 	}
 
 	@Override
-	protected Bitmap doInBackground(Void... nothing) {
+	protected Bitmap doInBackground(ImageView... nothing) {
 		Bitmap bitmap = null;
 		try {
 			if (this.mImage != null) {

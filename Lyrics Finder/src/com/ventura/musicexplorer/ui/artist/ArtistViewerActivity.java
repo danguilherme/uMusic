@@ -14,9 +14,14 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Parcelable;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.text.ClipboardManager;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
@@ -24,23 +29,29 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.view.ViewGroup.LayoutParams;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
-import android.widget.FrameLayout;
+import android.widget.Gallery;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.SlidingDrawer;
-import android.widget.SlidingDrawer.OnDrawerCloseListener;
-import android.widget.SlidingDrawer.OnDrawerOpenListener;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.ActionBar.Tab;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.SubMenu;
+import com.googlecode.androidannotations.annotations.AfterViews;
+import com.googlecode.androidannotations.annotations.Background;
+import com.googlecode.androidannotations.annotations.EActivity;
+import com.googlecode.androidannotations.annotations.UiThread;
+import com.googlecode.androidannotations.annotations.ViewById;
 import com.ventura.androidutils.exception.LazyInternetConnectionException;
 import com.ventura.androidutils.exception.NoInternetConnectionException;
-import com.ventura.androidutils.utils.InnerActivityAsyncTask;
 import com.ventura.musicexplorer.R;
 import com.ventura.musicexplorer.business.ArtistService;
 import com.ventura.musicexplorer.constants.GlobalConstants;
@@ -54,20 +65,36 @@ import com.ventura.musicexplorer.util.ImageDownloaderTask;
 import com.ventura.musicexplorer.util.ImageLoader;
 import com.ventura.musicexplorer.util.OnImageDownloadListener;
 
-// TODO: Review SlidingDrawer's deprecation
-@SuppressWarnings("deprecation")
-public class ArtistViewerActivity extends BaseActivity {
+@EActivity(R.layout.artist_info)
+public class ArtistViewerActivity extends BaseActivity implements
+		OnItemSelectedListener {
 	final String TAG = getClass().getName();
 
-	private FrameLayout mBaseLayout;
-	private ImageView mArtistImageView;
-	private TextView mArtistBio;
-	private TextView mArtistName;
-	private SlidingDrawer mSlidingDrawer;
-	private LinearLayout mArtistBioContent;
-	private LinearLayout mArtistExtraInfoContent;
+	@ViewById(R.id.loading)
+	ProgressBar mActivityLoadingBar;
 
-	private ImageDownloaderTask imageDownloaderTask = new ImageDownloaderTask();
+	@ViewById(R.id.artist_info)
+	LinearLayout mBaseLayout;
+
+	@ViewById(R.id.artist_image)
+	ImageView mArtistImageView;
+
+	@ViewById(android.R.id.progress)
+	ProgressBar mArtistImageDownloadProgressBar;
+
+	@SuppressWarnings("deprecation")
+	@ViewById(R.id.artist_images_gallery)
+	Gallery artistImageGallery;
+
+	@ViewById(R.id.artist_bio)
+	TextView mArtistBio;
+
+	@ViewById(R.id.artist_name)
+	TextView mArtistName;
+
+	ImageAdapter artistImagesAdapter;
+
+	ImageDownloaderTask imageDownloaderTask = new ImageDownloaderTask();
 
 	private Artist mCurrentArtist;
 
@@ -75,43 +102,35 @@ public class ArtistViewerActivity extends BaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		final ActionBar actionBar = getSupportActionBar();
 		// Enable navigation to parent activity
-		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-		mBaseLayout = (FrameLayout) this.getLayoutInflater().inflate(
-				R.layout.artist_info, null);
-		this.setContentView(mBaseLayout);
+		actionBar.setDisplayHomeAsUpEnabled(true);
 
 		Intent intent = this.getIntent();
 		Artist artist = (Artist) intent.getSerializableExtra(Artist.KEY);
+		this.mCurrentArtist = artist;
 		OAuthConsumer consumer = this.getConsumer(this.sharedPreferences);
 
-		mArtistImageView = (ImageView) findViewById(R.id.artist_image);
-		mArtistBio = (TextView) findViewById(R.id.artist_bio);
-		mArtistName = (TextView) findViewById(R.id.artist_name);
-		mSlidingDrawer = (SlidingDrawer) findViewById(R.id.artist_aditional_information_sliding);
-		mArtistBioContent = (LinearLayout) mSlidingDrawer
-				.findViewById(R.id.scroll_container);
-		mArtistExtraInfoContent = (LinearLayout) this
-				.findViewById(R.id.scroll_container);
+		this.getArtist(artist.getId());
+	}
 
-		mSlidingDrawer.setOnDrawerOpenListener(new OnDrawerOpenListener() {
-			public void onDrawerOpened() {
-				onArtistInfoDrawerOpened();
-			}
-		});
+	@AfterViews
+	void afterViews() {
+		mArtistName.setText(this.mCurrentArtist.getName());
+	}
 
-		mSlidingDrawer.setOnDrawerCloseListener(new OnDrawerCloseListener() {
-			public void onDrawerClosed() {
-				onArtistInfoDrawerClosed();
-			}
-		});
-
-		mSlidingDrawer.open();
-
-		mArtistName.setText(artist.getName());
-
-		new GetArtistTask(this, consumer, artist).execute();
+	@Background
+	void getArtist(int artistId) {
+		ArtistService artistService = new ArtistService(this);
+		try {
+			fillView(artistService.getArtist(artistId));
+		} catch (NoInternetConnectionException e) {
+			e.printStackTrace();
+		} catch (LazyInternetConnectionException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			Log.e(TAG, e.getMessage());
+		}
 	}
 
 	@Override
@@ -127,72 +146,27 @@ public class ArtistViewerActivity extends BaseActivity {
 		return super.onOptionsItemSelected(item);
 	}
 
-	private void onArtistInfoDrawerOpened() {
-		LinearLayout.LayoutParams linearLayoutParams = new LinearLayout.LayoutParams(
-				mArtistName.getLayoutParams());
-		linearLayoutParams.height = LayoutParams.WRAP_CONTENT;
-
-		mArtistName.setCompoundDrawablesWithIntrinsicBounds(0, 0,
-				R.drawable.ic_slider_down, 0);
-
-		mArtistName.setLayoutParams(linearLayoutParams);
-
-		mArtistName.setVisibility(View.VISIBLE);
-		mSlidingDrawer.findViewById(R.id.imageview_arrow_up).setVisibility(
-				View.GONE);
-	}
-
-	private void onArtistInfoDrawerClosed() {
-		LinearLayout.LayoutParams linearLayoutParams = new LinearLayout.LayoutParams(
-				mArtistName.getLayoutParams());
-		linearLayoutParams.height = 85;
-
-		mArtistName.setCompoundDrawablesWithIntrinsicBounds(0, 0,
-				R.drawable.ic_slider_up, 0);
-
-		mArtistName.setLayoutParams(linearLayoutParams);
-
-		mArtistName.setVisibility(View.GONE);
-		mSlidingDrawer.findViewById(R.id.imageview_arrow_up).setVisibility(
-				View.VISIBLE);
-	}
-
-	private void fillView(com.ventura.musicexplorer.entity.artist.Artist artist) {
+	@UiThread
+	void fillView(Artist artist) {
+		mActivityLoadingBar.setVisibility(View.GONE);
 		mBaseLayout.setVisibility(View.VISIBLE);
-
-		final ProgressBar artistImageDownloadProgressBar = (ProgressBar) findViewById(android.R.id.progress);
 
 		this.mCurrentArtist = artist;
 
 		if (this.mCurrentArtist.getImages() != null
 				&& this.mCurrentArtist.getImages().size() > 0) {
-			final Image firstImage = this.mCurrentArtist.getImages().get(0);
+			Image firstImage = this.mCurrentArtist.getImages().get(0);
 
 			new ImageLoader(this).displayImage(firstImage.getUrl().toString(),
 					mArtistImageView);
+			// TODO
+			artistImagesAdapter = new ImageAdapter(this,
+					this.mCurrentArtist.getImages());
+			artistImageGallery.setAdapter(artistImagesAdapter);
 
-			OnImageDownloadListener imageDownloadListener = new OnImageDownloadListener() {
-				public void onDownloadFinished(Bitmap result) {
-					firstImage.setBitmap(result);
-					if (firstImage.getHeight() > 0 && firstImage.getWidth() > 0) {
-						mArtistImageView.setMinimumHeight(firstImage
-								.getHeight());
-						mArtistImageView.setMinimumWidth(firstImage.getWidth());
-					}
-					mArtistImageView.setImageBitmap(firstImage.getBitmap());
+			artistImageGallery.setOnItemSelectedListener(this);
 
-					artistImageDownloadProgressBar.setVisibility(View.GONE);
-				}
-
-				public void onDownloadError(String error) {
-					mArtistImageView.setVisibility(View.GONE);
-					artistImageDownloadProgressBar.setVisibility(View.GONE);
-				}
-			};
-
-			imageDownloaderTask.setImage(firstImage);
-			imageDownloaderTask.setImageDownloadListener(imageDownloadListener);
-			imageDownloaderTask.execute();
+			this.setArtistMainImage(firstImage);
 
 			if (firstImage.getHeight() > 0 && firstImage.getWidth() > 0) {
 				mArtistImageView.setMinimumHeight(firstImage.getHeight());
@@ -200,7 +174,7 @@ public class ArtistViewerActivity extends BaseActivity {
 			}
 		} else {
 			mArtistImageView.setVisibility(View.GONE);
-			artistImageDownloadProgressBar.setVisibility(View.GONE);
+			mArtistImageDownloadProgressBar.setVisibility(View.GONE);
 		}
 
 		mArtistName.setText(this.mCurrentArtist.getName());
@@ -290,7 +264,7 @@ public class ArtistViewerActivity extends BaseActivity {
 			externalUrlRow = (Button) this.getLayoutInflater().inflate(
 					R.layout.button_group_item, null);
 			externalUrlRow.setLayoutParams(new LayoutParams(
-					LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT));
+					LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 
 			try {
 				switch (this.mCurrentArtist.getExternalUrls().get(i).getType()) {
@@ -511,7 +485,7 @@ public class ArtistViewerActivity extends BaseActivity {
 	private void openNewArtistInfo(Artist artist) {
 		if (this.isConnected()) {
 			Intent openArtistInfoIntent = new Intent(this,
-					ArtistViewerActivity.class);
+					ArtistViewerActivity_.class);
 			openArtistInfoIntent.setAction(Intent.ACTION_SEND);
 			openArtistInfoIntent.putExtra(Artist.KEY, artist);
 			startActivity(openArtistInfoIntent);
@@ -593,71 +567,6 @@ public class ArtistViewerActivity extends BaseActivity {
 		super.onActivityResult(reqCode, resultCode, data);
 	}
 
-	private class GetArtistTask extends
-			InnerActivityAsyncTask<Void, Void, Artist> {
-		private OAuthConsumer mConsumer;
-		private Artist mArtist;
-
-		public GetArtistTask(Context context, OAuthConsumer consumer,
-				Artist artist) {
-			super(context, getString(R.string.app_name),
-					getString(R.string.message_fetching_artists_list));
-
-			this.mConsumer = consumer;
-			this.mArtist = artist;
-		}
-
-		@Override
-		protected Artist doInBackground(Void... params) {
-			ArtistService artistService = new ArtistService(this.getContext());
-			try {
-				return artistService.getArtist(this.mArtist.getId());// discogsService.getArtistInfo(this.mArtist.getId());
-			} catch (NoInternetConnectionException e) {
-				/*
-				 * Toast.makeText( mContext, mContext.getResources().getString(
-				 * R.string.message_no_internet_connection),
-				 * Toast.LENGTH_LONG).show();
-				 */
-				e.printStackTrace();
-			} catch (LazyInternetConnectionException e) {
-				/*
-				 * Toast.makeText( mContext, mContext.getResources().getString(
-				 * R.string.message_lazy_internet_connection),
-				 * Toast.LENGTH_LONG).show();
-				 */
-				e.printStackTrace();
-			} catch (Exception e) {
-				Log.e(TAG, e.getMessage());
-			}
-
-			return null;
-		}
-
-		@Override
-		protected void onPostExecute(
-				com.ventura.musicexplorer.entity.artist.Artist result) {
-			super.onPostExecute(result);
-			if (result != null) {
-				fillView(result);
-			}
-		}
-
-		@Override
-		public void onProgressDialogCancelled(DialogInterface progressDialog) {
-
-		}
-	}
-
-	// ****** EVENT HANDLERS ******
-	@Override
-	public void onBackPressed() {
-		if (!this.mSlidingDrawer.isOpened()) {
-			this.mSlidingDrawer.animateOpen();
-		} else {
-			super.onBackPressed();
-		}
-	}
-
 	// Menu
 
 	@Override
@@ -688,5 +597,59 @@ public class ArtistViewerActivity extends BaseActivity {
 
 	public void onOpenReleasesButtonClicked(View button) {
 		this.openArtistReleases();
+	}
+
+	/**
+	 * Event fired when an image is selected in the artist images gallery
+	 */
+	@Override
+	public void onItemSelected(AdapterView<?> adapter, View view, int position,
+			long arg3) {
+		Image artistImage = (Image) artistImagesAdapter.getItem(position);
+		this.setArtistMainImage(artistImage);
+	}
+
+	@Override
+	public void onNothingSelected(AdapterView<?> adapter) {
+
+	}
+
+	public void setArtistMainImage(Image image) {
+		mArtistImageDownloadProgressBar.setVisibility(View.VISIBLE);
+		mArtistImageView.setImageBitmap(image.getBitmap());
+		mArtistImageView.setMinimumHeight(image.getHeight());
+		mArtistImageView.setMinimumWidth(image.getWidth());
+		this.downloadMainImage(image);
+	}
+
+	@Background
+	void downloadMainImage(Image image) {
+		try {
+			image.setBitmap(BitmapFactory.decodeStream(image.getUrl()
+					.openConnection().getInputStream()));
+		} catch (Exception e) {
+			this.onArtistMainImageDownloadError();
+			e.printStackTrace();
+		}
+
+		this.afterDownloadArtistMainImage(image);
+	}
+
+	@UiThread
+	void onArtistMainImageDownloadError() {
+		mArtistImageView.setVisibility(View.GONE);
+		mArtistImageDownloadProgressBar.setVisibility(View.GONE);
+	}
+
+	@UiThread
+	void afterDownloadArtistMainImage(Image image) {
+		// Avoid the show of all images when user rolls the gallery,
+		// from first to last picture, for instance
+		if (artistImageGallery.getSelectedItem() == image) {
+			mArtistImageView.setImageBitmap(image.getBitmap());
+			mArtistImageView.setMinimumHeight(image.getHeight());
+			mArtistImageView.setMinimumWidth(image.getWidth());
+			mArtistImageDownloadProgressBar.setVisibility(View.GONE);
+		}
 	}
 }

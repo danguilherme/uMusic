@@ -51,6 +51,7 @@
     <string name="no_biography">This artist has no Bio.</string>
     <string name="real_name">Real Name</string>
     <string name="aliases">Aliases</string>
+    <string name="biography">Biography</string>
     <string name="discogs_view_artist_profile">View artist profile on Discogs</string>
     <string name="discogs_view_artist_releases">View artist\'s releases</string>
     <!-- Artist image download -->

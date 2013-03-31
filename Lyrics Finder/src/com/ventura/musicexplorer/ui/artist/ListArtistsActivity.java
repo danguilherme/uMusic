@@ -271,7 +271,7 @@ public class ListArtistsActivity extends SherlockListActivity implements
 					Toast.LENGTH_LONG).show();
 		}
 
-		Intent intent = new Intent(this, ArtistViewerActivity.class);
+		Intent intent = new Intent(this, ArtistViewerActivity_.class);
 
 		Artist artist = (Artist) adapter.getItem(position);
 		intent.setAction(Intent.ACTION_SEND);

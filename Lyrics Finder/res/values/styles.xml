@@ -52,8 +52,8 @@
     </style>
     
     <!-- ALL NEW -->
-    <style name="GrayBackground" parent="android:Theme.Light">
-        <item name="android:background">#CCCCCC</item>
+    <style name="Background" parent="android:Theme.Light">
+        <item name="android:background">#dfdfdf</item>
     </style>
     
     <style name="Title" parent="android:Theme.Light">

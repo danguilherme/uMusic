@@ -49,8 +49,9 @@
     <string name="band_members">Membros da Banda</string>
     <string name="groups">Grupos</string>
     <string name="no_biography">Este artista não tem biografia.</string>
-    <string name="real_name">Nome Real</string>
+    <string name="real_name">Nome Verdadeiro</string>
     <string name="aliases">Apelidos</string>
+    <string name="biography">Biografia</string>
     <string name="discogs_view_artist_profile">Ver perfil do artista no Discogs (em inglês)</string>
     <string name="discogs_view_artist_releases">Ver lançamentos do artista</string>
     <!-- Artist image download -->
