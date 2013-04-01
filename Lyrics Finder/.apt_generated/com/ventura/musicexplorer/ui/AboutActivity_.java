@@ -32,23 +32,8 @@ public final class AboutActivity_
     }
 
     private void afterSetContentView_() {
-        appVersion = ((KeyValuePanel) findViewById(id.app_version));
         developerName = ((KeyValuePanel) findViewById(id.developer_name));
-        {
-            View view = findViewById(id.btn_send_email);
-            if (view!= null) {
-                view.setOnClickListener(new OnClickListener() {
-
-
-                    @Override
-                    public void onClick(View view) {
-                        AboutActivity_.this.sendEmail();
-                    }
-
-                }
-                );
-            }
-        }
+        appVersion = ((KeyValuePanel) findViewById(id.app_version));
         {
             View view = findViewById(id.btn_rate_app);
             if (view!= null) {
@@ -58,6 +43,21 @@ public final class AboutActivity_
                     @Override
                     public void onClick(View view) {
                         AboutActivity_.this.openGooglePlayPage();
+                    }
+
+                }
+                );
+            }
+        }
+        {
+            View view = findViewById(id.btn_send_email);
+            if (view!= null) {
+                view.setOnClickListener(new OnClickListener() {
+
+
+                    @Override
+                    public void onClick(View view) {
+                        AboutActivity_.this.sendEmail();
                     }
 
                 }

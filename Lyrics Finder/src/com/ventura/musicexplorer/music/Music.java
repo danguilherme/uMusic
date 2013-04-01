@@ -2,6 +2,8 @@ package com.ventura.musicexplorer.music;
 
 import java.io.IOException;
 
+import com.ventura.musicexplorer.entity.music.Track;
+
 import android.content.Context;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
@@ -13,16 +15,21 @@ public class Music implements OnCompletionListener {
 	private MediaPlayer mediaPlayer;
 	private boolean isPrepared = false;
 	private boolean isPaused = false;
-	
+
 	private OnCompletionListener onCompletionListener;
 
-	private Song currentPlaying;
+	private Track currentPlaying;
 	private Context context;
 
 	public Music(Context context) {
 		this.context = context;
+		this.initializeMediaPlayer();
+	}
+
+	private void initializeMediaPlayer() {
 		mediaPlayer = new MediaPlayer();
 		mediaPlayer.setOnCompletionListener(this);
+		currentPlaying = null;
 	}
 
 	public void onCompletion(MediaPlayer mediaPlayer) {
@@ -51,28 +58,26 @@ public class Music implements OnCompletionListener {
 	 * @param song
 	 *            The song to play.
 	 */
-	public void play(Song song) {
-		if (currentPlaying != null && currentPlaying.equals(song)) {
-			if (!isPaused)
-				return;
-		}
-		if (mediaPlayer.isPlaying()) {
-			stop();
-		}
+	public void play(Track song) {
 		try {
 			synchronized (this) {
-				if (!isPaused) {
+				if (currentPlaying != null && currentPlaying.equals(song)) {
+					if (isPaused)
+						mediaPlayer.start();
+				} else {
+					stop();
 					mediaPlayer.reset();
 					mediaPlayer.setDataSource(context, song.getPathUri());
 					if (!isPrepared) {
 						prepare();
 					}
+					mediaPlayer.start();
+					currentPlaying = song;
 				}
-				mediaPlayer.start();
-				currentPlaying = song;
+				isPaused = false;
 			}
 		} catch (Exception ex) {
-			this.prepare();
+			this.initializeMediaPlayer();
 			throw new RuntimeException("Couldn't load music, uh oh!");
 		}
 	}
@@ -117,7 +122,7 @@ public class Music implements OnCompletionListener {
 		mediaPlayer.release();
 	}
 
-	public Song getCurrentPlaying() {
+	public Track getCurrentPlaying() {
 		return currentPlaying;
 	}
 
@@ -129,7 +134,12 @@ public class Music implements OnCompletionListener {
 		return onCompletionListener;
 	}
 
-	public void setOnCompletionListener(OnCompletionListener onCompletionListener) {
+	public void setOnCompletionListener(
+			OnCompletionListener onCompletionListener) {
 		this.onCompletionListener = onCompletionListener;
+	}
+
+	public MediaPlayer getMediaPlayer() {
+		return mediaPlayer;
 	}
 }

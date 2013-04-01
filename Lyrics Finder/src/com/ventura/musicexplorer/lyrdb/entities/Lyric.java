@@ -53,4 +53,9 @@ public class Lyric {
 	public void setLyric(String lyric) {
 		this.lyric = lyric;
 	}
+	
+	@Override
+	public String toString() {
+		return this.artistName + "'s " + this.musicName + " lyrics";
+	}
 }

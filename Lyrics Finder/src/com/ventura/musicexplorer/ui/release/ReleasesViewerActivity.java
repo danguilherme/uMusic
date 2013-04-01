@@ -29,10 +29,10 @@ import com.ventura.musicexplorer.business.ReleaseService;
 import com.ventura.musicexplorer.constants.GlobalConstants;
 import com.ventura.musicexplorer.entity.artist.Artist;
 import com.ventura.musicexplorer.entity.enumerator.ReleaseType;
+import com.ventura.musicexplorer.entity.music.Track;
 import com.ventura.musicexplorer.entity.release.ArtistRelease;
 import com.ventura.musicexplorer.entity.release.Master;
 import com.ventura.musicexplorer.entity.release.Release;
-import com.ventura.musicexplorer.entity.release.Track;
 import com.ventura.musicexplorer.ui.BaseActivity;
 import com.ventura.musicexplorer.util.ImageLoader;
 

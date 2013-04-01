@@ -8,6 +8,7 @@ import java.util.List;
 import com.ventura.musicexplorer.entity.Image;
 import com.ventura.musicexplorer.entity.artist.Artist;
 import com.ventura.musicexplorer.entity.enumerator.ReleaseType;
+import com.ventura.musicexplorer.entity.music.Track;
 
 public class ArtistRelease implements Comparable<ArtistRelease>, Serializable {
 	private static final long serialVersionUID = 4281097578238872681L;

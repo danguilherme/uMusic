@@ -6,7 +6,9 @@
     android:layout_height="match_parent"
     android:layout_gravity="center_horizontal|center_vertical" >
 
-    <include layout="@layout/loading" />
+    <include
+        android:id="@+id/loadingArtistInfoProgressBar"
+        layout="@layout/loading" />
 
     <LinearLayout
         android:id="@+id/artist_info"

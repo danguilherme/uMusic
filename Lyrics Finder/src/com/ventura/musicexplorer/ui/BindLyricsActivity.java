@@ -20,8 +20,8 @@ import com.ventura.androidutils.utils.ConnectionManager;
 import com.ventura.musicexplorer.R;
 import com.ventura.musicexplorer.constants.GlobalConstants;
 import com.ventura.musicexplorer.constants.RequestCodes;
+import com.ventura.musicexplorer.entity.music.Lyrics;
 import com.ventura.musicexplorer.lyrdb.ui.ListLyricsActivity;
-import com.ventura.musicexplorer.lyrics.Lyric;
 
 public class BindLyricsActivity extends BaseActivity {
 
@@ -107,7 +107,7 @@ public class BindLyricsActivity extends BaseActivity {
 					lyrics = mLyricsTextField.getText().toString();
 				}
 
-				saveLyrics(mCurrentMP3File, new Lyric(null, null, lyrics));
+				saveLyrics(mCurrentMP3File, new Lyrics(null, null, lyrics));
 			}
 		});
 
@@ -137,8 +137,8 @@ public class BindLyricsActivity extends BaseActivity {
 	 * mEditLyricsButton.setVisibility(View.VISIBLE); }
 	 */
 
-	private void saveLyrics(MP3File file, Lyric lyrics) {
-		file.getID3v2Tag().setSongLyric(lyrics.getLyric());
+	private void saveLyrics(MP3File file, Lyrics lyrics) {
+		file.getID3v2Tag().setSongLyric(lyrics.getLyrics());
 
 		try {
 			file.save(TagConstant.MP3_FILE_SAVE_OVERWRITE);

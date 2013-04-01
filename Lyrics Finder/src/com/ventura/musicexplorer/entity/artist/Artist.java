@@ -37,6 +37,11 @@ public class Artist implements Comparable<Artist>, Serializable {
 		this.name = name;
 		this.discogsUrl = discogsUrl;
 	}
+	
+	public Artist(int id, String name) {
+		this.id = id;
+		this.name = name;
+	}
 
 	/**
 	 * Constructor to create a band member

@@ -12,7 +12,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 
-import com.ventura.musicexplorer.lyrics.Lyric;
+import com.ventura.musicexplorer.entity.music.Lyrics;
 import com.ventura.musicexplorer.lyrics.LyricNotFoundException;
 
 public abstract class LyricProvider {
@@ -53,9 +53,9 @@ public abstract class LyricProvider {
 		return mName;
 	}
 
-	public Lyric searchLyrics(String artistName, String musicName)
+	public Lyrics searchLyrics(String artistName, String musicName)
 			throws LyricNotFoundException {
-		Lyric lyric = new Lyric();
+		Lyrics lyric = new Lyrics(artistName, musicName);
 		String stringResponse = null;
 		try {
 			this.setUrl(this.encodeToUrl(this.getUrl()));
@@ -72,11 +72,11 @@ public abstract class LyricProvider {
 		lyric.setArtistName(artistName.trim());
 		lyric.setMusicName(musicName.trim());
 		if (stringResponse == null || stringResponse.equals("")) {
-			lyric.setLyric("Lyric not found");
+			lyric.setLyrics("Lyric not found");
 		} else {
 			String lyricHtml = this.decodeLyricHtml(stringResponse, lyric);
 			URLDecoder.decode(lyricHtml);
-			lyric.setLyric(this.insertLineBreak(lyricHtml));
+			lyric.setLyrics(this.insertLineBreak(lyricHtml));
 		}
 		return lyric;
 	}
@@ -121,7 +121,7 @@ public abstract class LyricProvider {
 		return url;
 	}
 
-	public abstract String decodeLyricHtml(String html, Lyric actualLyric)
+	public abstract String decodeLyricHtml(String html, Lyrics actualLyric)
 			throws LyricNotFoundException;
 
 	public abstract String encodeToUrl(String target);

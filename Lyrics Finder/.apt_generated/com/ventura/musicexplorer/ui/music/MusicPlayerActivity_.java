@@ -9,19 +9,26 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import com.googlecode.androidannotations.api.BackgroundExecutor;
 import com.ventura.musicexplorer.R.id;
 import com.ventura.musicexplorer.R.layout;
+import com.ventura.musicexplorer.lyrdb.entities.Lyric;
 
 public final class MusicPlayerActivity_
     extends MusicPlayerActivity
 {
 
+    private Handler handler_ = new Handler();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -34,24 +41,30 @@ public final class MusicPlayerActivity_
     }
 
     private void afterSetContentView_() {
-        btnPause = ((ImageButton) findViewById(id.btnPause));
-        lblArtistName = ((TextView) findViewById(id.artist_name));
-        lblSongTitle = ((TextView) findViewById(id.songTitle));
-        btnNext = ((ImageButton) findViewById(id.btnNext));
-        lblSongTotalDurationLabel = ((TextView) findViewById(id.songTotalDurationLabel));
-        lblSongCurrentDuration = ((TextView) findViewById(id.songCurrentDurationLabel));
-        btnPlay = ((ImageButton) findViewById(id.btnPlay));
         songProgressBar = ((SeekBar) findViewById(id.songProgressBar));
+        lblSongTitle = ((TextView) findViewById(id.songTitle));
+        btnPause = ((ImageButton) findViewById(id.btnPause));
+        lblSongCurrentDuration = ((TextView) findViewById(id.songCurrentDurationLabel));
+        songThumbnail = ((ImageView) findViewById(id.songThumbnail));
+        lblSongLyrics = ((TextView) findViewById(id.songLyrics));
+        btnPlaylist = ((ImageButton) findViewById(id.btnPlaylist));
+        lblSongTotalDuration = ((TextView) findViewById(id.songTotalDurationLabel));
+        btnShuffle = ((ImageButton) findViewById(id.btnShuffle));
+        btnPlay = ((ImageButton) findViewById(id.btnPlay));
+        btnRepeat = ((ImageButton) findViewById(id.btnRepeat));
+        btnNext = ((ImageButton) findViewById(id.btnNext));
         btnPrevious = ((ImageButton) findViewById(id.btnPrevious));
+        lyricsLoadingProgressBar = ((ProgressBar) findViewById(id.lyricsLoadingProgressBar));
+        lblArtistName = ((TextView) findViewById(id.artist_name));
         {
-            View view = findViewById(id.btnNext);
+            View view = findViewById(id.btnShuffle);
             if (view!= null) {
                 view.setOnClickListener(new OnClickListener() {
 
 
                     @Override
                     public void onClick(View view) {
-                        MusicPlayerActivity_.this.next();
+                        MusicPlayerActivity_.this.toggleShuffle();
                     }
 
                 }
@@ -74,6 +87,36 @@ public final class MusicPlayerActivity_
             }
         }
         {
+            View view = findViewById(id.btnPlay);
+            if (view!= null) {
+                view.setOnClickListener(new OnClickListener() {
+
+
+                    @Override
+                    public void onClick(View view) {
+                        MusicPlayerActivity_.this.play();
+                    }
+
+                }
+                );
+            }
+        }
+        {
+            View view = findViewById(id.btnPlaylist);
+            if (view!= null) {
+                view.setOnClickListener(new OnClickListener() {
+
+
+                    @Override
+                    public void onClick(View view) {
+                        MusicPlayerActivity_.this.onAlbumImageClick(view);
+                    }
+
+                }
+                );
+            }
+        }
+        {
             View view = findViewById(id.btnPrevious);
             if (view!= null) {
                 view.setOnClickListener(new OnClickListener() {
@@ -89,14 +132,29 @@ public final class MusicPlayerActivity_
             }
         }
         {
-            View view = findViewById(id.btnPlay);
+            View view = findViewById(id.btnRepeat);
             if (view!= null) {
                 view.setOnClickListener(new OnClickListener() {
 
 
                     @Override
                     public void onClick(View view) {
-                        MusicPlayerActivity_.this.play();
+                        MusicPlayerActivity_.this.toggleRepeat();
+                    }
+
+                }
+                );
+            }
+        }
+        {
+            View view = findViewById(id.btnNext);
+            if (view!= null) {
+                view.setOnClickListener(new OnClickListener() {
+
+
+                    @Override
+                    public void onClick(View view) {
+                        MusicPlayerActivity_.this.next();
                     }
 
                 }
@@ -126,6 +184,78 @@ public final class MusicPlayerActivity_
 
     public static MusicPlayerActivity_.IntentBuilder_ intent(Context context) {
         return new MusicPlayerActivity_.IntentBuilder_(context);
+    }
+
+    @Override
+    public void setSongLyrics(final Lyric lyrics) {
+        handler_.post(new Runnable() {
+
+
+            @Override
+            public void run() {
+                try {
+                    MusicPlayerActivity_.super.setSongLyrics(lyrics);
+                } catch (RuntimeException e) {
+                    Log.e("MusicPlayerActivity_", "A runtime exception was thrown while executing code in a runnable", e);
+                }
+            }
+
+        }
+        );
+    }
+
+    @Override
+    public void updateProgressBarViews(final String currentDuration, final String totalDuration, final int progress) {
+        handler_.post(new Runnable() {
+
+
+            @Override
+            public void run() {
+                try {
+                    MusicPlayerActivity_.super.updateProgressBarViews(currentDuration, totalDuration, progress);
+                } catch (RuntimeException e) {
+                    Log.e("MusicPlayerActivity_", "A runtime exception was thrown while executing code in a runnable", e);
+                }
+            }
+
+        }
+        );
+    }
+
+    @Override
+    public void updateProgressBar() {
+        BackgroundExecutor.execute(new Runnable() {
+
+
+            @Override
+            public void run() {
+                try {
+                    MusicPlayerActivity_.super.updateProgressBar();
+                } catch (RuntimeException e) {
+                    Log.e("MusicPlayerActivity_", "A runtime exception was thrown while executing code in a runnable", e);
+                }
+            }
+
+        }
+        );
+    }
+
+    @Override
+    public void searchSongLyrics() {
+        BackgroundExecutor.execute(new Runnable() {
+
+
+            @Override
+            public void run() {
+                try {
+                    MusicPlayerActivity_.super.searchSongLyrics();
+                } catch (RuntimeException e) {
+                    Log.e("MusicPlayerActivity_", "A runtime exception was thrown while executing code in a runnable", e);
+                }
+            }
+
+        }
+        );
     }
 
     public static class IntentBuilder_ {

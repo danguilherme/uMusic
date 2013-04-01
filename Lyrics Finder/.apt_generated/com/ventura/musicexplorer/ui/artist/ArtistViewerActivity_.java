@@ -40,13 +40,13 @@ public final class ArtistViewerActivity_
     }
 
     private void afterSetContentView_() {
-        mArtistImageDownloadProgressBar = ((ProgressBar) findViewById(android.R.id.progress));
         mArtistName = ((TextView) findViewById(com.ventura.musicexplorer.R.id.artist_name));
-        mArtistImageView = ((ImageView) findViewById(com.ventura.musicexplorer.R.id.artist_image));
-        artistImageGallery = ((Gallery) findViewById(com.ventura.musicexplorer.R.id.artist_images_gallery));
+        mArtistImageDownloadProgressBar = ((ProgressBar) findViewById(android.R.id.progress));
+        mActivityLoadingBar = ((ProgressBar) findViewById(com.ventura.musicexplorer.R.id.loadingArtistInfoProgressBar));
         mBaseLayout = ((LinearLayout) findViewById(com.ventura.musicexplorer.R.id.artist_info));
+        mArtistImageView = ((ImageView) findViewById(com.ventura.musicexplorer.R.id.artist_image));
         mArtistBio = ((TextView) findViewById(com.ventura.musicexplorer.R.id.artist_bio));
-        mActivityLoadingBar = ((ProgressBar) findViewById(com.ventura.musicexplorer.R.id.loading));
+        artistImageGallery = ((Gallery) findViewById(com.ventura.musicexplorer.R.id.artist_images_gallery));
         afterViews();
     }
 
@@ -91,14 +91,14 @@ public final class ArtistViewerActivity_
     }
 
     @Override
-    public void fillView(final Artist artist) {
+    public void onArtistMainImageDownloadError() {
         handler_.post(new Runnable() {
 
 
             @Override
             public void run() {
                 try {
-                    ArtistViewerActivity_.super.fillView(artist);
+                    ArtistViewerActivity_.super.onArtistMainImageDownloadError();
                 } catch (RuntimeException e) {
                     Log.e("ArtistViewerActivity_", "A runtime exception was thrown while executing code in a runnable", e);
                 }
@@ -109,14 +109,14 @@ public final class ArtistViewerActivity_
     }
 
     @Override
-    public void onArtistMainImageDownloadError() {
+    public void fillView(final Artist artist) {
         handler_.post(new Runnable() {
 
 
             @Override
             public void run() {
                 try {
-                    ArtistViewerActivity_.super.onArtistMainImageDownloadError();
+                    ArtistViewerActivity_.super.fillView(artist);
                 } catch (RuntimeException e) {
                     Log.e("ArtistViewerActivity_", "A runtime exception was thrown while executing code in a runnable", e);
                 }

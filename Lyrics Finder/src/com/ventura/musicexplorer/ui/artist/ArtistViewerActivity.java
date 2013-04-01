@@ -18,10 +18,6 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Parcelable;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.text.ClipboardManager;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
@@ -36,12 +32,10 @@ import android.widget.Gallery;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.ActionBar.Tab;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.SubMenu;
@@ -70,7 +64,7 @@ public class ArtistViewerActivity extends BaseActivity implements
 		OnItemSelectedListener {
 	final String TAG = getClass().getName();
 
-	@ViewById(R.id.loading)
+	@ViewById(R.id.loadingArtistInfoProgressBar)
 	ProgressBar mActivityLoadingBar;
 
 	@ViewById(R.id.artist_info)
