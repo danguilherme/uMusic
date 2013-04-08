@@ -25,10 +25,58 @@ public class TracksManager {
 	}
 
 	/**
-	 * Function to read all mp3 files from sdcard and store the details in
-	 * ArrayList
-	 * */
+	 * Read all mp3 files from sdcard and store the details inside a List
+	 * 
+	 * @return A list with the found mp3 tracks.
+	 */
 	public List<Track> refreshPlayList() {
+		ContentResolver contentResolver = this.context.getContentResolver();
+
+		String[] columns = new String[] { MediaStore.Audio.Media.DATA };
+
+		Uri filesUri = MediaStore.Audio.Media.getContentUriForPath(Environment
+				.getExternalStorageDirectory().getPath());
+
+		StringBuilder whereSentence = new StringBuilder();
+		whereSentence.append(MediaStore.Audio.Media.MIME_TYPE);
+		whereSentence.append(" = \"audio/mpeg\" OR ");
+		whereSentence.append(MediaStore.Audio.Media.MIME_TYPE);
+		whereSentence.append(" = \"audio/mp4\"").toString();
+		Cursor cursor = null;
+		try {
+			cursor = contentResolver.query(filesUri, columns,
+					whereSentence.toString(), null, null);
+
+			int pathColumnIndex = cursor
+					.getColumnIndex(MediaStore.Audio.Media.DATA);
+
+			while (cursor.moveToNext()) {
+				Track track = this.getTrackByUri(cursor
+						.getString(pathColumnIndex));
+				if (track != null) {
+					songsList.add(track);
+				}
+				Log.d(TAG, "Loaded song from device: " + track.toString());
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (cursor != null) {
+				cursor.close();
+			}
+		}
+
+		return songsList;
+	}
+
+	/**
+	 * Get a track from device by its URI
+	 * 
+	 * @param uri
+	 *            The uri of the track
+	 * @return The track object, or null, if it was not found.
+	 */
+	public Track getTrackByUri(String uri) {
 		ContentResolver contentResolver = this.context.getContentResolver();
 
 		String[] columns = new String[] { MediaStore.Audio.Media._ID,
@@ -40,20 +88,33 @@ public class TracksManager {
 				.getExternalStorageDirectory().getPath());
 
 		StringBuilder whereSentence = new StringBuilder();
+		whereSentence.append(MediaStore.Audio.Media.DATA);
+		whereSentence.append(" = \"" + uri + "\" AND (");
 		whereSentence.append(MediaStore.Audio.Media.MIME_TYPE);
 		whereSentence.append(" = \"audio/mpeg\" OR ");
 		whereSentence.append(MediaStore.Audio.Media.MIME_TYPE);
-		whereSentence.append(" = \"audio/mp4\"").toString();
+		whereSentence.append(" = \"audio/mp4\")").toString();
 
-		Cursor cursor = contentResolver.query(filesUri, columns,
-				whereSentence.toString(), null, null);
+		Track track = null;
+		Cursor cursor = null;
 
-		while (cursor.moveToNext()) {
-			Track track = this.loadSong(cursor);
-			songsList.add(track);
-			Log.d(TAG, "Loaded song from device: " + track.toString());
+		try {
+			cursor = contentResolver.query(filesUri, columns,
+					whereSentence.toString(), null, null);
+
+			if (cursor.moveToNext())
+				track = this.loadSong(cursor);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			// Some providers return null if an error occurs, others throw an
+			// exception
+			if (cursor != null) {
+				cursor.close();
+			}
 		}
-		return songsList;
+
+		return track;
 	}
 
 	private Track loadSong(Cursor cursor) {

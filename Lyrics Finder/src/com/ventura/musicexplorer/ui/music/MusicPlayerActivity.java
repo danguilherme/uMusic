@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import android.content.Intent;
 import android.content.SharedPreferences.Editor;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -114,7 +114,6 @@ public class MusicPlayerActivity extends BaseActivity implements
 		music.setOnCompletionListener(this);
 		songsManager = new TracksManager(this);
 		songsList = songsManager.refreshPlayList();
-		// alert(this.createList(songs));
 	}
 
 	@Override
@@ -122,24 +121,31 @@ public class MusicPlayerActivity extends BaseActivity implements
 		next();
 	}
 
-	@Override
-	protected void onSaveInstanceState(Bundle outState) {
-		super.onSaveInstanceState(outState);
-		Log.i(TAG, "onSaveInstanceState");
-	}
-
 	@AfterViews
 	void afterViews() {
 		songProgressBar.setOnSeekBarChangeListener(this); // Important
-		this.playSong(songsList.get(0));
 
 		setRepeat(this.sharedPreferences.getBoolean(PREF_IS_REPEAT, false));
 		setShuffle(this.sharedPreferences.getBoolean(PREF_IS_SHUFFLE, false));
+
+		Intent intent = getIntent();
+		String intendedAction = intent.getAction();
+
+		if (intendedAction != null && intendedAction.equals(Intent.ACTION_VIEW)) {
+			Track track = songsManager.getTrackByUri(intent.getData().getPath());
+			songsList.add(track);
+			if (shuffledSongsList != null) {
+				shuffledSongsList.add(track);
+			}
+			this.playSong(track);
+		} else {
+			this.playSong(songsList.get(0));
+		}
 	}
 
 	// TEST
 	@Click(R.id.btnPlaylist)
-	void onAlbumImageClick(View btn) {
+	void onPlaylistButtonClick(View btn) {
 		if (!this.isConnected()) {
 			Toast.makeText(this, R.string.message_no_internet_connection,
 					Toast.LENGTH_SHORT).show();
@@ -171,9 +177,8 @@ public class MusicPlayerActivity extends BaseActivity implements
 
 	@UiThread
 	void setSongLyrics(Lyric lyrics) {
-		lblSongLyrics.setText(lyrics != null ? lyrics.getLyric() : "");
-
-		alert("First found: " + lyrics.toString());
+		lblSongLyrics.setText(lyrics != null ? lyrics.toString() + "\n\n\n"
+				+ lyrics.getLyric() : "");
 
 		lyricsLoadingProgressBar.setVisibility(View.GONE);
 	}
