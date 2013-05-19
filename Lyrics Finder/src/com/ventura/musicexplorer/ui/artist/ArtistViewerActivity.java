@@ -14,7 +14,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -52,7 +51,7 @@ import com.ventura.musicexplorer.constants.GlobalConstants;
 import com.ventura.musicexplorer.entity.Image;
 import com.ventura.musicexplorer.entity.artist.Artist;
 import com.ventura.musicexplorer.ui.BaseActivity;
-import com.ventura.musicexplorer.ui.release.ReleasesViewerActivity;
+import com.ventura.musicexplorer.ui.release.ReleasesListActivity_;
 import com.ventura.musicexplorer.ui.widget.ButtonGroup;
 import com.ventura.musicexplorer.ui.widget.KeyValuePanel;
 import com.ventura.musicexplorer.util.ImageDownloaderTask;
@@ -83,9 +82,6 @@ public class ArtistViewerActivity extends BaseActivity implements
 	@ViewById(R.id.artist_bio)
 	TextView mArtistBio;
 
-	@ViewById(R.id.artist_name)
-	TextView mArtistName;
-
 	ImageAdapter artistImagesAdapter;
 
 	ImageDownloaderTask imageDownloaderTask = new ImageDownloaderTask();
@@ -99,18 +95,19 @@ public class ArtistViewerActivity extends BaseActivity implements
 		final ActionBar actionBar = getSupportActionBar();
 		// Enable navigation to parent activity
 		actionBar.setDisplayHomeAsUpEnabled(true);
-
+		
 		Intent intent = this.getIntent();
 		Artist artist = (Artist) intent.getSerializableExtra(Artist.KEY);
 		this.mCurrentArtist = artist;
 		OAuthConsumer consumer = this.getConsumer(this.sharedPreferences);
 
-		this.getArtist(artist.getId());
+		getSupportActionBar().setTitle(artist.getName());
+		getSupportActionBar().setSubtitle(R.string.title_activity_artist_viewer);
 	}
 
 	@AfterViews
 	void afterViews() {
-		mArtistName.setText(this.mCurrentArtist.getName());
+		this.getArtist(this.mCurrentArtist.getId());
 	}
 
 	@Background
@@ -171,7 +168,7 @@ public class ArtistViewerActivity extends BaseActivity implements
 			mArtistImageDownloadProgressBar.setVisibility(View.GONE);
 		}
 
-		mArtistName.setText(this.mCurrentArtist.getName());
+		getSupportActionBar().setTitle(this.mCurrentArtist.getName());
 		String profile = this.mCurrentArtist.getProfile();
 
 		if (profile != null && !profile.equals("")) {
@@ -198,8 +195,18 @@ public class ArtistViewerActivity extends BaseActivity implements
 
 	private void openArtistReleases() {
 		if (this.isConnected()) {
+			// Intent releasesIntent = new Intent(this,
+			// ReleasesViewerActivity.class);
 			Intent releasesIntent = new Intent(this,
-					ReleasesViewerActivity.class);
+					ReleasesListActivity_.class);
+
+			for (int i = 0; this.mCurrentArtist.getImages() != null
+					&& i < this.mCurrentArtist.getImages().size(); i++) {
+				//this.mCurrentArtist.getImages().get(0).setBitmap(null);
+			}
+
+			releasesIntent.putExtra(Artist.KEY, this.mCurrentArtist);
+
 			releasesIntent.putExtra(GlobalConstants.EXTRA_ARTIST_ID,
 					this.mCurrentArtist.getId());
 			releasesIntent.putExtra(GlobalConstants.EXTRA_ARTIST_NAME,
@@ -507,10 +514,10 @@ public class ArtistViewerActivity extends BaseActivity implements
 		final Image primaryImage = this.mCurrentArtist.getImages().get(0);
 
 		// If the image is already downloaded, only save it
-		if (primaryImage.getBitmap() != null) {
+		/*if (primaryImage.getBitmap() != null) {
 			saveImage(primaryImage.getBitmap(), directory, fileName);
 			return;
-		}
+		}*/
 
 		OnImageDownloadListener imageDownloadListener = new OnImageDownloadListener() {
 			public void onDownloadFinished(Bitmap result) {
@@ -610,7 +617,7 @@ public class ArtistViewerActivity extends BaseActivity implements
 
 	public void setArtistMainImage(Image image) {
 		mArtistImageDownloadProgressBar.setVisibility(View.VISIBLE);
-		mArtistImageView.setImageBitmap(image.getBitmap());
+		//mArtistImageView.setImageBitmap(image.getBitmap());
 		mArtistImageView.setMinimumHeight(image.getHeight());
 		mArtistImageView.setMinimumWidth(image.getWidth());
 		this.downloadMainImage(image);
@@ -619,8 +626,8 @@ public class ArtistViewerActivity extends BaseActivity implements
 	@Background
 	void downloadMainImage(Image image) {
 		try {
-			image.setBitmap(BitmapFactory.decodeStream(image.getUrl()
-					.openConnection().getInputStream()));
+			/*image.setBitmap(BitmapFactory.decodeStream(image.getUrl()
+					.openConnection().getInputStream()));*/
 		} catch (Exception e) {
 			this.onArtistMainImageDownloadError();
 			e.printStackTrace();
@@ -640,7 +647,7 @@ public class ArtistViewerActivity extends BaseActivity implements
 		// Avoid the show of all images when user rolls the gallery,
 		// from first to last picture, for instance
 		if (artistImageGallery.getSelectedItem() == image) {
-			mArtistImageView.setImageBitmap(image.getBitmap());
+			//mArtistImageView.setImageBitmap(image.getBitmap());
 			mArtistImageView.setMinimumHeight(image.getHeight());
 			mArtistImageView.setMinimumWidth(image.getWidth());
 			mArtistImageDownloadProgressBar.setVisibility(View.GONE);

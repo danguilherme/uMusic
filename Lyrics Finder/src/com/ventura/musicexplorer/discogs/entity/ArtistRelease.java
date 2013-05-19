@@ -1,11 +1,15 @@
 package com.ventura.musicexplorer.discogs.entity;
 
+import java.io.Serializable;
 import java.net.URL;
 
 import com.google.gson.annotations.SerializedName;
 
-public class ArtistRelease implements Comparable<ArtistRelease> {
+public class ArtistRelease implements Comparable<ArtistRelease>, Serializable {
+	private static final long serialVersionUID = 2596405730507599408L;
 
+	public static final String KEY = ArtistRelease.class.getName();
+	
 	public static final String KEY_SEARCH_RESULT_RELEASES = "releases";
 
 	public static final String KEY_ID = "id";

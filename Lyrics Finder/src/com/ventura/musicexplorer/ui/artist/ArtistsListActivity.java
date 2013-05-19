@@ -5,11 +5,8 @@ import java.util.List;
 
 import oauth.signpost.OAuthConsumer;
 import android.app.SearchManager;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -20,31 +17,42 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.actionbarsherlock.app.SherlockListActivity;
+import com.googlecode.androidannotations.annotations.AfterViews;
+import com.googlecode.androidannotations.annotations.Background;
+import com.googlecode.androidannotations.annotations.EActivity;
+import com.googlecode.androidannotations.annotations.UiThread;
+import com.googlecode.androidannotations.annotations.ViewById;
 import com.ventura.androidutils.exception.LazyInternetConnectionException;
 import com.ventura.androidutils.exception.NoInternetConnectionException;
 import com.ventura.androidutils.utils.ConnectionManager;
-import com.ventura.androidutils.utils.InnerActivityAsyncTask;
 import com.ventura.musicexplorer.R;
 import com.ventura.musicexplorer.discogs.DiscogsConstants;
 import com.ventura.musicexplorer.discogs.DiscogsService;
-import com.ventura.musicexplorer.discogs.OnContentDownloadListener;
 import com.ventura.musicexplorer.discogs.entity.SearchItem;
 import com.ventura.musicexplorer.discogs.entity.SearchResult;
 import com.ventura.musicexplorer.discogs.entity.enumerator.QueryType;
 import com.ventura.musicexplorer.entity.Image;
 import com.ventura.musicexplorer.entity.artist.Artist;
+import com.ventura.musicexplorer.ui.BaseListActivity;
 
-public class ListArtistsActivity extends SherlockListActivity implements
+@EActivity(R.layout.default_list)
+public class ArtistsListActivity extends BaseListActivity implements
 		OnScrollListener, OnItemClickListener {
 	final String TAG = getClass().getName();
 
 	private SharedPreferences prefs;
+	
+	@ViewById(android.R.id.list)
+	protected ListView list;
+	
+	@ViewById(R.id.loadingListProgressBar)
+	protected ProgressBar loadingProgressBar;
 
-	private ListView list;
 	private ArtistsListAdapter adapter;
+
 	private OAuthConsumer discogsCustomer;
 	private SearchResult currentSearchResult;
 	private LinearLayout loadMoreProgress;
@@ -54,21 +62,19 @@ public class ListArtistsActivity extends SherlockListActivity implements
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		final LinearLayout mainLayout = (LinearLayout) this.getLayoutInflater()
-				.inflate(R.layout.default_list, null);
-		this.setContentView(mainLayout);
 		this.prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		discogsCustomer = new ArtistViewerActivity().getConsumer(this.prefs);
-
-		Intent intent = this.getIntent();
-
-		list = (ListView) findViewById(android.R.id.list);
+	}
+	
+	@AfterViews
+	protected void afterViews() {
 		list.setOnScrollListener(this);
 
 		loadMoreProgress = (LinearLayout) this.getLayoutInflater().inflate(
 				R.layout.load_more_progress, null);
 		list.addFooterView(loadMoreProgress);
 
+		Intent intent = this.getIntent();
 		if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
 			String query = intent.getStringExtra(SearchManager.QUERY);
 			Log.i(TAG, "Search: " + query);
@@ -83,8 +89,7 @@ public class ListArtistsActivity extends SherlockListActivity implements
 		if (queryText == null || queryType == null)
 			finish();
 
-		new ListArtistsTask(this, discogsCustomer, queryType)
-				.execute(queryText);
+		this.listArtists(queryType, queryText);
 
 		// Click event for single list row
 		list.setOnItemClickListener(this);
@@ -96,7 +101,12 @@ public class ListArtistsActivity extends SherlockListActivity implements
 		return super.onSearchRequested();
 	}
 
-	private void updateListView(SearchResult data) {
+	@UiThread
+	protected void updateListView(SearchResult data) {
+		if (loadingProgressBar.getVisibility() == View.VISIBLE) {
+			loadingProgressBar.setVisibility(View.INVISIBLE);
+		}
+		
 		List<Artist> artistsList = new ArrayList<Artist>();
 
 		if (data.getCount() <= 0) {
@@ -117,7 +127,7 @@ public class ListArtistsActivity extends SherlockListActivity implements
 			adapter = new ArtistsListAdapter(this, artistsList);
 		} else {
 			currentPosition = list.getFirstVisiblePosition();
-			adapter.add(artistsList);
+			adapter.addItems(artistsList);
 		}
 		adapter.notifyDataSetChanged();
 		list.setAdapter(adapter);
@@ -142,101 +152,43 @@ public class ListArtistsActivity extends SherlockListActivity implements
 		return artistsList;
 	}
 
-	private void loadMore() {
-		this.isLoading = true;
-		OnContentDownloadListener listener = new OnContentDownloadListener() {
-			public void onDownloadFinished(Object result) {
-				updateListView((SearchResult) result);
-				isLoading = false;
-			}
-
-			public void onDownloadError(String error) {
-				isLoading = false;
-			}
-		};
-		new LoadMoreTask(listener).execute();
+	@Background
+	protected void listArtists(QueryType queryType, String query) {
+		DiscogsService discogsService = new DiscogsService(this, null);
+		SearchResult searchResult = new SearchResult();
+		
+		try {
+			searchResult = discogsService.search(queryType, query);
+		} catch (NoInternetConnectionException e) {
+			showNoInternetMessage();
+			e.printStackTrace();
+		} catch (LazyInternetConnectionException e) {
+			showLazyInternetMessage();
+			e.printStackTrace();
+		}
+		updateListView(searchResult);
 	}
 
-	private class ListArtistsTask extends
-			InnerActivityAsyncTask<String, Void, SearchResult> {
-		private OAuthConsumer mConsumer;
-		private QueryType mQueryType;
-
-		public ListArtistsTask(Context context, OAuthConsumer consumer,
-				QueryType queryType) {
-			super(context, getString(R.string.app_name),
-					getString(R.string.message_fetching_artists_list));
-			this.mConsumer = consumer;
-			this.mQueryType = queryType;
+	@Background
+	protected void loadMore() {
+		SearchResult searchResult = null;
+		try {
+			DiscogsService service = new DiscogsService(
+					ArtistsListActivity.this, discogsCustomer);
+			searchResult = service.next(currentSearchResult.getPagination());
+		} catch (NoInternetConnectionException e) {
+			showNoInternetMessage();
+			e.printStackTrace();
+		} catch (LazyInternetConnectionException e) {
+			showLazyInternetMessage();
+			e.printStackTrace();
 		}
-
-		@Override
-		protected SearchResult doInBackground(String... params) {
-			DiscogsService discogsService = new DiscogsService(
-					this.getContext(), this.mConsumer);
-			// ArtistService artistService = new
-			// ArtistService(this.getContext());
-			try {
-				return discogsService.search(this.mQueryType, params[0]);
-			} catch (NoInternetConnectionException e) {
-				/*
-				 * Toast.makeText(mContext, "No internet connection...",
-				 * Toast.LENGTH_SHORT).show();
-				 */
-				e.printStackTrace();
-			} catch (LazyInternetConnectionException e) {
-				/*
-				 * Toast.makeText(mContext,
-				 * "Your connection is lazy! Try again?",
-				 * Toast.LENGTH_SHORT).show();
-				 */
-				e.printStackTrace();
-			}
-			// finish();
-			return new SearchResult();
-		}
-
-		@Override
-		protected void onPostExecute(SearchResult result) {
-			super.onPostExecute(result);
-			updateListView(result);
-		}
-
-		@Override
-		public void onProgressDialogCancelled(DialogInterface progressDialog) {
-		}
+		updateListView(searchResult);
 	}
 
-	private class LoadMoreTask extends AsyncTask<Void, Void, SearchResult> {
-		OnContentDownloadListener contentDownloadListener;
-
-		public LoadMoreTask(OnContentDownloadListener contentDownloadListener) {
-			this.contentDownloadListener = contentDownloadListener;
-		}
-
-		@Override
-		protected SearchResult doInBackground(Void... params) {
-			try {
-				DiscogsService service = new DiscogsService(
-						ListArtistsActivity.this, discogsCustomer);
-				SearchResult searchResult = service.next(currentSearchResult
-						.getPagination());
-				return searchResult;
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			return null;
-		}
-
-		@Override
-		protected void onPostExecute(SearchResult searchResult) {
-			if (this.contentDownloadListener != null) {
-				contentDownloadListener.onDownloadFinished(searchResult);
-			}
-		}
-	}
-
-	// OnScrollListener
+	/**
+	 * OnScrollListener
+	 */
 	public void onScroll(AbsListView view, int firstVisibleItem,
 			int visibleItemCount, int totalItemCount) {
 		if (currentSearchResult == null) {

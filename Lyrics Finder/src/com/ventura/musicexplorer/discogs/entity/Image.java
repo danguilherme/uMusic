@@ -1,12 +1,15 @@
 package com.ventura.musicexplorer.discogs.entity;
 
+import java.io.Serializable;
 import java.net.URL;
 
 import android.graphics.Bitmap;
 
 import com.google.gson.annotations.SerializedName;
 
-public class Image {
+public class Image implements Serializable {
+	private static final long serialVersionUID = 3261131054339122370L;
+	
 	public static final String KEY_URI = "uri";
 	public static final String KEY_HEIGHT = "height";
 	public static final String KEY_WIDTH = "width";
@@ -24,14 +27,14 @@ public class Image {
 	@SerializedName(KEY_TYPE)
 	private String type;
 
-	private Bitmap bitmap;
+	//private Bitmap bitmap;
 
 	public Image(URL uri, int width, int height, String type, Bitmap bitmap) {
 		this.setUrl(uri);
 		this.width = width;
 		this.height = height;
 		this.type = type;
-		this.bitmap = bitmap;
+		//this.bitmap = bitmap;
 	}
 
 	public Image(URL uri, int width, int height, String type) {
@@ -80,13 +83,13 @@ public class Image {
 		this.type = type;
 	}
 
-	public Bitmap getBitmap() {
-		return this.bitmap;
-	}
-
-	public void setBitmap(Bitmap bitmap) {
-		this.bitmap = bitmap;
-	}
+	// public Bitmap getBitmap() {
+	// return this.bitmap;
+	// }
+	//
+	// public void setBitmap(Bitmap bitmap) {
+	// this.bitmap = bitmap;
+	// }
 
 	@Override
 	public String toString() {

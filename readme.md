@@ -1,4 +1,4 @@
-#Music Explorer
+#uMusic
 
 ##Introduction
 In the application, it will be possible to:

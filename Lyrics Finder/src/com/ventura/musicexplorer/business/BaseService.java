@@ -20,9 +20,9 @@ public abstract class BaseService extends Service {
 	final String TAG = getClass().getName();
 	private final String KEY_PAGINATED_CONTENT = "Data";
 
-	public final String KEY_DATA = "data";
-	public final String KEY_SUCCESS = "success";
-	public final String KEY_MESSAGE = "message";
+	protected final String KEY_DATA = "data";
+	protected final String KEY_SUCCESS = "success";
+	protected final String KEY_MESSAGE = "message";
 
 	protected static final String URL_BASE_API = "http://www.musicexplorer.somee.com/api";
 
@@ -35,11 +35,11 @@ public abstract class BaseService extends Service {
 				FieldNamingPolicy.UPPER_CAMEL_CASE).create();
 	}
 
-	public <T> T deserialize(String json, Class<T> targetType) {
+	protected <T> T deserialize(String json, Class<T> targetType) {
 		return deserializer.fromJson(json, targetType);
 	}
 
-	public <T> List<T> deserializeList(JSONArray jsonArray, Class<T> targetType) {
+	protected <T> List<T> deserializeList(JSONArray jsonArray, Class<T> targetType) {
 		List<T> list = new ArrayList<T>();
 		try {
 			for (int i = 0; i < jsonArray.length(); i++) {
@@ -61,7 +61,7 @@ public abstract class BaseService extends Service {
 	 *            The JSON string to search for the data property
 	 * @return The Data array of the JSONObject as a JSONArray
 	 */
-	public JSONArray extractData(String jsonString) {
+	protected JSONArray extractData(String jsonString) {
 		if (jsonString == null)
 			return new JSONArray();
 
@@ -82,7 +82,7 @@ public abstract class BaseService extends Service {
 	 *            The JSONObject to search the Data property.
 	 * @return The Data array of the JSONObject as a JSONArray
 	 */
-	public JSONArray extractData(JSONObject source) {
+	protected JSONArray extractData(JSONObject source) {
 		if (source == null)
 			return new JSONArray();
 

@@ -35,8 +35,8 @@ public class ImageAdapter extends BaseAdapter {
 		placeholder = BitmapFactory.decodeResource(
 				galleryContext.getResources(), R.drawable.no_image);
 		// set placeholder as all thumbnail images in the gallery initially
-		for (int i = 0; i < images.size(); i++)
-			this.images.get(i).setBitmap(placeholder);
+		/*for (int i = 0; i < images.size(); i++)
+			this.images.get(i).setBitmap(placeholder);*/
 	}
 
 	@Override
@@ -74,7 +74,7 @@ public class ImageAdapter extends BaseAdapter {
 					@Override
 					public void onLoaded(ImageView imgView, Bitmap bitmap,
 							String url, boolean loadedFromCache) {
-						images.get(pos).setBitmap(bitmap);
+						/*images.get(pos).setBitmap(bitmap);*/
 					}
 				});
 		// return the view

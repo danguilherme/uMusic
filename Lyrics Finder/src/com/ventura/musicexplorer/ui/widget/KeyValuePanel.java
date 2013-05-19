@@ -19,7 +19,7 @@ public class KeyValuePanel extends LinearLayout {
 	TextView key, value;
 
 	private final String DEFAULT_KEY_DELIMITER = ":";
-	
+
 	private String keyText, valueText;
 	private String keyDelimiter = DEFAULT_KEY_DELIMITER;
 
@@ -28,8 +28,9 @@ public class KeyValuePanel extends LinearLayout {
 
 		TypedArray typedArray = context.obtainStyledAttributes(attrs,
 				R.styleable.KeyValuePanel);
-		
-		keyDelimiter = typedArray.getString(R.styleable.KeyValuePanel_keyDelimiter);
+
+		keyDelimiter = typedArray
+				.getString(R.styleable.KeyValuePanel_keyDelimiter);
 		if (keyDelimiter == null) {
 			keyDelimiter = DEFAULT_KEY_DELIMITER;
 		}
@@ -42,15 +43,16 @@ public class KeyValuePanel extends LinearLayout {
 		this.initComponent(key, value, DEFAULT_KEY_DELIMITER);
 	}
 
-	public KeyValuePanel(Context context, String key, String value, String keyDelimiter) {
+	public KeyValuePanel(Context context, String key, String value,
+			String keyDelimiter) {
 		super(context);
 		this.initComponent(key, value, keyDelimiter);
 	}
-	
+
 	private void initComponent(String key, String value, String keyDelimiter) {
-        this.value = ((TextView) findViewById(id.value));
-        this.key = ((TextView) findViewById(id.key));
-        
+		this.value = ((TextView) findViewById(id.value));
+		this.key = ((TextView) findViewById(id.key));
+
 		this.keyDelimiter = keyDelimiter;
 		this.setKeyValue(key, value);
 	}
@@ -58,6 +60,14 @@ public class KeyValuePanel extends LinearLayout {
 	@AfterViews
 	public void setViewData() {
 		this.setKeyValue(keyText, valueText);
+	}
+
+	public String getKey() {
+		return keyText;
+	}
+
+	public String getValue() {
+		return valueText;
 	}
 
 	public void setKey(String key) {

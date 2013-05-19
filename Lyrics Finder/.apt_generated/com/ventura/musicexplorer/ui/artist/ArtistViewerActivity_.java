@@ -41,12 +41,11 @@ public final class ArtistViewerActivity_
 
     private void afterSetContentView_() {
         mActivityLoadingBar = ((ProgressBar) findViewById(com.ventura.musicexplorer.R.id.loadingArtistInfoProgressBar));
+        mArtistImageDownloadProgressBar = ((ProgressBar) findViewById(android.R.id.progress));
+        artistImageGallery = ((Gallery) findViewById(com.ventura.musicexplorer.R.id.artist_images_gallery));
+        mArtistImageView = ((ImageView) findViewById(com.ventura.musicexplorer.R.id.artist_image));
         mArtistBio = ((TextView) findViewById(com.ventura.musicexplorer.R.id.artist_bio));
         mBaseLayout = ((LinearLayout) findViewById(com.ventura.musicexplorer.R.id.artist_info));
-        mArtistName = ((TextView) findViewById(com.ventura.musicexplorer.R.id.artist_name));
-        mArtistImageDownloadProgressBar = ((ProgressBar) findViewById(android.R.id.progress));
-        mArtistImageView = ((ImageView) findViewById(com.ventura.musicexplorer.R.id.artist_image));
-        artistImageGallery = ((Gallery) findViewById(com.ventura.musicexplorer.R.id.artist_images_gallery));
         afterViews();
     }
 
@@ -73,14 +72,14 @@ public final class ArtistViewerActivity_
     }
 
     @Override
-    public void onArtistMainImageDownloadError() {
+    public void afterDownloadArtistMainImage(final Image image) {
         handler_.post(new Runnable() {
 
 
             @Override
             public void run() {
                 try {
-                    ArtistViewerActivity_.super.onArtistMainImageDownloadError();
+                    ArtistViewerActivity_.super.afterDownloadArtistMainImage(image);
                 } catch (RuntimeException e) {
                     Log.e("ArtistViewerActivity_", "A runtime exception was thrown while executing code in a runnable", e);
                 }
@@ -109,32 +108,14 @@ public final class ArtistViewerActivity_
     }
 
     @Override
-    public void afterDownloadArtistMainImage(final Image image) {
+    public void onArtistMainImageDownloadError() {
         handler_.post(new Runnable() {
 
 
             @Override
             public void run() {
                 try {
-                    ArtistViewerActivity_.super.afterDownloadArtistMainImage(image);
-                } catch (RuntimeException e) {
-                    Log.e("ArtistViewerActivity_", "A runtime exception was thrown while executing code in a runnable", e);
-                }
-            }
-
-        }
-        );
-    }
-
-    @Override
-    public void downloadMainImage(final Image image) {
-        BackgroundExecutor.execute(new Runnable() {
-
-
-            @Override
-            public void run() {
-                try {
-                    ArtistViewerActivity_.super.downloadMainImage(image);
+                    ArtistViewerActivity_.super.onArtistMainImageDownloadError();
                 } catch (RuntimeException e) {
                     Log.e("ArtistViewerActivity_", "A runtime exception was thrown while executing code in a runnable", e);
                 }
@@ -153,6 +134,24 @@ public final class ArtistViewerActivity_
             public void run() {
                 try {
                     ArtistViewerActivity_.super.getArtist(artistId);
+                } catch (RuntimeException e) {
+                    Log.e("ArtistViewerActivity_", "A runtime exception was thrown while executing code in a runnable", e);
+                }
+            }
+
+        }
+        );
+    }
+
+    @Override
+    public void downloadMainImage(final Image image) {
+        BackgroundExecutor.execute(new Runnable() {
+
+
+            @Override
+            public void run() {
+                try {
+                    ArtistViewerActivity_.super.downloadMainImage(image);
                 } catch (RuntimeException e) {
                     Log.e("ArtistViewerActivity_", "A runtime exception was thrown while executing code in a runnable", e);
                 }

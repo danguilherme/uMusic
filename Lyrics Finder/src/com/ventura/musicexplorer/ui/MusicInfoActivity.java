@@ -29,7 +29,7 @@ import com.ventura.musicexplorer.constants.GlobalConstants;
 import com.ventura.musicexplorer.discogs.DiscogsConstants;
 import com.ventura.musicexplorer.discogs.entity.enumerator.QueryType;
 import com.ventura.musicexplorer.musixmatch.ui.LyricsViewerActivity;
-import com.ventura.musicexplorer.ui.artist.ListArtistsActivity;
+import com.ventura.musicexplorer.ui.artist.ArtistsListActivity_;
 
 public class MusicInfoActivity extends BaseActivity {
 	final String TAG = getClass().getName();
@@ -308,7 +308,7 @@ public class MusicInfoActivity extends BaseActivity {
 					this.getString(R.string.message_no_internet_connection),
 					Toast.LENGTH_LONG).show();
 		} else if (artistName != null && !artistName.equals("")) {
-			Intent intent = new Intent(this, ListArtistsActivity.class);
+			Intent intent = new Intent(this, ArtistsListActivity_.class);
 			intent.setAction(Intent.ACTION_SEND);
 			intent.putExtra(DiscogsConstants.KEY_QUERY_TYPE,
 					QueryType.artist.toString());

@@ -17,17 +17,6 @@
         android:orientation="vertical"
         android:visibility="gone" >
 
-        <TextView
-            android:id="@+id/artist_name"
-            style="@style/Title"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:background="#FFF"
-            android:gravity="center_vertical"
-            android:padding="2dp" />
-
-        <TextView style="@style/scroll_divider" />
-
         <ScrollView
             android:layout_width="fill_parent"
             android:layout_height="fill_parent" >

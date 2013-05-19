@@ -12,13 +12,13 @@ public class Image implements Serializable {
 	private int height = 0;
 	private int width = 0;
 
-	private Bitmap bitmap;
+	//private Bitmap bitmap;
 
-	public Image(URL uri, int width, int height, Bitmap bitmap) {
+	public Image(URL uri, int width, int height/*, Bitmap bitmap*/) {
 		this.setUrl(uri);
 		this.width = width;
 		this.height = height;
-		this.bitmap = bitmap;
+		//this.bitmap = bitmap;
 	}
 
 	public Image(URL uri, int width, int height, String type) {
@@ -58,13 +58,13 @@ public class Image implements Serializable {
 		this.url = url;
 	}
 
-	public Bitmap getBitmap() {
+	/*public Bitmap getBitmap() {
 		return this.bitmap;
 	}
 
 	public void setBitmap(Bitmap bitmap) {
 		this.bitmap = bitmap;
-	}
+	}*/
 
 	@Override
 	public String toString() {

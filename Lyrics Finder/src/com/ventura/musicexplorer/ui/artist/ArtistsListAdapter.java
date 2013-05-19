@@ -2,62 +2,33 @@ package com.ventura.musicexplorer.ui.artist;
 
 import java.util.List;
 
-import android.app.Activity;
 import android.content.Context;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ventura.musicexplorer.R;
 import com.ventura.musicexplorer.entity.artist.Artist;
-import com.ventura.musicexplorer.util.ImageLoader;
+import com.ventura.musicexplorer.ui.BaseAdapter;
 
-public class ArtistsListAdapter extends BaseAdapter {
-	private Activity context;
-	private List<Artist> artists;
-	private static LayoutInflater inflater = null;
-	public ImageLoader imageLoader;
+public class ArtistsListAdapter extends BaseAdapter<Artist> {
+	public ArtistsListAdapter(Context context, List<Artist> data) {
+		super(context, data);
+	}
 
 	private int layoutId = R.layout.artist_list_item;
 
-	public ArtistsListAdapter(Activity activity, List<Artist> artists) {
-		this.context = activity;
-		this.artists = artists;
-		inflater = (LayoutInflater) activity
-				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		imageLoader = new ImageLoader(activity.getApplicationContext());
-	}
-
-	public void add(List<Artist> artists) {
-		this.artists.addAll(artists);
-		this.notifyDataSetChanged();
-	}
-
-	public int getCount() {
-		return this.artists.size();
-	}
-
-	public Object getItem(int position) {
-		return this.artists.get(position);
-	}
-
 	public void filter(String query) {
-		for (int i = 0; i < this.artists.size(); i++) {
-			if (!this.artists.get(i).getName().equalsIgnoreCase(query)) {
-				this.artists.remove(i);
+		for (int i = 0; i < this.data.size(); i++) {
+			if (!this.data.get(i).getName().equalsIgnoreCase(query)) {
+				this.data.remove(i);
 			}
 		}
 	}
 
-	public long getItemId(int position) {
-		return position;
-	}
-
 	public String getId(int position) {
-		return String.valueOf(this.artists.get(position).getId());
+		return String.valueOf(this.data.get(position).getId());
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent) {
@@ -75,7 +46,7 @@ public class ArtistsListAdapter extends BaseAdapter {
 			viewHolder = (ViewHolder) convertView.getTag();
 		}
 
-		Artist artist = this.artists.get(position);
+		Artist artist = (Artist) this.getItem(position);
 
 		// Setting all values in listview
 		viewHolder.artistName.setText(artist.getName());

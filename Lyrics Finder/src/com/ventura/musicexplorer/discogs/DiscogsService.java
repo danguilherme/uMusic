@@ -201,15 +201,15 @@ public class DiscogsService extends BaseService {
 		HttpGet request = new HttpGet(url);
 		Log.i(TAG, "Requesting URL : " + url);
 
-		try {
-			this.mConsumer.sign(request);
-		} catch (OAuthMessageSignerException e) {
-			e.printStackTrace();
-		} catch (OAuthExpectationFailedException e) {
-			e.printStackTrace();
-		} catch (OAuthCommunicationException e) {
-			e.printStackTrace();
-		}
+		// try {
+		// this.mConsumer.sign(request);
+		// } catch (OAuthMessageSignerException e) {
+		// e.printStackTrace();
+		// } catch (OAuthExpectationFailedException e) {
+		// e.printStackTrace();
+		// } catch (OAuthCommunicationException e) {
+		// e.printStackTrace();
+		// }
 
 		return this.doGet(request);
 	}

@@ -7,6 +7,8 @@ import java.util.List;
 import com.google.gson.annotations.SerializedName;
 
 public class Release extends BasicRelease {
+	private static final long serialVersionUID = -130599118901495196L;
+	
 	public static final String KEY_RELEASED_FORMATTED = "released_formatted";
 	public static final String KEY_MASTER_ID = "master_id";
 	public static final String KEY_MASTER_URL = "master_url";
