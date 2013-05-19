@@ -142,6 +142,7 @@ public class ArtistViewerActivity extends BaseActivity implements
 		mActivityLoadingBar.setVisibility(View.GONE);
 		mBaseLayout.setVisibility(View.VISIBLE);
 
+		// artist
 		this.mCurrentArtist = artist;
 
 		if (this.mCurrentArtist.getImages() != null
