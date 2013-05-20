@@ -3,6 +3,4 @@
     <group android:id="@+id/menu_artist_options">
         <item android:id="@+id/menu_download_artist_image" android:title="@string/menu_download_artist_image"></item>
     </group>
-    
-
 </menu>

@@ -1,5 +1,6 @@
 package com.ventura.musicexplorer.ui.widget;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
@@ -29,6 +30,7 @@ public class ButtonGroup extends LinearLayout {
 	private final int BUTTON_PADDING_BOTTOM = 12;
 
 	private TextView mTitleTextView;
+	private String title;
 	private final int TITLE_ID = -2;
 
 	public ButtonGroup(Context context) {
@@ -48,7 +50,8 @@ public class ButtonGroup extends LinearLayout {
 				R.styleable.ButtonGroup);
 		String groupTitle = typedArray
 				.getString(R.styleable.ButtonGroup_groupTitle);
-
+		typedArray.recycle();
+		
 		this.buildGroupTitle();
 
 		if (groupTitle != null && !groupTitle.equals("")) {
@@ -79,21 +82,30 @@ public class ButtonGroup extends LinearLayout {
 	/**
 	 * Only <code>addViews</code> method works well in a ButtonGroup. This
 	 * method will delete all the buttons already in the component and add the
-	 * button in parameter.
+	 * button in parameter, if it's not a button
+	 * 
+	 * @param child
+	 *            If the child is a button, it will be added with the already
+	 *            existing ones. Otherwise, the old items will be removed and
+	 *            the view will be added
 	 */
 	@Override
 	public void addView(View child) {
-		Log.w(TAG, MESSAGE_ERROR_ONLY_ADDVIEWS_METHOD_ALLOWED);
-		this.removeAllViews();
-		super.addView(child);
-		refreshButtonGroupPanel();
+		if (child.getClass() == Button.class) {
+			this.addButton((Button) child);
+		} else {
+			Log.w(TAG, MESSAGE_ERROR_ONLY_ADDVIEWS_METHOD_ALLOWED);
+			this.removeAllViews();
+			super.addView(child);
+			refreshButtonGroupPanel();
+		}
 	}
 
 	@Override
 	public void addView(View child, android.view.ViewGroup.LayoutParams params) {
 		if (Button.class.equals(child.getClass())
 				|| child.getId() == ButtonSeparator.SEPARATOR_ID
-				|| child.getId() == R.id.title) {
+				|| child.getId() == TITLE_ID) {
 			LayoutParams linearLayoutParams = (LayoutParams) params;
 			// linearLayoutParams.setMargins(0, 0, 0, 0);
 			child.setPadding(BUTTON_PADDING_LEFT, BUTTON_PADDING_TOP,
@@ -104,6 +116,35 @@ public class ButtonGroup extends LinearLayout {
 		}
 	}
 
+	/**
+	 * 
+	 * @param button
+	 * @return Inserted button
+	 */
+	public Button addButton(Button button) {
+		if (button.getParent() != null) {
+			throw new IllegalStateException("The button you want to insert already have a parent");
+		}
+		
+		List<Button> buttons = new ArrayList<Button>();
+
+		// Get the already existing buttons
+		for (int i = 0; i < this.getChildCount(); i++) {
+			View child = this.getChildAt(i);
+
+			// Verify if it is the title TextView or if it is hidden
+			if (child.getClass() == Button.class)
+				buttons.add((Button) child);
+		}
+
+		buttons.add(button);
+
+		this.removeAllViews();
+		this.addViews(buttons);
+
+		return button;
+	}
+
 	@Override
 	protected void onFinishInflate() {
 		super.onFinishInflate();
@@ -111,6 +152,7 @@ public class ButtonGroup extends LinearLayout {
 	}
 
 	public void setGroupTitle(String title) {
+		this.title = title;
 		if (title != null && !title.equals("")) {
 			mTitleTextView.setVisibility(View.VISIBLE);
 			mTitleTextView.setText(title);
@@ -120,23 +162,26 @@ public class ButtonGroup extends LinearLayout {
 	}
 
 	private void buildGroupTitle() {
-		mTitleTextView = new TextView(this.getContext());
+		if (mTitleTextView == null || mTitleTextView.getParent() == null) {
+			mTitleTextView = new TextView(this.getContext());
 
-		LinearLayout.LayoutParams layoutParams = new LayoutParams(
-				android.view.ViewGroup.LayoutParams.MATCH_PARENT,
-				android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
-		layoutParams.bottomMargin = 7;
-		mTitleTextView.setLayoutParams(layoutParams);
+			LinearLayout.LayoutParams layoutParams = new LayoutParams(
+					android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+					android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
+			layoutParams.bottomMargin = 7;
+			mTitleTextView.setLayoutParams(layoutParams);
 
-		mTitleTextView.setVisibility(View.GONE);
-		mTitleTextView.setId(TITLE_ID);
-		mTitleTextView.setTypeface(null, Typeface.BOLD);
-		mTitleTextView.setTextSize(16);
-		super.addView(mTitleTextView, 0);
+			mTitleTextView.setVisibility(View.GONE);
+			mTitleTextView.setId(TITLE_ID);
+			mTitleTextView.setTypeface(null, Typeface.BOLD);
+			mTitleTextView.setTextSize(16);
+			super.addView(mTitleTextView, 0);	
+		}
+		
+		this.setGroupTitle(title);
 	}
 
 	private void refreshButtonGroupPanel() {
-
 		boolean first = true, last = false;
 		int childCount = this.getChildCount();
 
@@ -171,6 +216,8 @@ public class ButtonGroup extends LinearLayout {
 				this.addView(new ButtonSeparator(getContext()), ++i);
 			}
 		}
+		
+		buildGroupTitle();
 	}
 
 	private class ButtonSeparator extends TextView {

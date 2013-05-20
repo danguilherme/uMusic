@@ -41,20 +41,20 @@ public final class MusicPlayerActivity_
     }
 
     private void afterSetContentView_() {
-        btnPlay = ((ImageButton) findViewById(id.btnPlay));
-        btnRepeat = ((ImageButton) findViewById(id.btnRepeat));
-        btnPause = ((ImageButton) findViewById(id.btnPause));
-        lblArtistName = ((TextView) findViewById(id.artist_name));
         btnPrevious = ((ImageButton) findViewById(id.btnPrevious));
-        btnNext = ((ImageButton) findViewById(id.btnNext));
-        lblSongCurrentDuration = ((TextView) findViewById(id.songCurrentDurationLabel));
-        btnShuffle = ((ImageButton) findViewById(id.btnShuffle));
+        btnPlaylist = ((ImageButton) findViewById(id.btnPlaylist));
         lblSongTotalDuration = ((TextView) findViewById(id.songTotalDurationLabel));
+        lblArtistName = ((TextView) findViewById(id.artist_name));
+        lblSongCurrentDuration = ((TextView) findViewById(id.songCurrentDurationLabel));
+        btnNext = ((ImageButton) findViewById(id.btnNext));
+        btnPlay = ((ImageButton) findViewById(id.btnPlay));
         lblSongLyrics = ((TextView) findViewById(id.songLyrics));
         songThumbnail = ((ImageView) findViewById(id.songThumbnail));
-        btnPlaylist = ((ImageButton) findViewById(id.btnPlaylist));
-        lblSongTitle = ((TextView) findViewById(id.songTitle));
         songProgressBar = ((SeekBar) findViewById(id.songProgressBar));
+        btnPause = ((ImageButton) findViewById(id.btnPause));
+        btnRepeat = ((ImageButton) findViewById(id.btnRepeat));
+        btnShuffle = ((ImageButton) findViewById(id.btnShuffle));
+        lblSongTitle = ((TextView) findViewById(id.songTitle));
         lyricsLoadingProgressBar = ((ProgressBar) findViewById(id.lyricsLoadingProgressBar));
         {
             View view = findViewById(id.btnPlaylist);
@@ -65,36 +65,6 @@ public final class MusicPlayerActivity_
                     @Override
                     public void onClick(View view) {
                         MusicPlayerActivity_.this.onPlaylistButtonClick(view);
-                    }
-
-                }
-                );
-            }
-        }
-        {
-            View view = findViewById(id.btnPause);
-            if (view!= null) {
-                view.setOnClickListener(new OnClickListener() {
-
-
-                    @Override
-                    public void onClick(View view) {
-                        MusicPlayerActivity_.this.pause();
-                    }
-
-                }
-                );
-            }
-        }
-        {
-            View view = findViewById(id.btnPlay);
-            if (view!= null) {
-                view.setOnClickListener(new OnClickListener() {
-
-
-                    @Override
-                    public void onClick(View view) {
-                        MusicPlayerActivity_.this.play();
                     }
 
                 }
@@ -117,6 +87,21 @@ public final class MusicPlayerActivity_
             }
         }
         {
+            View view = findViewById(id.btnPause);
+            if (view!= null) {
+                view.setOnClickListener(new OnClickListener() {
+
+
+                    @Override
+                    public void onClick(View view) {
+                        MusicPlayerActivity_.this.pause();
+                    }
+
+                }
+                );
+            }
+        }
+        {
             View view = findViewById(id.btnNext);
             if (view!= null) {
                 view.setOnClickListener(new OnClickListener() {
@@ -132,14 +117,14 @@ public final class MusicPlayerActivity_
             }
         }
         {
-            View view = findViewById(id.btnRepeat);
+            View view = findViewById(id.btnPlay);
             if (view!= null) {
                 view.setOnClickListener(new OnClickListener() {
 
 
                     @Override
                     public void onClick(View view) {
-                        MusicPlayerActivity_.this.toggleRepeat();
+                        MusicPlayerActivity_.this.play();
                     }
 
                 }
@@ -155,6 +140,21 @@ public final class MusicPlayerActivity_
                     @Override
                     public void onClick(View view) {
                         MusicPlayerActivity_.this.prev();
+                    }
+
+                }
+                );
+            }
+        }
+        {
+            View view = findViewById(id.btnRepeat);
+            if (view!= null) {
+                view.setOnClickListener(new OnClickListener() {
+
+
+                    @Override
+                    public void onClick(View view) {
+                        MusicPlayerActivity_.this.toggleRepeat();
                     }
 
                 }

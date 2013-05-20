@@ -19,13 +19,29 @@
 
         <ScrollView
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent" >
+            android:layout_height="fill_parent"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:scrollbarStyle="outsideInset" >
 
             <LinearLayout
                 android:id="@+id/scroll_container"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical" >
+
+                <Gallery
+                    android:id="@+id/artist_images_gallery"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone" />
+                
+                <Button android:id="@+id/btn_show_artist_gallery"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/show_artist_gallery"/>
+
+                <TextView style="@style/scroll_divider" />
 
                 <FrameLayout
                     android:layout_width="wrap_content"
@@ -50,11 +66,6 @@
                         android:indeterminate="true" />
                 </FrameLayout>
 
-                <Gallery
-                    android:id="@+id/artist_images_gallery"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
                 <com.ventura.musicexplorer.ui.widget.ButtonGroup
                     android:id="@+id/profile_and_releases_buttons_container"
                     android:layout_width="fill_parent"
@@ -112,102 +123,17 @@
                     android:visibility="gone" />
 
                 <TextView
-                    style="@style/Text16Bold"
+                    style="@style/CategoryTitle"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dip"
-                    android:layout_marginRight="5dip"
                     android:text="@string/biography" />
 
                 <TextView
                     android:id="@+id/artist_bio"
+                    style="@style/NormalText"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dip"
-                    android:layout_marginRight="5dip" />
-            </LinearLayout>
-        </ScrollView>
-
-        <ScrollView
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent" >
-
-            <LinearLayout
-                android:id="@+id/scroll_container"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical" >
-
-                <com.ventura.musicexplorer.ui.widget.ButtonGroup
-                    android:id="@+id/profile_and_releases_buttons_container"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical" >
-
-                    <Button
-                        android:id="@+id/btn_open_artist_discogs_profile"
-                        style="@style/list_button"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical|center_horizontal"
-                        android:onClick="onOpenProfileButtonClicked"
-                        android:text="@string/discogs_view_artist_profile"
-                        android:visibility="gone" />
-
-                    <Button
-                        android:id="@+id/btn_open_artist_releases"
-                        style="@style/list_button"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical|center_horizontal"
-                        android:onClick="onOpenReleasesButtonClicked"
-                        android:text="@string/discogs_view_artist_releases" />
-                </com.ventura.musicexplorer.ui.widget.ButtonGroup>
-
-                <com.ventura.musicexplorer.ui.widget.ButtonGroup
-                    android:id="@+id/members_container"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:visibility="gone"
-                    app:groupTitle="@string/band_members" >
-                </com.ventura.musicexplorer.ui.widget.ButtonGroup>
-
-                <com.ventura.musicexplorer.ui.widget.ButtonGroup
-                    android:id="@+id/external_urls_container"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:visibility="gone"
-                    app:groupTitle="@string/external_urls" >
-                </com.ventura.musicexplorer.ui.widget.ButtonGroup>
-
-                <com.ventura.musicexplorer.ui.widget.KeyValuePanel_
-                    android:id="@+id/real_name"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:visibility="gone" />
-
-                <com.ventura.musicexplorer.ui.widget.KeyValuePanel_
-                    android:id="@+id/aliases"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:visibility="gone" />
-
-                <TextView
-                    style="@style/Text16Bold"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dip"
-                    android:layout_marginRight="5dip"
-                    android:text="@string/biography" />
-
-                <TextView
-                    android:id="@+id/artist_bio"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dip"
-                    android:layout_marginRight="5dip" />
+                    android:textIsSelectable="true" />
             </LinearLayout>
         </ScrollView>
     </LinearLayout>

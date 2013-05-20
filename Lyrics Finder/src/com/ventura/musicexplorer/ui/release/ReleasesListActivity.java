@@ -48,7 +48,6 @@ public class ReleasesListActivity extends BaseListActivity {
 
 	@AfterViews
 	protected void afterViews() {
-		// list.setOnItemClickListener(this);
 		this.getArtistReleases(this.mArtist.getId());
 	}
 

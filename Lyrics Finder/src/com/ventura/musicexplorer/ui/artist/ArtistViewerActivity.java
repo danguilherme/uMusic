@@ -24,6 +24,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.view.ViewGroup.LayoutParams;
+import android.view.animation.Animation;
+import android.view.animation.Animation.AnimationListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
@@ -40,9 +42,13 @@ import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.SubMenu;
 import com.googlecode.androidannotations.annotations.AfterViews;
 import com.googlecode.androidannotations.annotations.Background;
+import com.googlecode.androidannotations.annotations.Click;
 import com.googlecode.androidannotations.annotations.EActivity;
 import com.googlecode.androidannotations.annotations.UiThread;
 import com.googlecode.androidannotations.annotations.ViewById;
+import com.googlecode.androidannotations.annotations.res.AnimationRes;
+import com.koushikdutta.urlimageviewhelper.UrlImageViewCallback;
+import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
 import com.ventura.androidutils.exception.LazyInternetConnectionException;
 import com.ventura.androidutils.exception.NoInternetConnectionException;
 import com.ventura.musicexplorer.R;
@@ -56,7 +62,6 @@ import com.ventura.musicexplorer.ui.widget.ButtonGroup;
 import com.ventura.musicexplorer.ui.widget.KeyValuePanel;
 import com.ventura.musicexplorer.util.ImageDownloaderTask;
 import com.ventura.musicexplorer.util.ImageLoader;
-import com.ventura.musicexplorer.util.OnImageDownloadListener;
 
 @EActivity(R.layout.artist_info)
 public class ArtistViewerActivity extends BaseActivity implements
@@ -77,12 +82,21 @@ public class ArtistViewerActivity extends BaseActivity implements
 
 	@SuppressWarnings("deprecation")
 	@ViewById(R.id.artist_images_gallery)
-	Gallery artistImageGallery;
+	Gallery mArtistImageGallery;
+	
+	@ViewById(R.id.btn_show_artist_gallery)
+	Button btnShowGallery;
+	
+	@AnimationRes
+	Animation fadeIn;
+	
+	@AnimationRes
+	Animation fadeOut;
 
 	@ViewById(R.id.artist_bio)
 	TextView mArtistBio;
 
-	ImageAdapter artistImagesAdapter;
+	ImageAdapter mArtistImagesAdapter;
 
 	ImageDownloaderTask imageDownloaderTask = new ImageDownloaderTask();
 
@@ -95,14 +109,23 @@ public class ArtistViewerActivity extends BaseActivity implements
 		final ActionBar actionBar = getSupportActionBar();
 		// Enable navigation to parent activity
 		actionBar.setDisplayHomeAsUpEnabled(true);
-		
+
 		Intent intent = this.getIntent();
 		Artist artist = (Artist) intent.getSerializableExtra(Artist.KEY);
+		// Handling discogs diff
+		if (artist == null) {
+			artist = new Artist(
+					intent.getIntExtra(
+							com.ventura.musicexplorer.discogs.entity.Artist.KEY_ID,
+							0),
+					intent.getStringExtra(com.ventura.musicexplorer.discogs.entity.Artist.KEY_NAME));
+		}
 		this.mCurrentArtist = artist;
 		OAuthConsumer consumer = this.getConsumer(this.sharedPreferences);
 
 		getSupportActionBar().setTitle(artist.getName());
-		getSupportActionBar().setSubtitle(R.string.title_activity_artist_viewer);
+		getSupportActionBar()
+				.setSubtitle(R.string.title_activity_artist_viewer);
 	}
 
 	@AfterViews
@@ -114,7 +137,7 @@ public class ArtistViewerActivity extends BaseActivity implements
 	void getArtist(int artistId) {
 		ArtistService artistService = new ArtistService(this);
 		try {
-			fillView(artistService.getArtist(artistId));
+			updateView(artistService.getArtist(artistId));
 		} catch (NoInternetConnectionException e) {
 			e.printStackTrace();
 		} catch (LazyInternetConnectionException e) {
@@ -138,7 +161,7 @@ public class ArtistViewerActivity extends BaseActivity implements
 	}
 
 	@UiThread
-	void fillView(Artist artist) {
+	void updateView(Artist artist) {
 		mActivityLoadingBar.setVisibility(View.GONE);
 		mBaseLayout.setVisibility(View.VISIBLE);
 
@@ -152,11 +175,11 @@ public class ArtistViewerActivity extends BaseActivity implements
 			new ImageLoader(this).displayImage(firstImage.getUrl().toString(),
 					mArtistImageView);
 			// TODO
-			artistImagesAdapter = new ImageAdapter(this,
+			mArtistImagesAdapter = new ImageAdapter(this,
 					this.mCurrentArtist.getImages());
-			artistImageGallery.setAdapter(artistImagesAdapter);
+			mArtistImageGallery.setAdapter(mArtistImagesAdapter);
 
-			artistImageGallery.setOnItemSelectedListener(this);
+			mArtistImageGallery.setOnItemSelectedListener(this);
 
 			this.setArtistMainImage(firstImage);
 
@@ -203,7 +226,7 @@ public class ArtistViewerActivity extends BaseActivity implements
 
 			for (int i = 0; this.mCurrentArtist.getImages() != null
 					&& i < this.mCurrentArtist.getImages().size(); i++) {
-				//this.mCurrentArtist.getImages().get(0).setBitmap(null);
+				// this.mCurrentArtist.getImages().get(0).setBitmap(null);
 			}
 
 			releasesIntent.putExtra(Artist.KEY, this.mCurrentArtist);
@@ -419,7 +442,6 @@ public class ArtistViewerActivity extends BaseActivity implements
 
 			ButtonGroup buttonGroup = (ButtonGroup) findViewById(R.id.members_container);
 
-			List<Button> buttonsToAdd = new ArrayList<Button>();
 			for (int i = 0; i < this.mCurrentArtist.getMembers().size(); i++) {
 				buttonGroup.setVisibility(View.VISIBLE);
 				final Artist member = this.mCurrentArtist.getMembers().get(i);
@@ -442,9 +464,8 @@ public class ArtistViewerActivity extends BaseActivity implements
 						openNewArtistInfo(member);
 					}
 				});
-				buttonsToAdd.add(button);
+				buttonGroup.addButton(button);
 			}
-			buttonGroup.addViews(buttonsToAdd);
 		}
 	}
 
@@ -497,6 +518,28 @@ public class ArtistViewerActivity extends BaseActivity implements
 		}
 	}
 
+	@Click(R.id.btn_show_artist_gallery)
+	public void onShowGalleryButtonClicked(View button){
+		btnShowGallery.startAnimation(fadeOut);
+		
+		fadeOut.setAnimationListener(new AnimationListener() {
+			public void onAnimationStart(Animation animation) {
+			}
+			public void onAnimationRepeat(Animation animation) {
+			}
+			
+			public void onAnimationEnd(Animation animation) {
+				btnShowGallery.setVisibility(View.GONE);
+				
+				mArtistImageGallery.setVisibility(View.INVISIBLE);
+				mArtistImageGallery.startAnimation(fadeIn);
+				mArtistImageGallery.setVisibility(View.VISIBLE);
+				
+				fadeOut.setAnimationListener(null);
+			}
+		});
+	}
+	
 	public void saveArtistImage() {
 		if (this.mCurrentArtist.getImages().size() == 0)
 			return;
@@ -510,32 +553,24 @@ public class ArtistViewerActivity extends BaseActivity implements
 
 		final String directory = Environment.getExternalStorageDirectory()
 				+ "/Artists Images/";
-		final String fileName = mCurrentArtist.getName() + ".jpg";
 
-		final Image primaryImage = this.mCurrentArtist.getImages().get(0);
+		Image selectedImage = (Image) mArtistImageGallery.getSelectedItem();
+		int selImagePos = mArtistImageGallery.getSelectedItemPosition();
 
-		// If the image is already downloaded, only save it
-		/*if (primaryImage.getBitmap() != null) {
-			saveImage(primaryImage.getBitmap(), directory, fileName);
-			return;
-		}*/
+		final String fileName = mCurrentArtist.getName()
+				+ (selImagePos == 0 ? "" : "-" + (selImagePos + 1)) + ".jpg";
 
-		OnImageDownloadListener imageDownloadListener = new OnImageDownloadListener() {
-			public void onDownloadFinished(Bitmap result) {
-				saveImage(result, directory, fileName);
-			}
-
-			public void onDownloadError(String error) {
-				Toast.makeText(ArtistViewerActivity.this,
-						getString(R.string.image_not_possible_to_download),
-						Toast.LENGTH_SHORT).show();
-			}
-		};
-
-		this.imageDownloaderTask.setImage(primaryImage);
-		this.imageDownloaderTask
-				.setImageDownloadListener(imageDownloadListener);
-		this.imageDownloaderTask.execute();
+		UrlImageViewHelper.setUrlDrawable(mArtistImageView, selectedImage
+				.getUrl().toString(), R.drawable.no_image,
+				new UrlImageViewCallback() {
+					@Override
+					public void onLoaded(ImageView imageView,
+							Bitmap loadedBitmap, String url,
+							boolean loadedFromCache) {
+						saveImage(loadedBitmap, directory, fileName);
+						return;
+					}
+				});
 	}
 
 	private void saveImage(Bitmap image, String directory, String fileName) {
@@ -607,7 +642,7 @@ public class ArtistViewerActivity extends BaseActivity implements
 	@Override
 	public void onItemSelected(AdapterView<?> adapter, View view, int position,
 			long arg3) {
-		Image artistImage = (Image) artistImagesAdapter.getItem(position);
+		Image artistImage = (Image) mArtistImagesAdapter.getItem(position);
 		this.setArtistMainImage(artistImage);
 	}
 
@@ -618,39 +653,41 @@ public class ArtistViewerActivity extends BaseActivity implements
 
 	public void setArtistMainImage(Image image) {
 		mArtistImageDownloadProgressBar.setVisibility(View.VISIBLE);
-		//mArtistImageView.setImageBitmap(image.getBitmap());
-		mArtistImageView.setMinimumHeight(image.getHeight());
-		mArtistImageView.setMinimumWidth(image.getWidth());
+
 		this.downloadMainImage(image);
 	}
 
-	@Background
-	void downloadMainImage(Image image) {
+	void downloadMainImage(final Image image) {
 		try {
-			/*image.setBitmap(BitmapFactory.decodeStream(image.getUrl()
-					.openConnection().getInputStream()));*/
+			UrlImageViewHelper.setUrlDrawable(mArtistImageView, image.getUrl()
+					.toString(), R.drawable.no_image,
+					new UrlImageViewCallback() {
+						@Override
+						public void onLoaded(ImageView imageView,
+								Bitmap loadedBitmap, String url,
+								boolean loadedFromCache) {
+							afterDownloadArtistMainImage(imageView, image,
+									loadedBitmap);
+						}
+					});
 		} catch (Exception e) {
 			this.onArtistMainImageDownloadError();
 			e.printStackTrace();
 		}
-
-		this.afterDownloadArtistMainImage(image);
 	}
 
-	@UiThread
 	void onArtistMainImageDownloadError() {
 		mArtistImageView.setVisibility(View.GONE);
 		mArtistImageDownloadProgressBar.setVisibility(View.GONE);
 	}
 
-	@UiThread
-	void afterDownloadArtistMainImage(Image image) {
+	void afterDownloadArtistMainImage(ImageView artistImageView, Image image,
+			Bitmap imageBmp) {
 		// Avoid the show of all images when user rolls the gallery,
 		// from first to last picture, for instance
-		if (artistImageGallery.getSelectedItem() == image) {
-			//mArtistImageView.setImageBitmap(image.getBitmap());
-			mArtistImageView.setMinimumHeight(image.getHeight());
-			mArtistImageView.setMinimumWidth(image.getWidth());
+		if (mArtistImageGallery.getSelectedItem() == image) {
+			mArtistImageView.setMinimumHeight(imageBmp.getHeight());
+			mArtistImageView.setMinimumWidth(imageBmp.getWidth());
 			mArtistImageDownloadProgressBar.setVisibility(View.GONE);
 		}
 	}

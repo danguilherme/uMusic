@@ -1,5 +1,6 @@
 package com.ventura.musicexplorer.ui.artist;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
@@ -27,6 +28,8 @@ public class ImageAdapter extends BaseAdapter {
 	// placeholder bitmap for empty spaces in gallery
 	Bitmap placeholder;
 
+	//List<Bitmap> cache;
+
 	public ImageAdapter(Context context, List<Image> images) {
 		// instantiate context
 		galleryContext = context;
@@ -34,9 +37,7 @@ public class ImageAdapter extends BaseAdapter {
 		// decode the placeholder image
 		placeholder = BitmapFactory.decodeResource(
 				galleryContext.getResources(), R.drawable.no_image);
-		// set placeholder as all thumbnail images in the gallery initially
-		/*for (int i = 0; i < images.size(); i++)
-			this.images.get(i).setBitmap(placeholder);*/
+		//cache = new ArrayList<Bitmap>();
 	}
 
 	@Override
@@ -74,7 +75,7 @@ public class ImageAdapter extends BaseAdapter {
 					@Override
 					public void onLoaded(ImageView imgView, Bitmap bitmap,
 							String url, boolean loadedFromCache) {
-						/*images.get(pos).setBitmap(bitmap);*/
+						//cache.add(pos, bitmap);
 					}
 				});
 		// return the view

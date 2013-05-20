@@ -27,15 +27,17 @@ public class KeyValuePanel extends LinearLayout {
 		super(context, attrs);
 
 		TypedArray typedArray = context.obtainStyledAttributes(attrs,
-				R.styleable.KeyValuePanel);
+				R.styleable.KeyValuePanel_);
 
 		keyDelimiter = typedArray
-				.getString(R.styleable.KeyValuePanel_keyDelimiter);
+				.getString(R.styleable.KeyValuePanel__keyDelimiter);
 		if (keyDelimiter == null) {
 			keyDelimiter = DEFAULT_KEY_DELIMITER;
 		}
-		keyText = typedArray.getString(R.styleable.KeyValuePanel_keyText);
-		valueText = typedArray.getString(R.styleable.KeyValuePanel_valueText);
+		keyText = typedArray.getString(R.styleable.KeyValuePanel__keyText);
+		valueText = typedArray.getString(R.styleable.KeyValuePanel__valueText);
+		
+		typedArray.recycle();
 	}
 
 	public KeyValuePanel(Context context, String key, String value) {

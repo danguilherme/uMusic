@@ -4,21 +4,17 @@
     <TextView
         android:id="@+id/key"
         style="@style/Text16Bold"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="5dp"
-        android:layout_weight="4"
-        android:orientation="horizontal"
-        android:padding="3dp" >
+        android:layout_marginRight="5dp" >
     </TextView>
 
     <TextView
         android:id="@+id/value"
+        style="@style/NormalText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="7"
-        android:orientation="horizontal"
-        android:padding="3dp" >
+        android:layout_weight="7" >
     </TextView>
 
 </merge>

@@ -32,8 +32,8 @@ public final class AboutActivity_
     }
 
     private void afterSetContentView_() {
-        appVersion = ((KeyValuePanel) findViewById(id.app_version));
         developerName = ((KeyValuePanel) findViewById(id.developer_name));
+        appVersion = ((KeyValuePanel) findViewById(id.app_version));
         {
             View view = findViewById(id.btn_send_email);
             if (view!= null) {

@@ -54,6 +54,7 @@
     <string name="biography">Biography</string>
     <string name="discogs_view_artist_profile">View artist profile on Discogs</string>
     <string name="discogs_view_artist_releases">View artist\'s releases</string>
+    <string name="show_artist_gallery">Show Gallery</string>
     <!-- Artist image download -->
     <string name="image_already_being_downloaded">The image is already being downloaded. When it is finished, try again.</string>
     <string name="image_not_possible_to_download">It wasn\'t possible to bring your photo. Please try again later.</string>
@@ -63,6 +64,20 @@
     <!-- Releases Viewer Activity [START] -->
     <string name="title_activity_releases_viewer">Releases</string>
     <string name="show_info_btn">Show Info</string>
+    <!-- Releases Viewer Activity [END] -->
+    
+    <!-- Release/Master -->    
+    <string name="notes">Notes</string>
+    <string name="year">Year</string>
+    <string name="country">Country</string>
+    <string name="tracks">Tracks</string>
+    
+    <!-- Release Viewer Activity [START] -->
+    <string name="title_activity_release_viewer">Release Info</string>
+    <!-- Releases Viewer Activity [END] -->
+    
+    <!-- Release Viewer Activity [START] -->
+    <string name="title_activity_master_viewer">Master Info</string>
     <!-- Releases Viewer Activity [END] -->
 
 
@@ -112,6 +127,8 @@
 
     <!-- Error Messages -->
     <string name="error_bringing_release_info">There was an error when bringing the release\'s info.</string>
+    
+    <!-- Lyrics providers -->
     <string name="provider_terra_name">Terra Letras</string>
     <string name="provider_terra_url">http://letras.mus.br/winamp.php?artista=%1$s%26musica=%2$s</string>
     <string name="provider_lyrster_name">Lyrster</string>
