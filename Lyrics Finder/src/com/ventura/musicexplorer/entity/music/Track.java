@@ -110,7 +110,7 @@ public class Track implements Serializable {
 		}
 		Track anotherSong = (Track) o;
 		return this.id == anotherSong.id
-				&& this.getTitle() == anotherSong.getTitle();
+				&& this.getTitle().equals(anotherSong.getTitle());
 	}
 
 	@Override

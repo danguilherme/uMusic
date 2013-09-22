@@ -18,7 +18,7 @@ public class ReleasesListAdapter extends BaseAdapter<ArtistRelease> {
 		super(context, data);
 	}
 
-	private int layoutId = R.layout.artist_release;
+	private int layoutId = R.layout.artist_releases_list_item;
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {

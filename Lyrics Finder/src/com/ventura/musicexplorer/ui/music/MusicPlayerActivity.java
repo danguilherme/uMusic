@@ -4,12 +4,21 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import android.app.Activity;
+import android.content.ComponentName;
+import android.content.ContextWrapper;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences.Editor;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
+import android.os.RemoteException;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -26,13 +35,17 @@ import com.googlecode.androidannotations.annotations.EActivity;
 import com.googlecode.androidannotations.annotations.UiThread;
 import com.googlecode.androidannotations.annotations.ViewById;
 import com.ventura.musicexplorer.R;
+import com.ventura.musicexplorer.discogs.DiscogsConstants;
+import com.ventura.musicexplorer.discogs.entity.enumerator.QueryType;
 import com.ventura.musicexplorer.entity.music.Track;
 import com.ventura.musicexplorer.lyrdb.LyrDBService;
-import com.ventura.musicexplorer.lyrdb.QueryType;
 import com.ventura.musicexplorer.lyrdb.entities.Lyric;
+import com.ventura.musicexplorer.music.IMediaPlaybackService;
 import com.ventura.musicexplorer.music.Music;
 import com.ventura.musicexplorer.music.TracksManager;
+import com.ventura.musicexplorer.music.player.MediaPlaybackService;
 import com.ventura.musicexplorer.ui.BaseActivity;
+import com.ventura.musicexplorer.ui.artist.ArtistsListActivity_;
 import com.ventura.musicexplorer.util.TimerUtils;
 
 @EActivity(R.layout.musicplayer)
@@ -44,7 +57,7 @@ public class MusicPlayerActivity extends BaseActivity implements
 			+ ".PREF_IS_SHUFFLE";
 	final String PREF_IS_REPEAT = this.getClass().getName() + ".PREF_IS_REPEAT";
 
-	TracksManager songsManager;
+	TracksManager tracksManager;
 	private List<Track> songsList;
 	/**
 	 * List used when shuffle is active. This way, when click previous, the same
@@ -59,6 +72,9 @@ public class MusicPlayerActivity extends BaseActivity implements
 
 	@ViewById(R.id.btnPlaylist)
 	ImageButton btnPlaylist;
+
+	@ViewById(R.id.btnSearch)
+	ImageButton btnSearch;
 
 	@ViewById(R.id.btnPlay)
 	ImageButton btnPlay;
@@ -105,15 +121,19 @@ public class MusicPlayerActivity extends BaseActivity implements
 	// Handler to update UI timer, progress bar etc,.
 	private Handler mHandler = new Handler();
 
+	private IMediaPlaybackService mService;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		music = new Music(this);
-		timerUtils = new TimerUtils();
 		music.setOnCompletionListener(this);
-		songsManager = new TracksManager(this);
-		songsList = songsManager.refreshPlayList();
+		timerUtils = new TimerUtils();
+		tracksManager = new TracksManager(this);
+		songsList = tracksManager.refreshPlayList();
+
+		setVolumeControlStream(AudioManager.STREAM_MUSIC);
 	}
 
 	@Override
@@ -132,7 +152,8 @@ public class MusicPlayerActivity extends BaseActivity implements
 		String intendedAction = intent.getAction();
 
 		if (intendedAction != null && intendedAction.equals(Intent.ACTION_VIEW)) {
-			Track track = songsManager.getTrackByUri(intent.getData().getPath());
+			Track track = tracksManager.getTrackByUri(intent.getData()
+					.getPath());
 			songsList.add(track);
 			if (shuffledSongsList != null) {
 				shuffledSongsList.add(track);
@@ -140,6 +161,99 @@ public class MusicPlayerActivity extends BaseActivity implements
 			this.playSong(track);
 		} else {
 			this.playSong(songsList.get(0));
+		}
+		this.bindToService();
+	}
+
+	private void startPlayback() {
+
+		if (mService == null)
+			return;
+		Intent intent = getIntent();
+		String filename = "";
+		Uri uri = intent.getData();
+		if (uri != null && uri.toString().length() > 0) {
+			// If this is a file:// URI, just use the path directly instead
+			// of going through the open-from-filedescriptor codepath.
+			String scheme = uri.getScheme();
+			if ("file".equals(scheme)) {
+				filename = uri.getPath();
+			} else {
+				filename = uri.toString();
+			}
+			try {
+				mService.stop();
+				mService.openFile(filename);
+				mService.play();
+				setIntent(new Intent());
+			} catch (Exception ex) {
+				Log.d("MediaPlaybackActivity", "couldn't start playback: " + ex);
+			}
+		}
+
+		try {
+			updateProgressBarViews(String.valueOf(mService.duration()),
+					String.valueOf(mService.duration()), 50);
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}
+		// updateTrackInfo();
+		// long next = refreshNow();
+		// queueNextRefresh(next);
+	}
+
+	ServiceConnection serviceConnection = new ServiceConnection() {
+		public void onServiceConnected(ComponentName classname, IBinder obj) {
+			mService = IMediaPlaybackService.Stub.asInterface(obj);
+			startPlayback();
+			try {
+				// Assume something is playing when the service says it is,
+				// but also if the audio ID is valid but the service is paused.
+				if (mService.getAudioId() >= 0 || mService.isPlaying()
+						|| mService.getPath() != null) {
+					// something is playing now, we're done
+					/*
+					 * mRepeatButton.setVisibility(View.VISIBLE);
+					 * mShuffleButton.setVisibility(View.VISIBLE);
+					 * mQueueButton.setVisibility(View.VISIBLE);
+					 * setRepeatButtonImage(); setShuffleButtonImage();
+					 * setPauseButtonImage();
+					 */
+					return;
+				}
+			} catch (RemoteException ex) {
+			}
+			// Service is dead or not playing anything. If we got here as part
+			// of a "play this file" Intent, exit. Otherwise go to the Music
+			// app start screen.
+			/*
+			 * if (getIntent().getData() == null) { Intent intent = new
+			 * Intent(Intent.ACTION_MAIN);
+			 * intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			 * intent.setClass(MediaPlaybackActivity.this,
+			 * MusicBrowserActivity.class); startActivity(intent); }
+			 */
+			finish();
+		}
+
+		public void onServiceDisconnected(ComponentName classname) {
+			mService = null;
+		}
+	};
+
+	private void bindToService() {
+		Activity realActivity = this.getParent();
+		if (realActivity == null) {
+			realActivity = this;
+		}
+		ContextWrapper cw = new ContextWrapper(realActivity);
+		cw.startService(new Intent(cw, MediaPlaybackService.class));
+		if (cw.bindService(
+				(new Intent()).setClass(cw, MediaPlaybackService.class),
+				serviceConnection, BIND_AUTO_CREATE)) {
+			Log.d(TAG, "MediaPlaybackService succesfully started");
+		} else {
+			Log.d(TAG, "Error when starting MediaPlaybackService");
 		}
 	}
 
@@ -157,12 +271,34 @@ public class MusicPlayerActivity extends BaseActivity implements
 		searchSongLyrics();
 	}
 
+	@Click(R.id.btnSearch)
+	void onSearchButtonClick(View btn) {
+		if (!this.isConnected()) {
+			Toast.makeText(this, R.string.message_no_internet_connection,
+					Toast.LENGTH_SHORT).show();
+			return;
+		}
+
+		openCurrentArtistInfo();
+	}
+
+	private void openCurrentArtistInfo() {
+		Intent artistSearchIntent = ArtistsListActivity_.intent(this).get();
+		artistSearchIntent.setAction(Intent.ACTION_SEND);
+		artistSearchIntent.putExtra(DiscogsConstants.KEY_QUERY_TYPE,
+				QueryType.artist.toString());
+		artistSearchIntent.putExtra(DiscogsConstants.KEY_QUERY_TEXT, music
+				.getCurrentPlaying().getArtist().getName());
+		startActivity(artistSearchIntent);
+	}
+
 	@Background
 	void searchSongLyrics() {
 		Track song = music.getCurrentPlaying();
 		LyrDBService lyrDBService = new LyrDBService(this);
-		List<Lyric> lyrs = lyrDBService.search(QueryType.FullT, new Lyric(null,
-				song.getTitle(), song.getArtist().getName()));
+		List<Lyric> lyrs = lyrDBService.search(
+				com.ventura.musicexplorer.lyrdb.QueryType.FullT, new Lyric(
+						null, song.getTitle(), song.getArtist().getName()));
 		if (lyrs.size() > 0) {
 			Lyric lyrics = lyrs.get(0);
 			// Verify if the user didn't changed the music
@@ -395,6 +531,18 @@ public class MusicPlayerActivity extends BaseActivity implements
 	@Override
 	public void onProgressChanged(SeekBar seekBar, int progress,
 			boolean fromTouch) {
+		if (fromTouch) {
+			mHandler.removeCallbacks(mUpdateTimerRunnable);
+			int totalDuration = music.getMediaPlayer().getDuration();
+			int currentPosition = timerUtils.progressToTimer(
+					songProgressBar.getProgress(), totalDuration);
+
+			// forward or backward to certain seconds
+			music.getMediaPlayer().seekTo(currentPosition);
+
+			// update timer progress again
+			updateProgressBar();
+		}
 	}
 
 	@Override
@@ -405,15 +553,5 @@ public class MusicPlayerActivity extends BaseActivity implements
 
 	@Override
 	public void onStopTrackingTouch(SeekBar seekBar) {
-		mHandler.removeCallbacks(mUpdateTimerRunnable);
-		int totalDuration = music.getMediaPlayer().getDuration();
-		int currentPosition = timerUtils.progressToTimer(
-				songProgressBar.getProgress(), totalDuration);
-
-		// forward or backward to certain seconds
-		music.getMediaPlayer().seekTo(currentPosition);
-
-		// update timer progress again
-		updateProgressBar();
 	}
 }

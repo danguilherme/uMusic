@@ -129,7 +129,6 @@ public class ArtistsListActivity extends BaseListActivity implements
 			currentPosition = list.getFirstVisiblePosition();
 			adapter.addItems(artistsList);
 		}
-		adapter.notifyDataSetChanged();
 		list.setAdapter(adapter);
 
 		list.setSelectionFromTop(currentPosition + 1, 0);

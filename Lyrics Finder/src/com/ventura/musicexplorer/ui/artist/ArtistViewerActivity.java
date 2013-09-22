@@ -61,7 +61,6 @@ import com.ventura.musicexplorer.ui.release.ReleasesListActivity_;
 import com.ventura.musicexplorer.ui.widget.ButtonGroup;
 import com.ventura.musicexplorer.ui.widget.KeyValuePanel;
 import com.ventura.musicexplorer.util.ImageDownloaderTask;
-import com.ventura.musicexplorer.util.ImageLoader;
 
 @EActivity(R.layout.artist_info)
 public class ArtistViewerActivity extends BaseActivity implements
@@ -83,13 +82,13 @@ public class ArtistViewerActivity extends BaseActivity implements
 	@SuppressWarnings("deprecation")
 	@ViewById(R.id.artist_images_gallery)
 	Gallery mArtistImageGallery;
-	
+
 	@ViewById(R.id.btn_show_artist_gallery)
 	Button btnShowGallery;
-	
+
 	@AnimationRes
 	Animation fadeIn;
-	
+
 	@AnimationRes
 	Animation fadeOut;
 
@@ -110,6 +109,16 @@ public class ArtistViewerActivity extends BaseActivity implements
 		// Enable navigation to parent activity
 		actionBar.setDisplayHomeAsUpEnabled(true);
 
+		this.mCurrentArtist = this.decipherIntent();
+		
+		OAuthConsumer consumer = this.getConsumer(this.sharedPreferences);
+
+		getSupportActionBar().setTitle(this.mCurrentArtist.getName());
+		getSupportActionBar()
+				.setSubtitle(R.string.title_activity_artist_viewer);
+	}
+	
+	private Artist decipherIntent(){
 		Intent intent = this.getIntent();
 		Artist artist = (Artist) intent.getSerializableExtra(Artist.KEY);
 		// Handling discogs diff
@@ -120,12 +129,7 @@ public class ArtistViewerActivity extends BaseActivity implements
 							0),
 					intent.getStringExtra(com.ventura.musicexplorer.discogs.entity.Artist.KEY_NAME));
 		}
-		this.mCurrentArtist = artist;
-		OAuthConsumer consumer = this.getConsumer(this.sharedPreferences);
-
-		getSupportActionBar().setTitle(artist.getName());
-		getSupportActionBar()
-				.setSubtitle(R.string.title_activity_artist_viewer);
+		return artist;
 	}
 
 	@AfterViews
@@ -162,9 +166,6 @@ public class ArtistViewerActivity extends BaseActivity implements
 
 	@UiThread
 	void updateView(Artist artist) {
-		mActivityLoadingBar.setVisibility(View.GONE);
-		mBaseLayout.setVisibility(View.VISIBLE);
-
 		// artist
 		this.mCurrentArtist = artist;
 
@@ -172,9 +173,6 @@ public class ArtistViewerActivity extends BaseActivity implements
 				&& this.mCurrentArtist.getImages().size() > 0) {
 			Image firstImage = this.mCurrentArtist.getImages().get(0);
 
-			new ImageLoader(this).displayImage(firstImage.getUrl().toString(),
-					mArtistImageView);
-			// TODO
 			mArtistImagesAdapter = new ImageAdapter(this,
 					this.mCurrentArtist.getImages());
 			mArtistImageGallery.setAdapter(mArtistImagesAdapter);
@@ -182,14 +180,10 @@ public class ArtistViewerActivity extends BaseActivity implements
 			mArtistImageGallery.setOnItemSelectedListener(this);
 
 			this.setArtistMainImage(firstImage);
-
-			if (firstImage.getHeight() > 0 && firstImage.getWidth() > 0) {
-				mArtistImageView.setMinimumHeight(firstImage.getHeight());
-				mArtistImageView.setMinimumWidth(firstImage.getWidth());
-			}
 		} else {
 			mArtistImageView.setVisibility(View.GONE);
 			mArtistImageDownloadProgressBar.setVisibility(View.GONE);
+			btnShowGallery.setVisibility(View.GONE);
 		}
 
 		getSupportActionBar().setTitle(this.mCurrentArtist.getName());
@@ -202,6 +196,10 @@ public class ArtistViewerActivity extends BaseActivity implements
 		}
 
 		buildAditionalInformationView();
+		
+		mActivityLoadingBar.setVisibility(View.GONE);
+		mBaseLayout.setVisibility(View.VISIBLE);
+		mBaseLayout.startAnimation(fadeIn);
 	}
 
 	private void openArtistDiscogsProfile() {
@@ -519,27 +517,58 @@ public class ArtistViewerActivity extends BaseActivity implements
 	}
 
 	@Click(R.id.btn_show_artist_gallery)
-	public void onShowGalleryButtonClicked(View button){
-		btnShowGallery.startAnimation(fadeOut);
-		
-		fadeOut.setAnimationListener(new AnimationListener() {
+	/**
+	 * Hides the "Show Gallery" button and shows
+	 * the Gallery, with a fade in/fade out effect. 
+	 * @param button
+	 * The "Show Gallery" button
+	 */
+	public void onShowGalleryButtonClicked(View button) {
+		// Show the mArtistImageGallery after btnShowGallery
+		// has been hidden
+		fadeIn.setAnimationListener(new AnimationListener() {
+			@Override
 			public void onAnimationStart(Animation animation) {
+				// Set visibility to INVISIBLE first because if the
+				// visibility of the view is gone the animation doesn't
+				// happens (The view is completely hidden)
+				mArtistImageGallery.setVisibility(View.INVISIBLE);
 			}
+
+			@Override
 			public void onAnimationRepeat(Animation animation) {
 			}
-			
+
+			@Override
 			public void onAnimationEnd(Animation animation) {
-				btnShowGallery.setVisibility(View.GONE);
-				
-				mArtistImageGallery.setVisibility(View.INVISIBLE);
-				mArtistImageGallery.startAnimation(fadeIn);
 				mArtistImageGallery.setVisibility(View.VISIBLE);
-				
+
+				fadeIn.setAnimationListener(null);
+			}
+		});
+
+		// Hide the btnShowGallery when the animation ends
+		fadeOut.setAnimationListener(new AnimationListener() {
+			@Override
+			public void onAnimationStart(Animation animation) {
+			}
+
+			@Override
+			public void onAnimationRepeat(Animation animation) {
+			}
+
+			public void onAnimationEnd(Animation animation) {
+				mArtistImageGallery.startAnimation(fadeIn);
+
+				btnShowGallery.setVisibility(View.GONE);
+
 				fadeOut.setAnimationListener(null);
 			}
 		});
+
+		btnShowGallery.startAnimation(fadeOut);
 	}
-	
+
 	public void saveArtistImage() {
 		if (this.mCurrentArtist.getImages().size() == 0)
 			return;
@@ -644,6 +673,8 @@ public class ArtistViewerActivity extends BaseActivity implements
 			long arg3) {
 		Image artistImage = (Image) mArtistImagesAdapter.getItem(position);
 		this.setArtistMainImage(artistImage);
+
+		mArtistImageView.setVisibility(View.VISIBLE);
 	}
 
 	@Override
@@ -651,14 +682,10 @@ public class ArtistViewerActivity extends BaseActivity implements
 
 	}
 
-	public void setArtistMainImage(Image image) {
-		mArtistImageDownloadProgressBar.setVisibility(View.VISIBLE);
-
-		this.downloadMainImage(image);
-	}
-
-	void downloadMainImage(final Image image) {
+	public void setArtistMainImage(final Image image) {
 		try {
+			mArtistImageDownloadProgressBar.setVisibility(View.VISIBLE);
+
 			UrlImageViewHelper.setUrlDrawable(mArtistImageView, image.getUrl()
 					.toString(), R.drawable.no_image,
 					new UrlImageViewCallback() {
@@ -671,24 +698,26 @@ public class ArtistViewerActivity extends BaseActivity implements
 						}
 					});
 		} catch (Exception e) {
-			this.onArtistMainImageDownloadError();
+			this.onArtistMainImageDownloadError(e);
 			e.printStackTrace();
+			Log.e(TAG, "Error when downloading the artist image", e);
 		}
 	}
 
-	void onArtistMainImageDownloadError() {
+	void onArtistMainImageDownloadError(Exception e) {
 		mArtistImageView.setVisibility(View.GONE);
 		mArtistImageDownloadProgressBar.setVisibility(View.GONE);
+
+		Toast.makeText(
+				this,
+				"There was an error when downloading the artist image: "
+						+ e.getMessage(), Toast.LENGTH_SHORT).show();
 	}
 
 	void afterDownloadArtistMainImage(ImageView artistImageView, Image image,
 			Bitmap imageBmp) {
-		// Avoid the show of all images when user rolls the gallery,
-		// from first to last picture, for instance
-		if (mArtistImageGallery.getSelectedItem() == image) {
-			mArtistImageView.setMinimumHeight(imageBmp.getHeight());
-			mArtistImageView.setMinimumWidth(imageBmp.getWidth());
-			mArtistImageDownloadProgressBar.setVisibility(View.GONE);
-		}
+		mArtistImageView.setMinimumHeight(imageBmp.getHeight());
+		mArtistImageView.setMinimumWidth(imageBmp.getWidth());
+		mArtistImageDownloadProgressBar.setVisibility(View.GONE);
 	}
 }

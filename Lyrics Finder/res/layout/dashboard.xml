@@ -11,7 +11,7 @@
         android:layout_weight="1" >
 
         <Button
-            style="@style/Text16"
+            style="@style/DashboardButtons"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
@@ -20,7 +20,7 @@
             android:text="@string/music_player" />
 
         <Button
-            style="@style/Text16"
+            style="@style/DashboardButtons"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
@@ -29,7 +29,7 @@
             android:text="@string/search_artist" />
 
         <Button
-            style="@style/Text16"
+            style="@style/DashboardButtons"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
@@ -38,7 +38,7 @@
             android:text="@string/search_lyrics" />
 
         <Button
-            style="@style/Text16"
+            style="@style/DashboardButtons"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"

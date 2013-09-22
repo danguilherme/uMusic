@@ -14,8 +14,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:paddingLeft="5dp"
-        android:paddingRight="5dp"
-        android:scrollbarStyle="outsideInset" >
+        android:paddingRight="5dp" >
 
         <LinearLayout
             android:id="@+id/content"

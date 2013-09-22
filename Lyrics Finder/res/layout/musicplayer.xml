@@ -56,6 +56,13 @@
             android:layout_height="fill_parent"
             android:background="@null"
             android:src="@drawable/btn_playlist" />
+        
+        <ImageButton
+            android:id="@+id/btnSearch"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:background="@null"
+            android:src="@android:drawable/ic_menu_search" />
     </LinearLayout>
 
     <!-- Song Thumbnail Image and Lyrics -->
@@ -180,7 +187,7 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@layout/rounded_corner"
+            android:background="@drawable/rounded_corner"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:paddingLeft="10dp"

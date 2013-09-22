@@ -9,6 +9,8 @@ import com.ventura.musicexplorer.entity.music.Track;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.CursorWindow;
+import android.database.CursorWrapper;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -37,11 +39,10 @@ public class TracksManager {
 		Uri filesUri = MediaStore.Audio.Media.getContentUriForPath(Environment
 				.getExternalStorageDirectory().getPath());
 
-		StringBuilder whereSentence = new StringBuilder();
-		whereSentence.append(MediaStore.Audio.Media.MIME_TYPE);
-		whereSentence.append(" = \"audio/mpeg\" OR ");
-		whereSentence.append(MediaStore.Audio.Media.MIME_TYPE);
-		whereSentence.append(" = \"audio/mp4\"").toString();
+		String whereSentence = String.format(
+				"%1$s = \"audio/mpeg\" OR %1$s = \"audio/mp4\"",
+				MediaStore.Audio.Media.MIME_TYPE);
+
 		Cursor cursor = null;
 		try {
 			cursor = contentResolver.query(filesUri, columns,
@@ -79,28 +80,37 @@ public class TracksManager {
 	public Track getTrackByUri(String uri) {
 		ContentResolver contentResolver = this.context.getContentResolver();
 
-		String[] columns = new String[] { MediaStore.Audio.Media._ID,
-				MediaStore.Audio.Media.DATA, MediaStore.Audio.Media.TITLE,
-				MediaStore.Audio.Media.MIME_TYPE,
-				MediaStore.Audio.Media.ARTIST, MediaStore.Audio.Media.TRACK };
+		String[] columns = new String[] {
+				// Track Info
+				MediaStore.Audio.AudioColumns._ID, // The id
+				MediaStore.Audio.AudioColumns.DATA, // The uri
+				MediaStore.Audio.AudioColumns.TRACK, // The position in the
+														// album
+				MediaStore.Audio.AudioColumns.TITLE, // The song title
+				MediaStore.Audio.AudioColumns.DURATION, // The song duration
+				MediaStore.Audio.AudioColumns.MIME_TYPE, // The file type
+				// Artist Info
+				MediaStore.Audio.AudioColumns.ARTIST_ID, // The album id
+				MediaStore.Audio.AudioColumns.ARTIST, // The artist name
+				// Album Info
+				MediaStore.Audio.AudioColumns.ALBUM_ID, // The album id
+				MediaStore.Audio.AudioColumns.ALBUM // The album name
+		};
 
 		Uri filesUri = MediaStore.Audio.Media.getContentUriForPath(Environment
 				.getExternalStorageDirectory().getPath());
 
-		StringBuilder whereSentence = new StringBuilder();
-		whereSentence.append(MediaStore.Audio.Media.DATA);
-		whereSentence.append(" = \"" + uri + "\" AND (");
-		whereSentence.append(MediaStore.Audio.Media.MIME_TYPE);
-		whereSentence.append(" = \"audio/mpeg\" OR ");
-		whereSentence.append(MediaStore.Audio.Media.MIME_TYPE);
-		whereSentence.append(" = \"audio/mp4\")").toString();
+		String whereSentence = String
+				.format("%1$s = \"%2$s\" AND (%3$s = \"audio/mpeg\" OR %3$s = \"audio/mp4\")",
+						MediaStore.Audio.AudioColumns.DATA, uri,
+						MediaStore.Audio.AudioColumns.MIME_TYPE);
 
 		Track track = null;
 		Cursor cursor = null;
 
 		try {
-			cursor = contentResolver.query(filesUri, columns,
-					whereSentence.toString(), null, null);
+			cursor = contentResolver.query(filesUri, columns, whereSentence,
+					null, null);
 
 			if (cursor.moveToNext())
 				track = this.loadSong(cursor);
@@ -117,24 +127,85 @@ public class TracksManager {
 		return track;
 	}
 
+	@Deprecated
+	/**
+	 * Gets an artist by his/her id and then use the loadArtist method to
+	 * populate it.
+	 * 
+	 * @param id
+	 * @return
+	 */
+	private Artist getArtistById(int id) {
+		ContentResolver contentResolver = this.context.getContentResolver();
+
+		String[] columns = new String[] {
+				// Artist Info
+				MediaStore.Audio.Artists._ID, // The id
+				MediaStore.Audio.Artists.ARTIST, // The artist name
+				MediaStore.Audio.Artists.NUMBER_OF_ALBUMS, // The number of
+															// albums this
+															// artist has
+				MediaStore.Audio.Artists.NUMBER_OF_TRACKS // The number of
+															// tracks this
+															// artist have
+		};
+
+		Uri filesUri = MediaStore.Audio.Artists.getContentUri(Environment
+				.getExternalStorageDirectory().getName());
+
+		String whereSentence = String.format("%1$s = \"%2$s\"",
+				MediaStore.Audio.Artists._ID, id);
+
+		Artist artist = null;
+		Cursor cursor = null;
+
+		try {
+			cursor = contentResolver.query(filesUri, columns, whereSentence, null, null);
+
+			if (cursor != null && cursor.moveToNext())
+				artist = this.loadArtist(cursor);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			// Some providers return null if an error occurs, others throw an
+			// exception
+			if (cursor != null) {
+				cursor.close();
+			}
+		}
+
+		return artist;
+	}
+
+	/**
+	 * Load a track by a database cursor.
+	 * 
+	 * The properties that will be loaded are:
+	 * <ul>
+	 * <li>Id</li>
+	 * <li>Title</li>
+	 * <li>Mime Type</li>
+	 * <li>Uri</li>
+	 * <li>Artist Name</li>
+	 * </ul>
+	 * 
+	 * @param cursor
+	 *            The database cursor, pointed in the line from where it will
+	 *            load the track
+	 * @return A {@link com.ventura.musicexplorer.entity.music.Track track}
+	 *         object
+	 */
 	private Track loadSong(Cursor cursor) {
-		int idColumnIdx = cursor.getColumnIndex(MediaStore.Audio.Media._ID);
-		int titleColumnIdx = cursor
-				.getColumnIndex(MediaStore.Audio.Media.TITLE);
-		int mimeTypeColumnIdx = cursor
-				.getColumnIndex(MediaStore.Audio.Media.MIME_TYPE);
-		int dataColumnIdx = cursor.getColumnIndex(MediaStore.Audio.Media.DATA);
-		int artistColumnIdx = cursor
-				.getColumnIndex(MediaStore.Audio.Media.ARTIST);
+		Track track = new Track(cursor.getInt(0), cursor.getString(3),
+				Uri.parse(cursor.getString(1)), cursor.getString(5));
 
-		Track song = new Track(cursor.getInt(idColumnIdx),
-				cursor.getString(titleColumnIdx), Uri.parse(cursor
-						.getString(dataColumnIdx)),
-				cursor.getString(mimeTypeColumnIdx));
+		track.setArtist(new Artist(cursor.getInt(6), cursor.getString(7)));
 
-		song.setArtist(new Artist(Integer.MIN_VALUE, cursor
-				.getString(artistColumnIdx)));
+		return track;
+	}
 
-		return song;
+	private Artist loadArtist(Cursor cursor) {
+		Artist artist = new Artist(cursor.getInt(0), cursor.getString(1));
+		return artist;
 	}
 }

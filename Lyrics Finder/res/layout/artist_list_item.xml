@@ -35,7 +35,7 @@
         android:layout_centerVertical="true"
         android:layout_toRightOf="@+id/thumbnail"
         android:background="@android:color/transparent"
-        android:textColor="#343434"
+        android:textColor="@color/default_list_item_color"
         android:typeface="sans" />
 
     <!-- Rightend Arrow -->

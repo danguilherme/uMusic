@@ -33,8 +33,7 @@
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/thumbnail"
         android:background="@android:color/transparent"
-        android:textColor="#343434"
-        android:text="End of the Dream"
+        android:textColor="@color/default_list_item_color"
         android:typeface="sans" />
     
     <!-- Track info -->
@@ -46,8 +45,7 @@
         android:layout_below="@+id/release_title"
         android:layout_toRightOf="@+id/thumbnail"
         android:background="@android:color/transparent"
-        android:textColor="#343434"
-        android:text="End of the Dream..."
+        android:textColor="@color/default_list_item_color"
         android:typeface="sans" />
     
     <!-- Year -->
@@ -59,8 +57,7 @@
         android:layout_alignEnd="@+id/release_title"
         android:layout_alignParentRight="true"
         android:background="@android:color/transparent"
-        android:textColor="#343434"
-        android:text="2011"
+        android:textColor="@color/default_list_item_color"
         android:typeface="sans" />
     
     <!-- Status -->
@@ -72,8 +69,7 @@
         android:layout_below="@+id/release_trackinfo"
         android:layout_toRightOf="@+id/thumbnail"
         android:background="@android:color/transparent"
-        android:textColor="#343434"
-        android:text="Good"
+        android:textColor="@color/default_list_item_color"
         android:typeface="sans" />
 
     <!-- Rightend Arrow -->
@@ -82,7 +78,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:background="#00000000"
+        android:background="@android:color/transparent"
         android:src="@drawable/arrow_gray_right" />
 
 </RelativeLayout>

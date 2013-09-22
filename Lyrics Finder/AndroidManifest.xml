@@ -17,6 +17,7 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/Theme.Sherlock.Light.DarkActionBar" >
+
         <!-- System -->
         <activity
             android:name=".ui.MusicInfoActivity"
@@ -50,14 +51,16 @@
             android:name=".ui.AboutActivity_"
             android:label="@string/about" >
         </activity>
-        
+
         <!-- Music Player -->
         <activity
             android:name=".ui.music.MusicPlayerActivity_"
+            android:clearTaskOnLaunch="true"
             android:configChanges="orientation"
+            android:excludeFromRecents="true"
             android:exported="false"
             android:label="@string/app_name"
-            android:launchMode="singleInstance"
+            android:launchMode="singleTask"
             android:theme="@style/Theme.Sherlock.Light.NoActionBar" >
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -67,7 +70,7 @@
                 <data android:mimeType="audio/*" />
             </intent-filter>
         </activity>
-        
+
         <!-- Lyrics -->
         <activity
             android:name=".ui.BindLyricsActivity"
@@ -82,7 +85,7 @@
                 <data android:mimeType="audio/*" />
             </intent-filter>
         </activity>
-        
+
         <!-- Artist -->
         <activity
             android:name=".ui.artist.ArtistsListActivity_"
@@ -103,7 +106,7 @@
             android:label="@string/title_activity_artist_viewer"
             android:parentActivityName=".ui.artist.ListArtistsActivity" >
         </activity>
-        
+
         <!-- Release/Master -->
         <activity
             android:name=".ui.release.ReleasesViewerActivity"
@@ -124,7 +127,6 @@
             android:configChanges="orientation"
             android:label="@string/title_activity_releases_viewer" >
         </activity>
-        
 
         <!-- Discogs -->
         <activity
@@ -156,6 +158,10 @@
             android:name=".musixmatch.ui.LyricsViewerActivity"
             android:configChanges="orientation" >
         </activity>
+
+        <service
+            android:name="com.ventura.musicexplorer.music.player.MediaPlaybackService"
+            android:exported="false" />
     </application>
 
 </manifest>
