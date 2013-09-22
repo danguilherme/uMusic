@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <Button
+        android:id="@+id/btn_save_file"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:onClick="onSaveButtonClicked"
+        android:text="@string/btn_save_file"
+        android:visibility="gone" >
+    </Button>
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="3dip" >
+
+        <TableLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:stretchColumns="1" >
+
+            <TableRow
+                style="@style/MusicInfoLinearLayout"
+                android:visibility="gone" >
+
+                <TextView
+                    style="@style/MusicInfoTextView"
+                    android:text="@string/song_title" />
+
+                <EditText
+                    android:id="@+id/music_text_field"
+                    style="@style/MusicInfoTextField" >
+                </EditText>
+            </TableRow>
+
+            <TableRow style="@style/MusicInfoLinearLayout" >
+
+                <TextView
+                    style="@style/MusicInfoTextView"
+                    android:text="@string/song_artist" />
+
+                <EditText
+                    android:id="@+id/artist_text_field"
+                    style="@style/MusicInfoTextField" >
+                </EditText>
+            </TableRow>
+
+            <TableRow
+                style="@style/MusicInfoLinearLayout"
+                android:visibility="gone" >
+
+                <TextView
+                    style="@style/MusicInfoTextView"
+                    android:text="@string/song_album" />
+
+                <EditText
+                    android:id="@+id/album_text_field"
+                    style="@style/MusicInfoTextField" >
+                </EditText>
+            </TableRow>
+
+            <TableRow
+                style="@style/MusicInfoLinearLayout"
+                android:visibility="gone" >
+
+                <TextView
+                    style="@style/MusicInfoTextView"
+                    android:text="@string/song_comment" />
+
+                <EditText
+                    android:id="@+id/comment_text_field"
+                    style="@style/MusicInfoTextField"
+                    android:inputType="textMultiLine" >
+                </EditText>
+            </TableRow>
+
+            <TableRow
+                style="@style/MusicInfoLinearLayout"
+                android:visibility="gone" >
+
+                <TextView
+                    style="@style/MusicInfoTextView"
+                    android:text="@string/song_compilation" />
+
+                <EditText
+                    android:id="@+id/compilation_text_field"
+                    style="@style/MusicInfoTextField"
+                    android:inputType="textMultiLine" >
+                </EditText>
+            </TableRow>
+
+            <TableRow
+                style="@style/MusicInfoLinearLayout"
+                android:visibility="gone" >
+
+                <TextView
+                    style="@style/MusicInfoTextView"
+                    android:text="@string/song_composer" />
+
+                <EditText
+                    android:id="@+id/composer_text_field"
+                    style="@style/MusicInfoTextField" >
+                </EditText>
+            </TableRow>
+
+            <TableRow
+                style="@style/MusicInfoLinearLayout"
+                android:visibility="gone" >
+
+                <TextView
+                    style="@style/MusicInfoTextView"
+                    android:text="@string/song_composer2" />
+
+                <EditText
+                    android:id="@+id/composer2_text_field"
+                    style="@style/MusicInfoTextField" >
+                </EditText>
+            </TableRow>
+
+            <TableRow
+                style="@style/MusicInfoLinearLayout"
+                android:visibility="gone" >
+
+                <TextView
+                    style="@style/MusicInfoTextView"
+                    android:text="@string/song_duration" />
+
+                <EditText
+                    android:id="@+id/duration_text_field"
+                    style="@style/MusicInfoTextField"
+                    android:inputType="numberSigned" >
+                </EditText>
+            </TableRow>
+
+            <TableRow
+                style="@style/MusicInfoLinearLayout"
+                android:visibility="gone" >
+
+                <TextView
+                    style="@style/MusicInfoTextView"
+                    android:text="@string/song_featuring_list" />
+
+                <EditText
+                    android:id="@+id/featuring_list_text_field"
+                    style="@style/MusicInfoTextField" >
+                </EditText>
+            </TableRow>
+
+            <TableRow
+                style="@style/MusicInfoLinearLayout"
+                android:visibility="gone" >
+
+                <TextView
+                    style="@style/MusicInfoTextView"
+                    android:text="@string/song_genre" />
+
+                <EditText
+                    android:id="@+id/genre_text_field"
+                    style="@style/MusicInfoTextField" >
+                </EditText>
+            </TableRow>
+
+            <TableRow
+                style="@style/MusicInfoLinearLayout"
+                android:visibility="gone" >
+
+                <TextView
+                    style="@style/MusicInfoTextView"
+                    android:text="@string/song_producer" />
+
+                <EditText
+                    android:id="@+id/producer_text_field"
+                    style="@style/MusicInfoTextField" >
+                </EditText>
+            </TableRow>
+
+            <TableRow
+                style="@style/MusicInfoLinearLayout"
+                android:visibility="gone" >
+
+                <TextView
+                    style="@style/MusicInfoTextView"
+                    android:text="@string/song_producer_artist" />
+
+                <EditText
+                    android:id="@+id/producer_artist_text_field"
+                    style="@style/MusicInfoTextField" >
+                </EditText>
+            </TableRow>
+
+            <TableRow
+                style="@style/MusicInfoLinearLayout"
+                android:visibility="gone" >
+
+                <TextView
+                    style="@style/MusicInfoTextView"
+                    android:text="@string/song_track_number" />
+
+                <EditText
+                    android:id="@+id/track_number_text_field"
+                    style="@style/MusicInfoTextField"
+                    android:inputType="number" >
+                </EditText>
+            </TableRow>
+
+            <TableRow
+                style="@style/MusicInfoLinearLayout"
+                android:visibility="gone" >
+
+                <TextView
+                    style="@style/MusicInfoTextView"
+                    android:text="@string/song_year" />
+
+                <EditText
+                    android:id="@+id/year_text_field"
+                    style="@style/MusicInfoTextField"
+                    android:inputType="number" >
+                </EditText>
+            </TableRow>
+        </TableLayout>
+    </ScrollView>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="onViewArtistInfoBtnClick"
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:text="@string/menu_view_artist_info" >
+    </Button>
+
+</LinearLayout>
