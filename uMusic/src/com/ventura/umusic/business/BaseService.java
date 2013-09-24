@@ -24,7 +24,7 @@ public abstract class BaseService extends Service {
 	protected final String KEY_SUCCESS = "success";
 	protected final String KEY_MESSAGE = "message";
 
-	protected static final String URL_BASE_API = "http://www.musicexplorer.somee.com/api";
+	protected static final String URL_BASE_API = "http://www.umusic-api.somee.com/api";
 
 	private Gson deserializer;
 

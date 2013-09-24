@@ -72,11 +72,11 @@ public abstract class LyricProvider {
 		lyric.setArtistName(artistName.trim());
 		lyric.setMusicName(musicName.trim());
 		if (stringResponse == null || stringResponse.equals("")) {
-			lyric.setLyrics("Lyric not found");
+			lyric.setLyricsText("Lyric not found");
 		} else {
 			String lyricHtml = this.decodeLyricHtml(stringResponse, lyric);
 			URLDecoder.decode(lyricHtml);
-			lyric.setLyrics(this.insertLineBreak(lyricHtml));
+			lyric.setLyricsText(this.insertLineBreak(lyricHtml));
 		}
 		return lyric;
 	}

@@ -15,6 +15,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
+import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockActivity;
 import com.ventura.androidutils.utils.ConnectionManager;
@@ -154,6 +155,16 @@ public abstract class BaseActivity extends SherlockActivity {
 		dialog.setTitle(title);
 		dialog.setMessage(message);
 		dialog.show();
+	}
+	
+	public void showToast(final String text, final int duration){
+		runOnUiThread(new Runnable() {
+			
+			@Override
+			public void run() {
+				Toast.makeText(getBaseContext(), text, duration).show();
+			}
+		});
 	}
 
 	/**

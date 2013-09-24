@@ -12,7 +12,7 @@
 	<classpathentry exported="true" kind="lib" path="ref_lib/signpost-commonshttp4-1.2.1.2.jar"/>
 	<classpathentry exported="true" kind="lib" path="ref_lib/jid3lib-0.5.4.jar" sourcepath="C:/Documents and Settings/Guilherme/Meus documentos/Eclipse/bibliotecas/jid3lib-0.5.4.zip"/>
 	<classpathentry exported="true" kind="lib" path="libs/gson-2.2.2.jar"/>
-	<classpathentry kind="lib" path="libs/androidannotations-api-2.7.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/androidannotations-api-2.7.1.jar"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>

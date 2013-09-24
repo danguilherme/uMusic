@@ -3,18 +3,16 @@ package com.ventura.umusic.music;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.ventura.umusic.entity.artist.Artist;
-import com.ventura.umusic.entity.music.Track;
-
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.CursorWindow;
-import android.database.CursorWrapper;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
+
+import com.ventura.umusic.entity.artist.Artist;
+import com.ventura.umusic.entity.music.Track;
 
 public class TracksManager {
 	final String TAG = getClass().getName();
@@ -45,8 +43,8 @@ public class TracksManager {
 
 		Cursor cursor = null;
 		try {
-			cursor = contentResolver.query(filesUri, columns,
-					whereSentence.toString(), null, null);
+			cursor = contentResolver.query(filesUri, columns, whereSentence,
+					null, null);
 
 			int pathColumnIndex = cursor
 					.getColumnIndex(MediaStore.Audio.Media.DATA);
@@ -56,8 +54,8 @@ public class TracksManager {
 						.getString(pathColumnIndex));
 				if (track != null) {
 					songsList.add(track);
+					Log.d(TAG, "Loaded song from device: " + track.toString());
 				}
-				Log.d(TAG, "Loaded song from device: " + track.toString());
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -100,10 +98,13 @@ public class TracksManager {
 		Uri filesUri = MediaStore.Audio.Media.getContentUriForPath(Environment
 				.getExternalStorageDirectory().getPath());
 
-		String whereSentence = String
-				.format("%1$s = \"%2$s\" AND (%3$s = \"audio/mpeg\" OR %3$s = \"audio/mp4\")",
-						MediaStore.Audio.AudioColumns.DATA, uri,
-						MediaStore.Audio.AudioColumns.MIME_TYPE);
+		if ("content".equals(Uri.parse(uri).getScheme()))
+			uri = getPath(Uri.parse(uri));
+
+		String whereSentence = String.format("%1$s = \"%2$s\"",
+				MediaStore.Audio.AudioColumns.DATA, uri,
+				MediaStore.Audio.AudioColumns.MIME_TYPE);
+		Log.d(TAG, "Searching for: " + whereSentence);
 
 		Track track = null;
 		Cursor cursor = null;
@@ -112,6 +113,7 @@ public class TracksManager {
 			cursor = contentResolver.query(filesUri, columns, whereSentence,
 					null, null);
 
+			// cursor.moveToFirst();
 			if (cursor.moveToNext())
 				track = this.loadSong(cursor);
 		} catch (Exception e) {
@@ -125,6 +127,16 @@ public class TracksManager {
 		}
 
 		return track;
+	}
+
+	public String getPath(Uri uri) {
+		String[] projection = { MediaStore.Audio.Media.DATA };
+		Cursor cursor = context.getContentResolver().query(uri, projection,
+				null, null, null);
+		int column_index = cursor
+				.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA);
+		cursor.moveToFirst();
+		return cursor.getString(column_index);
 	}
 
 	@Deprecated
@@ -160,7 +172,8 @@ public class TracksManager {
 		Cursor cursor = null;
 
 		try {
-			cursor = contentResolver.query(filesUri, columns, whereSentence, null, null);
+			cursor = contentResolver.query(filesUri, columns, whereSentence,
+					null, null);
 
 			if (cursor != null && cursor.moveToNext())
 				artist = this.loadArtist(cursor);
@@ -192,8 +205,7 @@ public class TracksManager {
 	 * @param cursor
 	 *            The database cursor, pointed in the line from where it will
 	 *            load the track
-	 * @return A {@link com.ventura.umusic.entity.music.Track track}
-	 *         object
+	 * @return A {@link com.ventura.umusic.entity.music.Track track} object
 	 */
 	private Track loadSong(Cursor cursor) {
 		Track track = new Track(cursor.getInt(0), cursor.getString(3),

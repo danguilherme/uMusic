@@ -38,7 +38,7 @@ public class LyricDownloadTask extends AsyncTask<Lyrics, Integer, Lyrics> {
 			lyric[0] = this.mLyricProvider.searchLyrics(
 					lyric[0].getArtistName(), lyric[0].getMusicName());
 		} catch (LyricNotFoundException e) {
-			lyric[0].setLyrics("Lyric not found...");
+			lyric[0].setLyricsText("Lyric not found...");
 			e.printStackTrace();
 		}
 		return lyric[0];
@@ -50,7 +50,7 @@ public class LyricDownloadTask extends AsyncTask<Lyrics, Integer, Lyrics> {
 
 	@Override
 	protected void onPostExecute(Lyrics result) {
-		this.mTargetLyricComponent.setText(result.getLyrics());
+		this.mTargetLyricComponent.setText(result.getLyricsText());
 		if (this.mProgressDialog != null && this.mProgressDialog.isShowing()) {
 			this.mProgressDialog.dismiss();
 		}

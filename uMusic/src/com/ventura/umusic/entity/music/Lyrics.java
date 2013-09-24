@@ -4,13 +4,13 @@ public class Lyrics {
 	private String id;
 	private String artistName;
 	private String songName;
-	private String lyrics;
+	private String lyricsText;
 
 	public Lyrics(String id, String artistName, String songName, String lyrics) {
 		this.id = id != null ? id : "";
 		this.artistName = artistName;
 		this.songName = songName;
-		this.lyrics = lyrics;
+		this.lyricsText = lyrics;
 	}
 
 	public Lyrics(String artistName, String songName, String lyrics) {
@@ -45,11 +45,11 @@ public class Lyrics {
 		this.songName = mMusicName;
 	}
 
-	public String getLyrics() {
-		return lyrics;
+	public String getLyricsText() {
+		return lyricsText;
 	}
 
-	public void setLyrics(String mLyric) {
-		this.lyrics = mLyric;
+	public void setLyricsText(String mLyric) {
+		this.lyricsText = mLyric;
 	}
 }

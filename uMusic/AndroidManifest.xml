@@ -73,16 +73,15 @@
 
         <!-- Lyrics -->
         <activity
-            android:name=".ui.BindLyricsActivity"
-            android:exported="false"
+            android:name=".ui.LyricsViewerActivity_"
+            android:exported="true"
             android:label="@string/title_activity_bind_lyrics" >
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
 
                 <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.OPENABLE" />
 
-                <data android:mimeType="audio/*" />
+                <data android:pathPattern=".*mp3" android:mimeType="audio/*" />
             </intent-filter>
         </activity>
 
@@ -158,10 +157,6 @@
             android:name=".musixmatch.ui.LyricsViewerActivity"
             android:configChanges="orientation" >
         </activity>
-
-        <service
-            android:name="com.ventura.umusic.music.player.MediaPlaybackService"
-            android:exported="false" />
     </application>
 
 </manifest>
