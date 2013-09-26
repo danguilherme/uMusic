@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.animation.Animation;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -21,6 +22,7 @@ import com.googlecode.androidannotations.annotations.UiThread;
 import com.googlecode.androidannotations.annotations.ViewById;
 import com.googlecode.androidannotations.annotations.res.AnimationRes;
 import com.ventura.umusic.R;
+import com.ventura.umusic.constants.GlobalConstants;
 import com.ventura.umusic.discogs.DiscogsService;
 import com.ventura.umusic.discogs.entity.Artist;
 import com.ventura.umusic.discogs.entity.ArtistRelease;
@@ -28,6 +30,8 @@ import com.ventura.umusic.discogs.entity.Release;
 import com.ventura.umusic.discogs.entity.Track;
 import com.ventura.umusic.ui.BaseActivity;
 import com.ventura.umusic.ui.artist.ArtistViewerActivity_;
+import com.ventura.umusic.ui.music.LyricsViewerActivity;
+import com.ventura.umusic.ui.music.LyricsViewerActivity_;
 import com.ventura.umusic.ui.widget.ButtonGroup;
 import com.ventura.umusic.ui.widget.KeyValuePanel;
 import com.ventura.umusic.util.ImageLoader;
@@ -66,7 +70,8 @@ public class ReleaseViewerActivity extends BaseActivity {
 	ArtistRelease artistRelease;
 	Release release;
 
-	@AnimationRes // Injects android.R.anim.fade_in
+	@AnimationRes
+	// Injects android.R.anim.fade_in
 	Animation fadeIn;
 
 	@Override
@@ -84,6 +89,12 @@ public class ReleaseViewerActivity extends BaseActivity {
 	protected void afterViews() {
 		this.getRelease(artistRelease);
 	}
+	
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+//		outState.putParcelable(TAG, release);
+	}
 
 	@Background
 	protected void getRelease(ArtistRelease artistRelease) {
@@ -91,7 +102,7 @@ public class ReleaseViewerActivity extends BaseActivity {
 		try {
 			release = ds.getRelease(artistRelease);
 		} catch (Exception e) {
-
+			alert(e.getMessage());
 		}
 		updateView(release);
 	}
@@ -136,16 +147,15 @@ public class ReleaseViewerActivity extends BaseActivity {
 
 	private void buildTracksView() {
 		if (release.getTracks() != null && release.getTracks().size() > 0) {
-			for (Track track : release.getTracks()) {
+			for (final Track track : release.getTracks()) {
 				if (track.getPosition().equals("")
 						&& track.getTitle().equals("")
 						&& track.getDuration().equals("")) {
 					continue;
 				}
 
-				if (track.getPosition().equals("0")) {
+				if (track.getPosition().equals("0"))
 					track.setPosition("");
-				}
 
 				LinearLayout trackPanel = (LinearLayout) getLayoutInflater()
 						.inflate(R.layout.track, null);
@@ -156,10 +166,19 @@ public class ReleaseViewerActivity extends BaseActivity {
 						.findViewById(R.id.track_title);
 				TextView duration = (TextView) trackPanel
 						.findViewById(R.id.track_duration);
+				ImageButton openLyrics = (ImageButton) trackPanel
+						.findViewById(R.id.open_lyrics);
 
 				position.setText(track.getPosition() + "");
 				title.setText(track.getTitle());
 				duration.setText(track.getDuration());
+
+				openLyrics.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						openTrackLyrics(track);
+					}
+				});
 
 				tracksContainer.addView(trackPanel);
 			}
@@ -191,7 +210,7 @@ public class ReleaseViewerActivity extends BaseActivity {
 				});
 				artists.addButton(button);
 			}
-			
+
 			artists.setVisibility(View.VISIBLE);
 		}
 	}
@@ -222,18 +241,37 @@ public class ReleaseViewerActivity extends BaseActivity {
 				});
 				extraArtists.addButton(button);
 			}
-			
+
 			extraArtists.setVisibility(View.VISIBLE);
 		}
+	}
+
+	/**
+	 * Opens {@link LyricsViewerActivity} activity to show song lyrics of the
+	 * given {@link Track}.
+	 * 
+	 * @param track
+	 */
+	private void openTrackLyrics(Track track) {
+		Artist firstArtist = this.release.getArtists().get(0);
+
+		Intent trackLyricsIntent = new Intent(this, LyricsViewerActivity_.class);
+
+		trackLyricsIntent.putExtra(GlobalConstants.EXTRA_ARTIST_NAME,
+				firstArtist.getName());
+		trackLyricsIntent.putExtra(GlobalConstants.EXTRA_TRACK_NAME,
+				track.getTitle());
+		
+		startActivity(trackLyricsIntent);
 	}
 
 	@UiThread
 	protected void openArtistInfo(Artist artist) {
 		Intent artistInfoIntent = new Intent(this, ArtistViewerActivity_.class);
-		
+
 		artistInfoIntent.putExtra(Artist.KEY_ID, artist.getId());
 		artistInfoIntent.putExtra(Artist.KEY_NAME, artist.getName());
-		
+
 		startActivity(artistInfoIntent);
 	}
 }

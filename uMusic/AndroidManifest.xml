@@ -73,7 +73,7 @@
 
         <!-- Lyrics -->
         <activity
-            android:name=".ui.LyricsViewerActivity_"
+            android:name=".ui.music.LyricsViewerActivity_"
             android:exported="true"
             android:label="@string/title_activity_bind_lyrics" >
             <intent-filter>
