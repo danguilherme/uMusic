@@ -11,6 +11,7 @@ import android.widget.Toast;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+import com.actionbarsherlock.view.Window;
 import com.googlecode.androidannotations.annotations.AfterViews;
 import com.googlecode.androidannotations.annotations.Background;
 import com.googlecode.androidannotations.annotations.Click;
@@ -46,8 +47,41 @@ public class LyricsViewerActivity extends BaseActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		// ActionBar actionBar = this.getSupportActionBar();
-		// actionBar.
+		// This has to be called before setContentView and you must use the
+		// class in com.actionbarsherlock.view and NOT android.view
+		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+	}
+
+	public String getArtistName() {
+		return artistName.getText().toString();
+	}
+
+	public void setArtistName(String artistName) {
+		this.artistName.setText(artistName);
+	}
+
+	public String getSongName() {
+		return songName.getText().toString();
+	}
+
+	public void setSongName(String songName) {
+		this.songName.setText(songName);
+	}
+
+	@AfterViews
+	public void onAfterViews() {
+		searchLyrics.requestFocus();
+		fetchLyricsInfo();
+		if (getSongName() == "" || getArtistName() == "") {
+			finish();
+			return;
+		}
+
+		ActionBar actionBar = getSupportActionBar();
+		actionBar.setTitle(getSongName());
+		actionBar.setSubtitle(getArtistName());
+
+		getLyrics();
 	}
 
 	/**
@@ -75,56 +109,29 @@ public class LyricsViewerActivity extends BaseActivity {
 		}
 	}
 
-	public String getArtistName() {
-		return artistName.getText().toString();
-	}
-
-	public void setArtistName(String artistName) {
-		this.artistName.setText(artistName);
-	}
-
-	public String getSongName() {
-		return songName.getText().toString();
-	}
-
-	public void setSongName(String songName) {
-		this.songName.setText(songName);
-	}
-
-	@AfterViews
-	public void onAfterViews() {
-		fetchLyricsInfo();
-		if (getSongName() == "" || getArtistName() == "") {
-			finish();
-			return;
-		}
-
-		ActionBar actionBar = getSupportActionBar();
-		actionBar.setTitle(getSongName());
-		actionBar.setSubtitle(getArtistName());
-
+	@UiThread
+	protected void fetchLyrics(){
 		getLyrics();
+		setSupportProgressBarIndeterminateVisibility(false);
 	}
-	
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		menu.add("Set params")
-			.setIcon(R.drawable.ic_action_search)
-			.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+		// menu.add("Set params").setIcon(R.drawable.ic_action_search)
+		// .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 		return true;
 	}
 
 	@Background
 	@Click(R.id.search_lyrics)
-	public void getLyrics() {
+	protected void getLyrics() {
+		showIndeterminateProgress(true);
 		LyricsService lyricsService = new LyricsService(this);
 
 		try {
-			showToast("Carregando...", Toast.LENGTH_SHORT);
 			Lyrics lyrics = lyricsService.getLyrics(getArtistName(),
 					getSongName());
 			updateView(lyrics);
-			showToast("Carregado!", Toast.LENGTH_SHORT);
 		} catch (NoInternetConnectionException e) {
 			alert(e.getMessage());
 			e.printStackTrace();
@@ -134,11 +141,18 @@ public class LyricsViewerActivity extends BaseActivity {
 		} catch (Exception e) {
 			alert(e.getMessage());
 			e.printStackTrace();
+		} finally {
+			showIndeterminateProgress(false);
 		}
 	}
 
 	@UiThread
 	public void updateView(Lyrics lyric) {
 		lyricsText.setText(lyric.getLyricsText());
+	}
+	
+	@UiThread
+	protected void showIndeterminateProgress(boolean show) {
+		setSupportProgressBarIndeterminateVisibility(show);
 	}
 }

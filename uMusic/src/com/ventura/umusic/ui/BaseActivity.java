@@ -151,15 +151,19 @@ public abstract class BaseActivity extends SherlockActivity {
 	 *            The message to show
 	 */
 	public void alert(String title, String message) {
-		AlertDialog dialog = new AlertDialog.Builder(this).create();
+		final AlertDialog dialog = new AlertDialog.Builder(this).create();
 		dialog.setTitle(title);
 		dialog.setMessage(message);
-		dialog.show();
+		runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				dialog.show();
+			}
+		});
 	}
 	
 	public void showToast(final String text, final int duration){
 		runOnUiThread(new Runnable() {
-			
 			@Override
 			public void run() {
 				Toast.makeText(getBaseContext(), text, duration).show();
