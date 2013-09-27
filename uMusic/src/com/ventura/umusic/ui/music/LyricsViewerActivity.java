@@ -9,6 +9,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
 import com.googlecode.androidannotations.annotations.AfterViews;
 import com.googlecode.androidannotations.annotations.Background;
 import com.googlecode.androidannotations.annotations.Click;
@@ -60,8 +62,8 @@ public class LyricsViewerActivity extends BaseActivity {
 		if (Intent.ACTION_SEND.equals(action)) {
 			Uri uri = (Uri) extras.getParcelable(Intent.EXTRA_STREAM);
 
-			TracksManager tracks = new TracksManager(this);
-			Track track = tracks.getTrackByUri(uri.toString());
+			TracksManager tracksManager = new TracksManager(this);
+			Track track = tracksManager.getTrackByUri(uri.toString());
 
 			if (track != null) {
 				setArtistName(track.getArtist().getName());
@@ -102,6 +104,14 @@ public class LyricsViewerActivity extends BaseActivity {
 		actionBar.setSubtitle(getArtistName());
 
 		getLyrics();
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		menu.add("Set params")
+			.setIcon(R.drawable.ic_action_search)
+			.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+		return true;
 	}
 
 	@Background

@@ -30,7 +30,6 @@ import com.ventura.umusic.discogs.entity.Release;
 import com.ventura.umusic.discogs.entity.Track;
 import com.ventura.umusic.ui.BaseActivity;
 import com.ventura.umusic.ui.artist.ArtistViewerActivity_;
-import com.ventura.umusic.ui.music.LyricsViewerActivity;
 import com.ventura.umusic.ui.music.LyricsViewerActivity_;
 import com.ventura.umusic.ui.widget.ButtonGroup;
 import com.ventura.umusic.ui.widget.KeyValuePanel;
