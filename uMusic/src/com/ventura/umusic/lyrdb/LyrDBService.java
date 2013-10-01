@@ -125,8 +125,7 @@ public class LyrDBService {
 	private String doGet(String url) throws Exception {
 		Resources res = this.mContext.getResources();
 		DefaultHttpClient httpclient = new DefaultHttpClient();
-		url += "&agent=" + res.getString(R.string.app_code_name) + "/"
-				+ res.getString(R.string.app_version);
+		url += "&agent=" + res.getString(R.string.app_code_name) + "/0.1";
 		HttpGet request = new HttpGet(url);
 		request.addHeader("Accept", "text/txt");
 		Log.i(TAG, "Requesting URL : " + url);

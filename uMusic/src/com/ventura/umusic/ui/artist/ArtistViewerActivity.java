@@ -110,23 +110,22 @@ public class ArtistViewerActivity extends BaseActivity implements
 		actionBar.setDisplayHomeAsUpEnabled(true);
 
 		this.mCurrentArtist = this.decipherIntent();
-		
+
 		OAuthConsumer consumer = this.getConsumer(this.sharedPreferences);
 
 		getSupportActionBar().setTitle(this.mCurrentArtist.getName());
 		getSupportActionBar()
 				.setSubtitle(R.string.title_activity_artist_viewer);
 	}
-	
-	private Artist decipherIntent(){
+
+	private Artist decipherIntent() {
 		Intent intent = this.getIntent();
 		Artist artist = (Artist) intent.getSerializableExtra(Artist.KEY);
 		// Handling discogs diff
 		if (artist == null) {
 			artist = new Artist(
 					intent.getIntExtra(
-							com.ventura.umusic.discogs.entity.Artist.KEY_ID,
-							0),
+							com.ventura.umusic.discogs.entity.Artist.KEY_ID, 0),
 					intent.getStringExtra(com.ventura.umusic.discogs.entity.Artist.KEY_NAME));
 		}
 		return artist;
@@ -196,7 +195,7 @@ public class ArtistViewerActivity extends BaseActivity implements
 		}
 
 		buildAditionalInformationView();
-		
+
 		mActivityLoadingBar.setVisibility(View.GONE);
 		mBaseLayout.setVisibility(View.VISIBLE);
 		mBaseLayout.startAnimation(fadeIn);

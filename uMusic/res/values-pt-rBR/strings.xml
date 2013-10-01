@@ -1,7 +1,6 @@
 <resources>
     <string name="app_name">uMusic</string>
-    <string name="app_code_name">TurnUpTheMusic</string>
-    <string name="app_version">1.0.3.0</string>
+    <string name="app_code_name">uMusic</string>
     
     <!-- Song Properties [START] -->
     <string name="song_artist">Artista</string>
@@ -30,7 +29,7 @@
 
     <!-- About Activity -->
     <string name="about_title">Sobre</string>
-    <string name="app_description">O aplicativo é feito para amantes da música. Ele torna sua vida mais fácil quando você vai procurar pela biografia de um artista, saber por quais grupos ele passou, seus lançamentos, de singles promocionais à álbuns completos, letras de músicas, e assim vai. Ele é, básica e essencialmente, um explorador do Universo da Música. Você está nele, então aproveite e faça bom proveito!</string>
+    <string name="app_description">O aplicativo é feito para amantes da música. Ele torna sua vida mais fácil quando você vai procurar pela biografia de um artista, saber por quais grupos ele passou, seus lançamentos, de singles promocionais à álbuns completos, letras de músicas, e assim vai. Ele é, básica e essencialmente, um explorador do Universo da Música. Você está nele, então aproveite e faça bom uso!</string>
     <string name="developed_by_title">Desenvolvedor</string>
     <string name="developer_name">Guilherme Ventura</string>
     <string name="developer_email">guilhermeventura2@gmail.com</string>
@@ -54,6 +53,7 @@
     <string name="biography">Biografia</string>
     <string name="discogs_view_artist_profile">Ver perfil do artista no Discogs (em inglês)</string>
     <string name="discogs_view_artist_releases">Ver lançamentos do artista</string>
+    <string name="show_artist_gallery">Mostrar Galeria</string>
     <!-- Artist image download -->
     <string name="image_already_being_downloaded">A imagem já está sendo baixada. Quando terminar, tente novamente.</string>
     <string name="image_not_possible_to_download">Não foi possível baixar sua foto. Pro favor, tente novamente mais tarde.</string>
@@ -63,6 +63,20 @@
     <!-- Releases Viewer Activity [START] -->
     <string name="title_activity_releases_viewer">Lançamentos</string>
     <string name="show_info_btn">Mostrar Informações</string>
+    <!-- Releases Viewer Activity [END] -->
+    
+    <!-- Release/Master -->    
+    <string name="notes">Anotações</string>
+    <string name="year">Ano</string>
+    <string name="country">País</string>
+    <string name="tracks">Faixas</string>
+    
+    <!-- Release Viewer Activity [START] -->
+    <string name="title_activity_release_viewer">Informação do Lançamento</string>
+    <!-- Releases Viewer Activity [END] -->
+    
+    <!-- Release Viewer Activity [START] -->
+    <string name="title_activity_master_viewer">Informação do [Master]</string>
     <!-- Releases Viewer Activity [END] -->
 
 

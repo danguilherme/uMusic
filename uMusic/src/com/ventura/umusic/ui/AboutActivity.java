@@ -8,6 +8,7 @@ import com.googlecode.androidannotations.annotations.AfterViews;
 import com.googlecode.androidannotations.annotations.Click;
 import com.googlecode.androidannotations.annotations.EActivity;
 import com.googlecode.androidannotations.annotations.ViewById;
+import com.ventura.umusic.BaseApplication;
 import com.ventura.umusic.R;
 import com.ventura.umusic.ui.widget.KeyValuePanel;
 
@@ -27,7 +28,7 @@ public class AboutActivity extends BaseActivity {
 
 	@AfterViews
 	void updateText() {
-		appVersion.setValue(getString(R.string.app_version));
+		appVersion.setValue(BaseApplication.APP_VERSION);
 	}
 
 	@Click(R.id.btn_rate_app)

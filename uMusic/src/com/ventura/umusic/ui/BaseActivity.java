@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockActivity;
 import com.ventura.androidutils.utils.ConnectionManager;
+import com.ventura.umusic.BaseApplication;
 import com.ventura.umusic.R;
 import com.ventura.umusic.discogs.oauth.Constants;
 
@@ -31,6 +32,10 @@ public abstract class BaseActivity extends SherlockActivity {
 		super.onCreate(savedInstanceState);
 		this.sharedPreferences = PreferenceManager
 				.getDefaultSharedPreferences(this);
+	}
+	
+	public BaseApplication getBaseApplication() {
+		return (BaseApplication) this.getApplication();
 	}
 
 	protected void clearCredentials() {
