@@ -2,8 +2,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <item
-        android:id="@+id/acition_settings"
-        android:title="Settings">
+        android:id="@+id/action_set_search_params"
+        android:checkable="true"
+        android:checked="false"
+        android:icon="@drawable/ic_action_search"
+        android:showAsAction="ifRoom"
+        android:title="Set Params">
     </item>
 
 </menu>

@@ -3,10 +3,14 @@ package com.ventura.umusic.ui.music;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.Animation.AnimationListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.Menu;
@@ -18,6 +22,7 @@ import com.googlecode.androidannotations.annotations.Click;
 import com.googlecode.androidannotations.annotations.EActivity;
 import com.googlecode.androidannotations.annotations.UiThread;
 import com.googlecode.androidannotations.annotations.ViewById;
+import com.googlecode.androidannotations.annotations.res.AnimationRes;
 import com.ventura.androidutils.exception.LazyInternetConnectionException;
 import com.ventura.androidutils.exception.NoInternetConnectionException;
 import com.ventura.umusic.R;
@@ -43,6 +48,15 @@ public class LyricsViewerActivity extends BaseActivity {
 
 	@ViewById(R.id.search_lyrics)
 	Button searchLyrics;
+
+	@ViewById(R.id.lyrics_matching_params)
+	LinearLayout lyricsMatchingParamsContainer;
+
+	@AnimationRes(R.anim.slide_in_down)
+	Animation slideDown;
+
+	@AnimationRes(R.anim.slide_out_up)
+	Animation slideUp;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +95,7 @@ public class LyricsViewerActivity extends BaseActivity {
 		actionBar.setTitle(getSongName());
 		actionBar.setSubtitle(getArtistName());
 
-		getLyrics();
+		fetchLyrics();
 	}
 
 	/**
@@ -109,22 +123,37 @@ public class LyricsViewerActivity extends BaseActivity {
 		}
 	}
 
-	@UiThread
-	protected void fetchLyrics(){
-		getLyrics();
-		setSupportProgressBarIndeterminateVisibility(false);
-	}
-
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// menu.add("Set params").setIcon(R.drawable.ic_action_search)
-		// .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+		getSupportMenuInflater().inflate(R.menu.menu_lyrics_view, menu);
 		return true;
 	}
 
-	@Background
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.action_set_search_params:
+			item.setChecked(!item.isChecked());
+			toggleLyricsSearchParamsVisibility();
+			break;
+
+		default:
+			break;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+
 	@Click(R.id.search_lyrics)
-	protected void getLyrics() {
+	protected void onSearchLyricsButtonClick() {
+		toggleLyricsSearchParamsVisibility();
+		fetchLyrics();
+	}
+
+	/**
+	 * Gets the lyrics from internet
+	 */
+	@Background
+	protected void fetchLyrics() {
 		showIndeterminateProgress(true);
 		LyricsService lyricsService = new LyricsService(this);
 
@@ -148,9 +177,66 @@ public class LyricsViewerActivity extends BaseActivity {
 
 	@UiThread
 	public void updateView(Lyrics lyric) {
-		lyricsText.setText(lyric.getLyricsText());
+		if (lyric.getLyricsText() == null || lyric.getLyricsText().equals(""))
+			lyricsText.setText(getResources().getString(
+					R.string.message_lyric_not_found));
+		else
+			lyricsText.setText(lyric.getLyricsText());
+
 	}
-	
+
+	/**
+	 * The artist that came from search params, to compare when closing the
+	 * search params container and re-searching (or not) the lyrics
+	 */
+	private String originalArtist = "";
+	/**
+	 * Same as {@link originalArtist}, but holds the song
+	 */
+	private String originalSong = "";
+
+	@UiThread
+	protected void toggleLyricsSearchParamsVisibility() {
+		// if hidden
+		if (lyricsMatchingParamsContainer.getVisibility() == View.GONE) {
+			originalArtist = getArtistName();
+			originalSong = getSongName();
+			lyricsMatchingParamsContainer.setVisibility(View.VISIBLE);
+			lyricsMatchingParamsContainer.startAnimation(slideDown);
+		} else {
+			lyricsMatchingParamsContainer.startAnimation(slideUp);
+
+			slideUp.setAnimationListener(new AnimationListener() {
+				@Override
+				public void onAnimationStart(Animation animation) {
+				}
+
+				@Override
+				public void onAnimationRepeat(Animation animation) {
+				}
+
+				@Override
+				public void onAnimationEnd(Animation animation) {
+					Log.d(TAG, "Animation end: slideUp");
+					lyricsMatchingParamsContainer.setVisibility(View.GONE);
+					Log.d(TAG, String.format(
+							"Lyrics params view visibility is %1$d",
+							lyricsMatchingParamsContainer.getVisibility()));
+				}
+			});
+
+			if ((getArtistName() != null && !getArtistName().equals(
+					originalArtist))
+					|| (getSongName() != null && !getSongName().equals(
+							originalSong))) {
+				fetchLyrics();
+			}
+		}
+
+		Log.d(TAG, String.format("Lyrics params view visibility is %1$d",
+				lyricsMatchingParamsContainer.getVisibility()));
+	}
+
 	@UiThread
 	protected void showIndeterminateProgress(boolean show) {
 		setSupportProgressBarIndeterminateVisibility(show);
