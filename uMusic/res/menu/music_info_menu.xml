@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android" >
-    <group android:id="@+id/menu_music_options">
-        <item android:id="@+id/menu_find_lyrics" android:title="@string/menu_find_lyrics"></item>
-        <item android:id="@+id/menu_view_artist_info" android:title="@string/menu_view_artist_info_condensed" android:titleCondensed="@string/menu_view_artist_info"></item>
-    </group>
-    
-
-</menu>
