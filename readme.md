@@ -1,5 +1,5 @@
 #uMusic
-
+**Note:** The application is not released yet. It is under development and has no official release date.
 ##Introduction
 In the application, it will be possible to:
 * Edit MP3 metadata tags;
@@ -7,17 +7,19 @@ In the application, it will be possible to:
 * Search music's lyrics; and
 * Play music!
 
-More features may appear during development.
+		More features may appear during development.
 
-##APIs
+##Content
 The application uses several APIs to bring to the user a ton of information
-about his/her favorite music, artist and labels. They are:
+about his/her favorite music, artist and labels. The information available includes:
 
-###[Discogs](http://discogs.com/developers "Discogs API")
-The API provides information about artists. Theirs releases, labels, tracks, groups,
-among other content. Besides it, it has a shop module that allows the user to buy
-a release directly from the Discogs service.
+###Artist Information
+One of the strongest side of the application is artist information. It is group members (if a band), groups (if a single artist), releases, labels, tracks, among other content. The source of information is the [Discogs](http://discogs.com) large database of user input.
 
-###[LyrDB](http://lyrdb.com "LyrDB lyrics API")
-This API provides lyrics for tons of musics, added by users from the whole world.
-The user can search and input lyrics on the service, added with an approval.
+###Music Lyrics
+Ever wanted to share a little piece of that great song lyrics? Well, that got easy enough that you could do it singing.
+The lyrics search and sharing is another great point of the application, leaving aside the fact of saving the music lyrics on the MP3 file itself, of course.
+
+##Links
+* [Google+ Beta Testing Community](http://bit.ly/19dIgb2 "uMusic Beta Testing")
+* [Email me](mailto:guilhermeventura2@gmail.com)
