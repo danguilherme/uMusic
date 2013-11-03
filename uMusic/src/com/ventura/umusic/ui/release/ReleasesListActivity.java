@@ -53,9 +53,8 @@ public class ReleasesListActivity extends BaseListActivity {
 
 	@UiThread
 	protected void updateListView(List<ArtistRelease> data) {
-		if (loadingProgressBar.getVisibility() == View.VISIBLE) {
+		if (loadingProgressBar.getVisibility() == View.VISIBLE)
 			loadingProgressBar.setVisibility(View.INVISIBLE);
-		}
 
 		if (this.listAdapter == null) {
 			listAdapter = new ReleasesListAdapter(this, data);
@@ -73,6 +72,9 @@ public class ReleasesListActivity extends BaseListActivity {
 		} catch (NoInternetConnectionException e) {
 			e.printStackTrace();
 		} catch (LazyInternetConnectionException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			this.alert(e.getMessage());
 			e.printStackTrace();
 		}
 		updateListView(new ArrayList<ArtistRelease>());

@@ -1,6 +1,5 @@
 package com.ventura.umusic.ui.artist;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;

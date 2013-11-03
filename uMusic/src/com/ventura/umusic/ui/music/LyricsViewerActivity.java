@@ -4,12 +4,16 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.SparseBooleanArray;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.actionbarsherlock.app.ActionBar;
@@ -31,14 +35,12 @@ import com.ventura.umusic.constants.GlobalConstants;
 import com.ventura.umusic.entity.music.Lyrics;
 import com.ventura.umusic.entity.music.Track;
 import com.ventura.umusic.music.TracksManager;
-import com.ventura.umusic.ui.BaseActivity;
+import com.ventura.umusic.ui.BaseListActivity;
 
 @EActivity(R.layout.activity_lyrics_view)
-public class LyricsViewerActivity extends BaseActivity {
+public class LyricsViewerActivity extends BaseListActivity implements
+		OnItemClickListener {
 	final String TAG = getClass().getName();
-
-	@ViewById(R.id.lyrics_text)
-	TextView lyricsText;
 
 	@ViewById(R.id.artist_name)
 	EditText artistName;
@@ -57,6 +59,12 @@ public class LyricsViewerActivity extends BaseActivity {
 
 	@AnimationRes(R.anim.slide_out_up)
 	Animation slideUp;
+
+	@ViewById(android.R.id.list)
+	protected ListView strophesList;
+
+	Lyrics mLyric;
+	private StrophesAdapter listAdapter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -84,7 +92,7 @@ public class LyricsViewerActivity extends BaseActivity {
 
 	@AfterViews
 	public void onAfterViews() {
-		searchLyrics.requestFocus();
+		strophesList.setOnItemClickListener(this);
 		fetchLyricsInfo();
 		if (getSongName() == "" || getArtistName() == "") {
 			finish();
@@ -132,11 +140,21 @@ public class LyricsViewerActivity extends BaseActivity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
+		case R.id.action_share:
+			Intent shareIntent = new Intent(Intent.ACTION_SEND);
+			shareIntent.setType("plain/text");
+			Log.d(TAG, "Sharing lyrics");
+			// Log.d(TAG, selectedText.equals("") ? mLyric.getLyricsText()
+			// : selectedText);
+			// shareIntent.putExtra(Intent.EXTRA_TEXT,
+			// selectedText.equals("") ? mLyric.getLyricsText()
+			// : selectedText);
+			startActivity(shareIntent);
+			break;
 		case R.id.action_set_search_params:
 			item.setChecked(!item.isChecked());
 			toggleLyricsSearchParamsVisibility();
 			break;
-
 		default:
 			break;
 		}
@@ -160,16 +178,21 @@ public class LyricsViewerActivity extends BaseActivity {
 		try {
 			Lyrics lyrics = lyricsService.getLyrics(getArtistName(),
 					getSongName());
+			if (lyrics == null)
+				Log.i(TAG, "Lyrics not found");
+			else
+				Log.i(TAG, "Lyrics found: " + lyrics.getLyricsText());
+
 			updateView(lyrics);
 		} catch (NoInternetConnectionException e) {
-			alert(e.getMessage());
 			e.printStackTrace();
+			alert(e.getMessage());
 		} catch (LazyInternetConnectionException e) {
-			alert(e.getMessage());
 			e.printStackTrace();
+			alert(e.getMessage());
 		} catch (Exception e) {
-			alert(e.getMessage());
 			e.printStackTrace();
+			alert(e.getMessage());
 		} finally {
 			showIndeterminateProgress(false);
 		}
@@ -177,12 +200,27 @@ public class LyricsViewerActivity extends BaseActivity {
 
 	@UiThread
 	public void updateView(Lyrics lyric) {
-		if (lyric.getLyricsText() == null || lyric.getLyricsText().equals(""))
-			lyricsText.setText(getResources().getString(
-					R.string.message_lyric_not_found));
-		else
-			lyricsText.setText(lyric.getLyricsText());
+		this.mLyric = lyric;
 
+		if (lyric == null || lyric.getLyricsText() == null
+				|| lyric.getLyricsText().equals("")) {
+			TextView textView = (TextView) getLayoutInflater().inflate(
+					R.layout.list_item_lyrics_strophe, null);
+			textView.setTextIsSelectable(false);
+			textView.setText(getResources().getString(
+					R.string.message_lyric_not_found));
+		} else
+			updateStrophes();
+	}
+
+	private void updateStrophes() {
+		if (listAdapter == null) {
+			listAdapter = new StrophesAdapter(this, mLyric.getLyricsStrophes());
+			strophesList.setAdapter(listAdapter);
+		} else {
+			listAdapter.addItems(mLyric.getLyricsStrophes());
+			listAdapter.notifyDataSetChanged();
+		}
 	}
 
 	/**
@@ -241,4 +279,26 @@ public class LyricsViewerActivity extends BaseActivity {
 	protected void showIndeterminateProgress(boolean show) {
 		setSupportProgressBarIndeterminateVisibility(show);
 	}
+
+	// onItemClickListener methods
+	@Override
+	public void onItemClick(AdapterView<?> arg0, View v, int position, long arg3) {
+		SparseBooleanArray checked = strophesList.getCheckedItemPositions();
+
+		for (int i = 0; i < checked.size(); i++) {
+			int pos = checked.keyAt(i);
+			listAdapter.setChecked(pos, checked.get(i));
+
+			Log.d(TAG,
+					"POS=" + i + " - isChecked="
+							+ listAdapter.isChecked(i));
+		}
+
+		View listItem = listAdapter.getView(position, v, null);
+		listItem.setBackgroundColor(listAdapter.isChecked(position) ? this
+				.getResources().getColor(R.color.red) : this.getResources()
+				.getColor(R.color.transparent));
+
+	}
+
 }

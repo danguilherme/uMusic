@@ -6,10 +6,8 @@ import java.util.List;
 import java.util.Locale;
 
 import oauth.signpost.OAuthConsumer;
-import oauth.signpost.exception.OAuthCommunicationException;
-import oauth.signpost.exception.OAuthExpectationFailedException;
-import oauth.signpost.exception.OAuthMessageSignerException;
 
+import org.apache.http.HttpException;
 import org.apache.http.client.methods.HttpGet;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -48,7 +46,7 @@ public class DiscogsService extends BaseService {
 
 	public SearchResult search(QueryType type, String query)
 			throws NoInternetConnectionException,
-			LazyInternetConnectionException {
+			LazyInternetConnectionException, HttpException {
 		if (query != null)
 			query = URLEncoder.encode(query);
 		Resources res = this.getContext().getResources();
@@ -73,7 +71,7 @@ public class DiscogsService extends BaseService {
 
 	public Artist getArtistInfo(int artistId)
 			throws NoInternetConnectionException,
-			LazyInternetConnectionException {
+			LazyInternetConnectionException, HttpException {
 
 		Resources res = this.getContext().getResources();
 		String url = res.getString(R.string.discogs_url_artists);
@@ -113,7 +111,7 @@ public class DiscogsService extends BaseService {
 
 	public List<ArtistRelease> getArtistReleases(int artistId)
 			throws NoInternetConnectionException,
-			LazyInternetConnectionException {
+			LazyInternetConnectionException, HttpException {
 
 		Resources res = this.getContext().getResources();
 		String url = res.getString(R.string.discogs_url_releases);
@@ -146,7 +144,7 @@ public class DiscogsService extends BaseService {
 
 	public Release getRelease(ArtistRelease artistRelease)
 			throws NoInternetConnectionException,
-			LazyInternetConnectionException {
+			LazyInternetConnectionException, HttpException {
 
 		Resources res = this.getContext().getResources();
 		String url = res.getString(R.string.discogs_url_tracks_releases);
@@ -171,7 +169,7 @@ public class DiscogsService extends BaseService {
 
 	public Master getMaster(ArtistRelease artistRelease)
 			throws NoInternetConnectionException,
-			LazyInternetConnectionException {
+			LazyInternetConnectionException, HttpException {
 
 		Resources res = this.getContext().getResources();
 		String url = res.getString(R.string.discogs_url_tracks_masters);
@@ -196,7 +194,7 @@ public class DiscogsService extends BaseService {
 
 	@Override
 	protected String doGet(String url) throws NoInternetConnectionException,
-			LazyInternetConnectionException {
+			LazyInternetConnectionException, HttpException {
 
 		HttpGet request = new HttpGet(url);
 		Log.i(TAG, "Requesting URL : " + url);
@@ -216,7 +214,7 @@ public class DiscogsService extends BaseService {
 
 	public SearchResult navigate(String url)
 			throws NoInternetConnectionException,
-			LazyInternetConnectionException {
+			LazyInternetConnectionException, HttpException {
 		String targetUrl = url;
 
 		if (targetUrl == null || targetUrl.equals("")) {
@@ -239,26 +237,26 @@ public class DiscogsService extends BaseService {
 
 	public SearchResult next(Paging paging)
 			throws NoInternetConnectionException,
-			LazyInternetConnectionException {
+			LazyInternetConnectionException, HttpException {
 		return navigate(paging.getPageNavigation().getNextPageUrl().toString());
 	}
 
 	protected SearchResult prev(Paging paging)
 			throws NoInternetConnectionException,
-			LazyInternetConnectionException {
+			LazyInternetConnectionException, HttpException {
 		return navigate(paging.getPageNavigation().getPreviousPageUrl()
 				.toString());
 	}
 
 	protected SearchResult last(Paging paging)
 			throws NoInternetConnectionException,
-			LazyInternetConnectionException {
+			LazyInternetConnectionException, HttpException {
 		return navigate(paging.getPageNavigation().getLastPageUrl().toString());
 	}
 
 	protected SearchResult first(Paging paging)
 			throws NoInternetConnectionException,
-			LazyInternetConnectionException {
+			LazyInternetConnectionException, HttpException {
 		return navigate(paging.getPageNavigation().getFirstPageUrl().toString());
 	}
 }

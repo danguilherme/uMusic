@@ -3,7 +3,7 @@
 
     <TextView
         android:id="@+id/key"
-        style="@style/Text16Bold"
+        style="@style/text.small.bold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="5dp" >
@@ -11,7 +11,7 @@
 
     <TextView
         android:id="@+id/value"
-        style="@style/NormalText"
+        style="@style/text.small"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="7" >

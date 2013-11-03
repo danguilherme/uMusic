@@ -54,7 +54,7 @@
 
             <TextView
                 android:id="@+id/notes"
-                style="@style/NormalText"
+                style="@style/text.small"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content" />
 

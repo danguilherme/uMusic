@@ -3,6 +3,8 @@ package com.ventura.umusic.business;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.http.HttpException;
+
 import android.content.Context;
 
 import com.ventura.androidutils.exception.LazyInternetConnectionException;
@@ -21,7 +23,7 @@ public class ArtistService extends BaseService {
 
 	public List<Artist> search(String query)
 			throws NoInternetConnectionException,
-			LazyInternetConnectionException {
+			LazyInternetConnectionException, HttpException {
 
 		String url = String.format(ArtistService.URL_BASE_API
 				+ ArtistService.URL_LIST_ARTISTS, query);
@@ -41,7 +43,7 @@ public class ArtistService extends BaseService {
 	}
 
 	public Artist getArtist(int artistId) throws NoInternetConnectionException,
-			LazyInternetConnectionException {
+			LazyInternetConnectionException, HttpException {
 
 		String url = String.format(ArtistService.URL_BASE_API
 				+ ArtistService.URL_GET_ARTIST_BY_ID, artistId);
@@ -60,7 +62,7 @@ public class ArtistService extends BaseService {
 
 	public List<ArtistRelease> getArtistReleases(int artistId)
 			throws NoInternetConnectionException,
-			LazyInternetConnectionException {
+			LazyInternetConnectionException, HttpException {
 
 		String requestUrl = String.format(ArtistService.URL_BASE_API
 				+ ArtistService.URL_GET_RELEASES_BY_ARTIST_ID,

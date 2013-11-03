@@ -62,7 +62,7 @@ import com.ventura.umusic.ui.widget.ButtonGroup;
 import com.ventura.umusic.ui.widget.KeyValuePanel;
 import com.ventura.umusic.util.ImageDownloaderTask;
 
-@EActivity(R.layout.artist_info)
+@EActivity(R.layout.activity_artist_info)
 public class ArtistViewerActivity extends BaseActivity implements
 		OnItemSelectedListener {
 	final String TAG = getClass().getName();

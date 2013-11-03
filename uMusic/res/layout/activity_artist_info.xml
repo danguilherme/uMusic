@@ -129,7 +129,7 @@
 
                 <TextView
                     android:id="@+id/artist_bio"
-                    style="@style/NormalText"
+                    style="@style/text.small"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:textIsSelectable="true" />

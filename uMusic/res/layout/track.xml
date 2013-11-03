@@ -6,21 +6,21 @@
 
     <TextView
         android:id="@+id/track_position"
-        style="@style/NormalTextBold"
+        style="@style/text.small.bold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="7dp" />
 
     <TextView
         android:id="@+id/track_title"
-        style="@style/NormalText"
+        style="@style/text.small"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1" />
 
     <TextView
         android:id="@+id/track_duration"
-        style="@style/NormalText"
+        style="@style/text.small"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="right"
