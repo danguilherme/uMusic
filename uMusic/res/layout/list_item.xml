@@ -29,13 +29,13 @@
 
     <TextView
         android:id="@+id/artist"
-        style="@style/Text16Bold"
+        style="@style/text.small.bold"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_toRightOf="@+id/thumbnail"
         android:background="@android:color/transparent"
-        android:textColor="@color/default_list_item_color"
+        android:textColor="@color/list_item_text_default"
         android:typeface="sans" />
 
     <!-- Rightend Arrow -->

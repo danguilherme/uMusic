@@ -1,5 +1,8 @@
 package com.ventura.umusic.entity.music;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Lyrics {
 	private String id;
 	private String artistName;
@@ -51,5 +54,16 @@ public class Lyrics {
 
 	public void setLyricsText(String mLyric) {
 		this.lyricsText = mLyric;
+	}
+
+	public List<String> getLyricsStrophes() {
+		List<String> strophes = new ArrayList<String>();
+		if (this.lyricsText == null)
+			return strophes;
+		
+		for (String strophe : lyricsText.split("\n\n+"))
+			strophes.add(strophe);
+		
+		return strophes;
 	}
 }

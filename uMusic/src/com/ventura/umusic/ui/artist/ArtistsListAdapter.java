@@ -9,9 +9,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.ventura.androidutils.ui.BaseAdapter;
 import com.ventura.umusic.R;
 import com.ventura.umusic.entity.artist.Artist;
-import com.ventura.umusic.ui.BaseAdapter;
 
 public class ArtistsListAdapter extends BaseAdapter<Artist> {
 	final String TAG = getClass().getName();
@@ -19,7 +19,7 @@ public class ArtistsListAdapter extends BaseAdapter<Artist> {
 		super(context, data);
 	}
 
-	private int layoutId = R.layout.artist_list_item;
+	private int layoutId = R.layout.list_item_default;
 
 	public void filter(String query) {
 		for (int i = 0; i < this.data.size(); i++) {
@@ -42,9 +42,9 @@ public class ArtistsListAdapter extends BaseAdapter<Artist> {
 				convertView.setTag(viewHolder);
 
 				viewHolder.artistImage = (ImageView) convertView
-						.findViewById(R.id.artist_image);
+						.findViewById(R.id.thumbnail);
 				viewHolder.artistName = (TextView) convertView
-						.findViewById(R.id.artist_name);
+						.findViewById(R.id.main_text);
 			} else {
 				viewHolder = (ViewHolder) convertView.getTag();
 			}

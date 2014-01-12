@@ -19,14 +19,11 @@
         android:paddingLeft="3dip" >
 
         <TableLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:stretchColumns="1" >
 
-            <TableRow
-                style="@style/MusicInfoLinearLayout"
-                android:visibility="gone" >
+            <TableRow style="@style/MusicInfoLinearLayout" >
 
                 <TextView
                     style="@style/MusicInfoTextView"
@@ -228,8 +225,8 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="onViewArtistInfoBtnClick"
         android:layout_gravity="center_vertical|center_horizontal"
+        android:onClick="onViewArtistInfoBtnClick"
         android:text="@string/menu_view_artist_info" >
     </Button>
 

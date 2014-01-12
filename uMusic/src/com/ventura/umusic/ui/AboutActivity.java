@@ -7,18 +7,15 @@ import android.os.Bundle;
 import com.googlecode.androidannotations.annotations.AfterViews;
 import com.googlecode.androidannotations.annotations.Click;
 import com.googlecode.androidannotations.annotations.EActivity;
-import com.googlecode.androidannotations.annotations.ViewById;
+import com.ventura.androidutils.ui.widget.KeyValuePanel;
 import com.ventura.umusic.BaseApplication;
 import com.ventura.umusic.R;
-import com.ventura.umusic.ui.widget.KeyValuePanel;
 
 @EActivity(R.layout.about)
 public class AboutActivity extends BaseActivity {
 
-	@ViewById(R.id.developer_name)
 	KeyValuePanel developerName;
 
-	@ViewById(R.id.app_version)
 	KeyValuePanel appVersion;
 
 	@Override
@@ -28,6 +25,9 @@ public class AboutActivity extends BaseActivity {
 
 	@AfterViews
 	void updateText() {
+		developerName = (KeyValuePanel) findViewById(R.id.developer_name);
+		appVersion = (KeyValuePanel) findViewById(R.id.app_version);
+
 		appVersion.setValue(BaseApplication.APP_VERSION);
 	}
 
@@ -42,12 +42,12 @@ public class AboutActivity extends BaseActivity {
 	void sendEmail() {
 		// %20 == space
 		String emailUrl = "mailto:%1$s?subject=[%2$s] %3$s";
-		
+
 		emailUrl = String
 				.format(emailUrl, getString(R.string.developer_email),
 						getString(R.string.app_name),
 						getString(R.string.email_subject));
-		
+
 		Intent i = new Intent(Intent.ACTION_VIEW);
 		i.setData(Uri.parse(emailUrl));
 		startActivity(i);

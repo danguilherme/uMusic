@@ -30,21 +30,21 @@
                 android:layout_gravity="center_vertical|center_horizontal"
                 android:background="@drawable/no_image" />
 
-            <com.ventura.umusic.ui.widget.ButtonGroup
+            <com.ventura.androidutils.ui.widget.ButtonGroup
                 android:id="@+id/artists_button_group"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
                 app:groupTitle="Artists" >
-            </com.ventura.umusic.ui.widget.ButtonGroup>
+            </com.ventura.androidutils.ui.widget.ButtonGroup>
 
-            <com.ventura.umusic.ui.widget.ButtonGroup
+            <com.ventura.androidutils.ui.widget.ButtonGroup
                 android:id="@+id/extra_artists_button_group"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
                 app:groupTitle="Extra Artists" >
-            </com.ventura.umusic.ui.widget.ButtonGroup>
+            </com.ventura.androidutils.ui.widget.ButtonGroup>
 
             <TextView
                 style="@style/CategoryTitle"
@@ -54,7 +54,7 @@
 
             <TextView
                 android:id="@+id/notes"
-                style="@style/NormalText"
+                style="@style/text.small"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content" />
 
@@ -63,21 +63,21 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal" >
 
-                <com.ventura.umusic.ui.widget.KeyValuePanel_
+                <com.ventura.androidutils.ui.widget.KeyValuePanel
                     android:id="@+id/year"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     app:keyText="@string/year" >
-                </com.ventura.umusic.ui.widget.KeyValuePanel_>
+                </com.ventura.androidutils.ui.widget.KeyValuePanel>
 
-                <com.ventura.umusic.ui.widget.KeyValuePanel_
+                <com.ventura.androidutils.ui.widget.KeyValuePanel
                     android:id="@+id/country"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     app:keyText="@string/country" >
-                </com.ventura.umusic.ui.widget.KeyValuePanel_>
+                </com.ventura.androidutils.ui.widget.KeyValuePanel>
             </LinearLayout>
 
             <TextView

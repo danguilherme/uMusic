@@ -28,7 +28,7 @@
 
             <TextView
                 android:id="@+id/songTitle"
-                style="@style/Text16Bold"
+                style="@style/text.small.bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -40,7 +40,7 @@
 
             <TextView
                 android:id="@id/artist_name"
-                style="@style/Text12"
+                style="@style/text.small"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -86,7 +86,7 @@
 
             <TextView
                 android:id="@+id/songLyrics"
-                style="@style/Text12"
+                style="@style/text.small"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@android:color/transparent"

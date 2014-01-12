@@ -18,9 +18,9 @@
             android:id="@android:id/list"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:divider="#b5b5b5"
+            android:divider="#E8E8E8"
             android:dividerHeight="1dp"
-            android:listSelector="@drawable/list_selector" />
+            android:listSelector="@drawable/list_selector_default" />
     </LinearLayout>
 
 </FrameLayout>

@@ -1,5 +1,7 @@
 package com.ventura.umusic.business;
 
+import org.apache.http.HttpException;
+
 import android.content.Context;
 
 import com.ventura.androidutils.exception.LazyInternetConnectionException;
@@ -19,7 +21,7 @@ public class ReleaseService extends BaseService {
 
 	public Release getRelease(int releaseId)
 			throws NoInternetConnectionException,
-			LazyInternetConnectionException {
+			LazyInternetConnectionException, HttpException {
 
 		String requestUrl = String.format(ReleaseService.URL_BASE_API
 				+ ReleaseService.URL_GET_RELEASE_BY_ID,
@@ -40,7 +42,7 @@ public class ReleaseService extends BaseService {
 	}
 
 	public Master getMaster(int masterId) throws NoInternetConnectionException,
-			LazyInternetConnectionException {
+			LazyInternetConnectionException, HttpException {
 
 		String requestUrl = String.format(ReleaseService.URL_BASE_API
 				+ ReleaseService.URL_GET_MASTER_BY_ID,

@@ -3,6 +3,8 @@ package com.ventura.umusic.business;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
+import org.apache.http.HttpException;
+
 import android.content.Context;
 
 import com.ventura.androidutils.exception.LazyInternetConnectionException;
@@ -20,7 +22,7 @@ public class LyricsService extends BaseService {
 
 	public Lyrics getLyrics(String artist, String song)
 			throws NoInternetConnectionException,
-			LazyInternetConnectionException {
+			LazyInternetConnectionException, HttpException {
 		String url = null;
 		try {
 			url = String.format(ArtistService.URL_BASE_API
@@ -43,7 +45,9 @@ public class LyricsService extends BaseService {
 	}
 
 	public Lyrics getLyrics(Lyric lyric) throws NoInternetConnectionException,
-			LazyInternetConnectionException {
-		return getLyrics(lyric.getArtistName(), lyric.getMusicName());
+			LazyInternetConnectionException, HttpException {
+		if (lyric != null)
+			return getLyrics(lyric.getArtistName(), lyric.getMusicName());
+		return null;
 	}
 }

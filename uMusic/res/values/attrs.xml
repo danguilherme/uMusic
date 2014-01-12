@@ -30,15 +30,5 @@
         <attr name="allowSingleTap" format="boolean" />
         <attr name="animateOnClick" format="boolean" />
     </declare-styleable>
-	
-    <declare-styleable name="ButtonGroup">
-        <attr name="groupTitle" format="string" />
-    </declare-styleable>
-	
-    <declare-styleable name="KeyValuePanel_">
-        <attr name="keyDelimiter" format="string" />
-        <attr name="keyText" format="string" />
-        <attr name="valueText" format="string" />
-    </declare-styleable>
 
 </resources>

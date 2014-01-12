@@ -7,7 +7,8 @@
     </style>
 
     <style name="Lyric" parent="android:Theme.Light">
-        <item name="android:textStyle">italic</item>        <item name="android:background">#000</item>
+        <item name="android:textStyle">italic</item>
+        <item name="android:background">#000</item>
         <item name="android:textColor">#FFF</item>
     </style>
 
@@ -36,59 +37,43 @@
         <item name="android:layout_marginTop">10sp</item>
     </style>
 
-    
     <!-- Artist Info -->
     <style name="scroll_divider">
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">2dp</item>
         <item name="android:background">#000</item>
     </style>
-    
-    <style name="list_button" parent="android:style/Widget.Button">
-        <item name="android:background">@drawable/rounded_borders</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:paddingTop">10dp</item>
-        <item name="android:paddingBottom">10dp</item>
-    </style>
-    
+
     <!-- ALL NEW -->
     <style name="Background" parent="android:Theme.Light">
         <item name="android:background">#dfdfdf</item>
     </style>
-    
-    <!-- Basically, would be the "CategoryText" -->
-    <style name="NormalText" parent="Text14">
-    </style>
-    
-    <style name="NormalTextBold" parent="NormalText">
-        <item name="android:textStyle">bold</item>
-    </style>
-    
-    <style name="Text" parent="android:Theme.Light">
+    <!-- android:Theme.Light -->
+    <style name="text" parent="@style/Theme.Blue">
         <item name="android:textColor">@color/black</item>
     </style>
-    
-    <style name="Text12" parent="Text">
+
+    <style name="text.micro">
         <item name="android:textSize">12sp</item>
     </style>
-    
-    <style name="Text12Bold" parent="Text12">
+
+    <style name="text.micro.bold">
         <item name="android:textStyle">bold</item>
     </style>
-    
-    <style name="Text14" parent="Text">
+
+    <style name="text.small">
         <item name="android:textSize">14sp</item>
     </style>
-    
-    <style name="Text14Bold" parent="Text14">
+
+    <style name="text.small.bold">
         <item name="android:textStyle">bold</item>
     </style>
-    
-    <style name="Text16" parent="Text">
-        <item name="android:textSize">16sp</item>
+
+    <style name="text.medium">
+        <item name="android:textSize">18sp</item>
     </style>
-    
-    <style name="Text16Bold" parent="Text16">
+
+    <style name="text.medium.bold">
         <item name="android:textStyle">bold</item>
     </style>
 
@@ -98,11 +83,11 @@
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">30sp</item>
     </style>
-    
-    <style name="CategoryTitle" parent="Text16Bold">
-    </style>
-    
-    <style name="DashboardButtons" parent="Text16Bold">
+
+    <style name="CategoryTitle" parent="text.medium"></style>
+
+    <style name="DashboardButtons" parent="text.medium.bold">
         <item name="android:textColor">@color/dashboard_buttons_color</item>
     </style>
+
 </resources>

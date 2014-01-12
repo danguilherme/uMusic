@@ -10,7 +10,8 @@
         android:id="@+id/lyrics_matching_params"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical" >
+        android:orientation="vertical"
+        android:visibility="gone" >
 
         <EditText
             android:id="@+id/artist_name"
@@ -31,14 +32,19 @@
             android:text="@string/search_lyrics" />
     </LinearLayout>
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="fill_parent" >
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical" >
 
-        <TextView
-            android:id="@+id/lyrics_text"
+        <ListView
+            android:id="@android:id/list"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
-    </ScrollView>
+            android:layout_height="wrap_content"
+            android:divider="@color/transparent"
+            android:dividerHeight="10dp"
+            android:choiceMode="multipleChoice"
+            android:listSelector="@drawable/list_selector_default" />
+    </LinearLayout>
 
 </LinearLayout>

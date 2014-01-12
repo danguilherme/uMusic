@@ -2,8 +2,20 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <item
-        android:id="@+id/acition_settings"
-        android:title="Settings">
+        android:id="@+id/action_share"
+        android:checkable="false"
+        android:icon="@drawable/ic_action_share"
+        android:showAsAction="always"
+        android:title="@string/action_share_lyrics">
+    </item>
+
+    <item
+        android:id="@+id/action_set_search_params"
+        android:checkable="true"
+        android:checked="false"
+        android:icon="@drawable/ic_action_search"
+        android:showAsAction="ifRoom"
+        android:title="@string/set_search_params">
     </item>
 
 </menu>

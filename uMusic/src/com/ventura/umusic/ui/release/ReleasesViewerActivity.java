@@ -1,40 +1,6 @@
 package com.ventura.umusic.ui.release;
 
-import java.util.Collections;
-import java.util.List;
-
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import com.actionbarsherlock.view.MenuItem;
-import com.ventura.androidutils.exception.LazyInternetConnectionException;
-import com.ventura.androidutils.exception.NoInternetConnectionException;
-import com.ventura.androidutils.utils.ConnectionManager;
-import com.ventura.androidutils.utils.InnerActivityAsyncTask;
-import com.ventura.umusic.R;
-import com.ventura.umusic.business.ArtistService;
-import com.ventura.umusic.business.ReleaseService;
-import com.ventura.umusic.constants.GlobalConstants;
-import com.ventura.umusic.entity.artist.Artist;
-import com.ventura.umusic.entity.enumerator.ReleaseType;
-import com.ventura.umusic.entity.music.Track;
-import com.ventura.umusic.entity.release.ArtistRelease;
-import com.ventura.umusic.entity.release.Master;
-import com.ventura.umusic.entity.release.Release;
 import com.ventura.umusic.ui.BaseActivity;
-import com.ventura.umusic.util.ImageLoader;
 
 public class ReleasesViewerActivity extends BaseActivity {
 //

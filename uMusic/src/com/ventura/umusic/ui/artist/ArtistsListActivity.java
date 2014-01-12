@@ -1,9 +1,5 @@
 package com.ventura.umusic.ui.artist;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import oauth.signpost.OAuthConsumer;
 import android.app.SearchManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,8 +7,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
-import android.widget.AbsListView;
-import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.LinearLayout;
@@ -29,43 +23,44 @@ import com.ventura.androidutils.exception.LazyInternetConnectionException;
 import com.ventura.androidutils.exception.NoInternetConnectionException;
 import com.ventura.androidutils.utils.ConnectionManager;
 import com.ventura.umusic.R;
+import com.ventura.umusic.business.ArtistService;
 import com.ventura.umusic.discogs.DiscogsConstants;
-import com.ventura.umusic.discogs.DiscogsService;
-import com.ventura.umusic.discogs.entity.SearchItem;
-import com.ventura.umusic.discogs.entity.SearchResult;
-import com.ventura.umusic.discogs.entity.enumerator.QueryType;
-import com.ventura.umusic.entity.Image;
 import com.ventura.umusic.entity.artist.Artist;
-import com.ventura.umusic.ui.BaseListActivity;
+import com.ventura.umusic.entity.pagination.PaginatedList;
+import com.ventura.umusic.ui.InfiniteListActivity;
 
 @EActivity(R.layout.default_list)
-public class ArtistsListActivity extends BaseListActivity implements
-		OnScrollListener, OnItemClickListener {
+public class ArtistsListActivity extends InfiniteListActivity implements
+		OnItemClickListener {
 	final String TAG = getClass().getName();
 
 	private SharedPreferences prefs;
-	
+
 	@ViewById(android.R.id.list)
 	protected ListView list;
-	
+
 	@ViewById(R.id.loadingListProgressBar)
 	protected ProgressBar loadingProgressBar;
 
 	private ArtistsListAdapter adapter;
 
-	private OAuthConsumer discogsCustomer;
-	private SearchResult currentSearchResult;
+	private PaginatedList<Artist> artistsFound = null;
 	private LinearLayout loadMoreProgress;
 	boolean isLoading = false;
+
+	private ArtistService artistService = new ArtistService(this);
+	/**
+	 * Artist being searched
+	 */
+	private String query = "";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		this.prefs = PreferenceManager.getDefaultSharedPreferences(this);
-		discogsCustomer = new ArtistViewerActivity().getConsumer(this.prefs);
 	}
-	
+
 	@AfterViews
 	protected void afterViews() {
 		list.setOnScrollListener(this);
@@ -81,15 +76,13 @@ public class ArtistsListActivity extends BaseListActivity implements
 			return;
 		}
 
-		QueryType queryType = Enum.valueOf(QueryType.class,
-				intent.getStringExtra(DiscogsConstants.KEY_QUERY_TYPE));
 		String queryText = intent
 				.getStringExtra(DiscogsConstants.KEY_QUERY_TEXT);
 
-		if (queryText == null || queryType == null)
+		if (queryText == null)
 			finish();
 
-		this.listArtists(queryType, queryText);
+		this.listArtists(queryText);
 
 		// Click event for single list row
 		list.setOnItemClickListener(this);
@@ -101,68 +94,67 @@ public class ArtistsListActivity extends BaseListActivity implements
 		return super.onSearchRequested();
 	}
 
+	/**
+	 * Pushes data into list adapter.
+	 * 
+	 * @param data
+	 *            the data to push
+	 */
 	@UiThread
-	protected void updateListView(SearchResult data) {
-		if (loadingProgressBar.getVisibility() == View.VISIBLE) {
+	protected void updateListView(PaginatedList<Artist> data) {
+		if (loadingProgressBar.getVisibility() == View.VISIBLE)
 			loadingProgressBar.setVisibility(View.INVISIBLE);
-		}
-		
-		List<Artist> artistsList = new ArrayList<Artist>();
 
 		if (data.getCount() <= 0) {
-			Toast.makeText(this, "No singer was found", Toast.LENGTH_SHORT)
+			Toast.makeText(this, "No singer was found", Toast.LENGTH_LONG)
 					.show();
 			this.finish();
 			return;
 		}
 
-		currentSearchResult = data;
-		artistsList = this.getArtistsFromSearchResult(currentSearchResult);
+		if (artistsFound == null)
+			artistsFound = new PaginatedList<Artist>(data);
+		else
+			artistsFound.addItems(data.getItems());
+
 		list = (ListView) findViewById(android.R.id.list);
 
 		// If the adapter doesn't exist, we create one with the initial data.
 		// If it exists, we update it.
 		int currentPosition = -1;
 		if (adapter == null) {
-			adapter = new ArtistsListAdapter(this, artistsList);
+			adapter = new ArtistsListAdapter(this, data.getItems());
 		} else {
 			currentPosition = list.getFirstVisiblePosition();
-			adapter.addItems(artistsList);
+			adapter.addItems(data.getItems());
 		}
 		list.setAdapter(adapter);
 
 		list.setSelectionFromTop(currentPosition + 1, 0);
 
-		if (currentSearchResult.getPagination().isLast()) {
+		if (artistsFound.getPaging().isLast())
 			list.removeFooterView(loadMoreProgress);
-		}
-	}
-
-	private List<Artist> getArtistsFromSearchResult(SearchResult items) {
-		ArrayList<Artist> artistsList = new ArrayList<Artist>();
-
-		for (int i = 0; i < items.getCount(); i++) {
-			SearchItem item = items.getResults().get(i);
-			Artist artist = new Artist(item.getId(), item.getTitle(), null);
-			artist.getImages().add(new Image(item.getThumbURL()));
-			artistsList.add(artist);
-		}
-
-		return artistsList;
+		
+		this.isLoading = false;
 	}
 
 	@Background
-	protected void listArtists(QueryType queryType, String query) {
-		DiscogsService discogsService = new DiscogsService(this, null);
-		SearchResult searchResult = new SearchResult();
-		
+	protected void listArtists(String query) {
+		this.isLoading = true;
+		PaginatedList<Artist> searchResult = PaginatedList.empty();
+
+		this.query = query;
+
 		try {
-			searchResult = discogsService.search(queryType, query);
+			searchResult = artistService.search(query);
 		} catch (NoInternetConnectionException e) {
 			showNoInternetMessage();
 			e.printStackTrace();
 		} catch (LazyInternetConnectionException e) {
 			showLazyInternetMessage();
+			e.printStackTrace();
+		} catch (Exception e) {
+			this.alert(e.getMessage());
 			e.printStackTrace();
 		}
 		updateListView(searchResult);
@@ -170,40 +162,36 @@ public class ArtistsListActivity extends BaseListActivity implements
 
 	@Background
 	protected void loadMore() {
-		SearchResult searchResult = null;
+		this.isLoading = true;
+		PaginatedList<Artist> searchResult = PaginatedList.empty();
+		
 		try {
-			DiscogsService service = new DiscogsService(
-					ArtistsListActivity.this, discogsCustomer);
-			searchResult = service.next(currentSearchResult.getPagination());
+			if (!artistsFound.getPaging().isLast()) {
+				searchResult = artistService.search(query, 50, artistsFound
+						.getPaging().getActualPage() + 1);
+				artistsFound.getPaging().setActualPage(
+						artistsFound.getPaging().getActualPage() + 1);
+			}
 		} catch (NoInternetConnectionException e) {
 			showNoInternetMessage();
 			e.printStackTrace();
 		} catch (LazyInternetConnectionException e) {
 			showLazyInternetMessage();
 			e.printStackTrace();
+		} catch (Exception e) {
+			this.alert(e.getMessage());
+			e.printStackTrace();
 		}
 		updateListView(searchResult);
 	}
 
-	/**
-	 * OnScrollListener
-	 */
-	public void onScroll(AbsListView view, int firstVisibleItem,
-			int visibleItemCount, int totalItemCount) {
-		if (currentSearchResult == null) {
+	@Override
+	protected void onListEndAchieved() {
+		if (artistsFound == null)
 			return;
-		}
 
-		Log.i(TAG, firstVisibleItem + "/" + totalItemCount);
-		boolean isLast = firstVisibleItem + visibleItemCount == totalItemCount;
-		if (isLast && !currentSearchResult.getPagination().isLast()
-				&& !this.isLoading) {
+		if (!artistsFound.getPaging().isLast() && !this.isLoading)
 			this.loadMore();
-		}
-	}
-
-	public void onScrollStateChanged(AbsListView view, int scrollState) {
-		Log.i(TAG, "Scroll state=" + scrollState);
 	}
 
 	// OnItemClickListener

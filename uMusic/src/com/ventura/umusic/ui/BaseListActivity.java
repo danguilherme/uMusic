@@ -51,10 +51,15 @@ public class BaseListActivity extends SherlockListActivity {
 	 *            The message to show
 	 */
 	public void alert(String title, String message) {
-		AlertDialog dialog = new AlertDialog.Builder(this).create();
+		final AlertDialog dialog = new AlertDialog.Builder(this).create();
 		dialog.setTitle(title);
 		dialog.setMessage(message);
-		dialog.show();
+		runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				dialog.show();
+			}
+		});
 	}
 
 	public void showNoInternetMessage() {
