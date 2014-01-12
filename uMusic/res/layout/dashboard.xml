@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <com.ventura.umusic.ui.widget.DashboardLayout
+    <com.ventura.androidutils.ui.widget.DashboardLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -45,5 +45,5 @@
             android:drawableTop="@drawable/info"
             android:onClick="onAboutButtonClick"
             android:text="@string/about" />
-    </com.ventura.umusic.ui.widget.DashboardLayout>
+    </com.ventura.androidutils.ui.widget.DashboardLayout>
 </LinearLayout>

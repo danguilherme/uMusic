@@ -101,7 +101,7 @@ public abstract class BaseActivity extends SherlockActivity {
 	 * 
 	 * @param source
 	 *            From where the strings will be catch from.
-	 * @return The strings list, with line breaks as \r\n chars.
+	 * @return The strings list, with line breaks artistService \r\n chars.
 	 */
 	protected <T extends Object> String createList(List<T> source) {
 		StringBuilder list = new StringBuilder();

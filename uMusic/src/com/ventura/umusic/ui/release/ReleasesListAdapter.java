@@ -9,9 +9,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.ventura.androidutils.ui.BaseAdapter;
 import com.ventura.umusic.R;
 import com.ventura.umusic.discogs.entity.ArtistRelease;
-import com.ventura.umusic.ui.BaseAdapter;
 
 public class ReleasesListAdapter extends BaseAdapter<ArtistRelease> {
 	private final String TAG = getClass().getName();

@@ -229,7 +229,7 @@ public class LyricsViewerActivity extends BaseListActivity implements
 	 */
 	private String originalArtist = "";
 	/**
-	 * Same as {@link originalArtist}, but holds the song
+	 * Same artistService {@link originalArtist}, but holds the song
 	 */
 	private String originalSong = "";
 

@@ -7,10 +7,11 @@ import android.util.SparseBooleanArray;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.Checkable;
 import android.widget.TextView;
 
+import com.ventura.androidutils.ui.BaseAdapter;
 import com.ventura.umusic.R;
-import com.ventura.umusic.ui.BaseAdapter;
 
 public class StrophesAdapter extends BaseAdapter<String> {
 	private final String TAG = getClass().getName();
@@ -27,7 +28,7 @@ public class StrophesAdapter extends BaseAdapter<String> {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		ViewHolder viewHolder;
+		final ViewHolder viewHolder;
 		if (convertView == null) {
 			viewHolder = new ViewHolder();
 			convertView = inflater.inflate(LAYOUT_ID, null);
@@ -57,6 +58,30 @@ public class StrophesAdapter extends BaseAdapter<String> {
 	@Override
 	public String getId(int position) {
 		return String.valueOf(position);
+	}
+
+	public class CheckableStrophe implements Checkable {
+		private boolean checked = false;
+		private String strophe;
+
+		public CheckableStrophe(String strophe) {
+			this.strophe = strophe;
+		}
+		
+		@Override
+		public void setChecked(boolean checked) {
+			this.checked = checked;
+		}
+
+		@Override
+		public boolean isChecked() {
+			return checked;
+		}
+
+		@Override
+		public void toggle() {
+			checked = !checked;
+		}
 	}
 
 	private static class ViewHolder {

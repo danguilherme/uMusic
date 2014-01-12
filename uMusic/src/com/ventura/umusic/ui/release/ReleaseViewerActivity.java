@@ -21,6 +21,9 @@ import com.googlecode.androidannotations.annotations.EActivity;
 import com.googlecode.androidannotations.annotations.UiThread;
 import com.googlecode.androidannotations.annotations.ViewById;
 import com.googlecode.androidannotations.annotations.res.AnimationRes;
+import com.ventura.androidutils.ui.widget.ButtonGroup;
+import com.ventura.androidutils.ui.widget.KeyValuePanel;
+import com.ventura.androidutils.utils.ImageLoader;
 import com.ventura.umusic.R;
 import com.ventura.umusic.constants.GlobalConstants;
 import com.ventura.umusic.discogs.DiscogsService;
@@ -30,10 +33,8 @@ import com.ventura.umusic.discogs.entity.Release;
 import com.ventura.umusic.discogs.entity.Track;
 import com.ventura.umusic.ui.BaseActivity;
 import com.ventura.umusic.ui.artist.ArtistViewerActivity_;
+import com.ventura.umusic.ui.music.LyricsViewerActivity;
 import com.ventura.umusic.ui.music.LyricsViewerActivity_;
-import com.ventura.umusic.ui.widget.ButtonGroup;
-import com.ventura.umusic.ui.widget.KeyValuePanel;
-import com.ventura.umusic.util.ImageLoader;
 
 @EActivity(R.layout.release_info)
 public class ReleaseViewerActivity extends BaseActivity {
@@ -88,11 +89,11 @@ public class ReleaseViewerActivity extends BaseActivity {
 	protected void afterViews() {
 		this.getRelease(artistRelease);
 	}
-	
+
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
-//		outState.putParcelable(TAG, release);
+		// outState.putParcelable(TAG, release);
 	}
 
 	@Background
@@ -260,7 +261,7 @@ public class ReleaseViewerActivity extends BaseActivity {
 				firstArtist.getName());
 		trackLyricsIntent.putExtra(GlobalConstants.EXTRA_TRACK_NAME,
 				track.getTitle());
-		
+
 		startActivity(trackLyricsIntent);
 	}
 

@@ -10,6 +10,7 @@ import android.content.Context;
 import com.ventura.androidutils.exception.LazyInternetConnectionException;
 import com.ventura.androidutils.exception.NoInternetConnectionException;
 import com.ventura.umusic.entity.artist.Artist;
+import com.ventura.umusic.entity.pagination.PaginatedList;
 import com.ventura.umusic.entity.release.ArtistRelease;
 
 public class ArtistService extends BaseService {
@@ -20,28 +21,39 @@ public class ArtistService extends BaseService {
 	protected static final String URL_LIST_ARTISTS = "/artists/search?q=%1$s";
 	protected static final String URL_GET_ARTIST_BY_ID = "/artists/%1$s";
 	protected static final String URL_GET_RELEASES_BY_ARTIST_ID = "/artists/listreleases/%1$s";
+	protected static final String PAGING_PARAMS = "&perPage=%1$d&page=%2$d";
 
-	public List<Artist> search(String query)
+	public PaginatedList<Artist> search(String query)
 			throws NoInternetConnectionException,
 			LazyInternetConnectionException, HttpException {
 
+		return search(query, 50, 1);
+	}
+	
+	public PaginatedList<Artist> search(String query, int itemsPerPage, int page)
+			throws NoInternetConnectionException,
+			LazyInternetConnectionException, HttpException {
+
+		if (query != null)
+			query = query.trim();
+
 		String url = String.format(ArtistService.URL_BASE_API
-				+ ArtistService.URL_LIST_ARTISTS, query);
+				+ ArtistService.URL_LIST_ARTISTS, query)
+				+ String.format(PAGING_PARAMS, itemsPerPage, page);
 
 		String jsonResponse = this.doGet(url);
 
-		List<Artist> artists = new ArrayList<Artist>();
-
+		PaginatedList<Artist> artists = null;
+		
 		try {
-			artists = this.deserializeList(this.extractData(jsonResponse),
-					Artist.class);
+			artists = deserializePaginatedList(jsonResponse, Artist.class);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 		return artists;
 	}
-
+	
 	public Artist getArtist(int artistId) throws NoInternetConnectionException,
 			LazyInternetConnectionException, HttpException {
 

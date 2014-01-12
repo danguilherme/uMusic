@@ -44,13 +44,6 @@
         <item name="android:background">#000</item>
     </style>
 
-    <style name="list_button" parent="android:style/Widget.Button">
-        <item name="android:background">@drawable/rounded_borders</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:paddingTop">10dp</item>
-        <item name="android:paddingBottom">10dp</item>
-    </style>
-
     <!-- ALL NEW -->
     <style name="Background" parent="android:Theme.Light">
         <item name="android:background">#dfdfdf</item>

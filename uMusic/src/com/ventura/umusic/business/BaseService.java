@@ -10,15 +10,17 @@ import org.json.JSONObject;
 import android.content.Context;
 import android.util.Log;
 
-import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import com.ventura.androidutils.utils.Service;
+import com.ventura.umusic.entity.pagination.PaginatedList;
+import com.ventura.umusic.entity.pagination.Pagination;
 
 public abstract class BaseService extends Service {
 	final String TAG = getClass().getName();
-	private final String KEY_PAGINATED_CONTENT = "Data";
+	private static final String KEY_PAGINATED_CONTENT = "data";
+	private static final String KEY_PAGINATION_INFO = "pagination";
 
 	protected final String KEY_DATA = "data";
 	protected final String KEY_SUCCESS = "success";
@@ -31,8 +33,7 @@ public abstract class BaseService extends Service {
 	public BaseService(Context context) {
 		super(context);
 
-		deserializer = new GsonBuilder().setFieldNamingPolicy(
-				FieldNamingPolicy.UPPER_CAMEL_CASE).create();
+		deserializer = new GsonBuilder().create();
 	}
 
 	protected <T> T deserialize(String json, Class<T> targetType) {
@@ -55,11 +56,11 @@ public abstract class BaseService extends Service {
 	}
 
 	/**
-	 * Get the Data property of a paginated JSON object as string.
+	 * Get the 'data' property of a paginated JSON object artistService string.
 	 * 
 	 * @param jsonString
 	 *            The JSON string to search for the data property
-	 * @return The Data array of the JSONObject as a JSONArray
+	 * @return The Data array of the JSONObject artistService a JSONArray
 	 */
 	protected JSONArray extractData(String jsonString) {
 		if (jsonString == null)
@@ -76,11 +77,11 @@ public abstract class BaseService extends Service {
 	}
 
 	/**
-	 * Get the Data property of a paginated JSONObject.
+	 * Get the 'data' property of a paginated JSONObject.
 	 * 
 	 * @param source
 	 *            The JSONObject to search the Data property.
-	 * @return The Data array of the JSONObject as a JSONArray
+	 * @return The Data array of the JSONObject artistService a JSONArray
 	 */
 	protected JSONArray extractData(JSONObject source) {
 		if (source == null)
@@ -96,4 +97,12 @@ public abstract class BaseService extends Service {
 		return array;
 	}
 
+
+	protected <T> PaginatedList<T> deserializePaginatedList(String jsonString, Class<T> targetType) throws JSONException {
+		JSONObject entireObject = new JSONObject(jsonString);
+		JSONArray data = extractData(entireObject);
+		Pagination paging = deserializer.fromJson(entireObject.getJSONObject(KEY_PAGINATION_INFO).toString(), Pagination.class);
+		return new PaginatedList<T>(deserializeList(data, targetType), paging);
+	}
+	
 }

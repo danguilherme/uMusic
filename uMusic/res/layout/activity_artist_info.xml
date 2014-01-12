@@ -65,7 +65,7 @@
                         android:indeterminate="true" />
                 </FrameLayout>
 
-                <com.ventura.umusic.ui.widget.ButtonGroup
+                <com.ventura.androidutils.ui.widget.ButtonGroup
                     android:id="@+id/profile_and_releases_buttons_container"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
@@ -73,7 +73,6 @@
 
                     <Button
                         android:id="@+id/btn_open_artist_discogs_profile"
-                        style="@style/list_button"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical|center_horizontal"
@@ -83,39 +82,38 @@
 
                     <Button
                         android:id="@+id/btn_open_artist_releases"
-                        style="@style/list_button"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical|center_horizontal"
                         android:onClick="onOpenReleasesButtonClicked"
                         android:text="@string/discogs_view_artist_releases" />
-                </com.ventura.umusic.ui.widget.ButtonGroup>
+                </com.ventura.androidutils.ui.widget.ButtonGroup>
 
-                <com.ventura.umusic.ui.widget.ButtonGroup
+                <com.ventura.androidutils.ui.widget.ButtonGroup
                     android:id="@+id/members_container"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:visibility="gone"
                     app:groupTitle="@string/band_members" >
-                </com.ventura.umusic.ui.widget.ButtonGroup>
+                </com.ventura.androidutils.ui.widget.ButtonGroup>
 
-                <com.ventura.umusic.ui.widget.ButtonGroup
+                <com.ventura.androidutils.ui.widget.ButtonGroup
                     android:id="@+id/external_urls_container"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:visibility="gone"
                     app:groupTitle="@string/external_urls" >
-                </com.ventura.umusic.ui.widget.ButtonGroup>
+                </com.ventura.androidutils.ui.widget.ButtonGroup>
 
-                <com.ventura.umusic.ui.widget.KeyValuePanel_
+                <com.ventura.androidutils.ui.widget.KeyValuePanel
                     android:id="@+id/real_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:visibility="gone" />
 
-                <com.ventura.umusic.ui.widget.KeyValuePanel_
+                <com.ventura.androidutils.ui.widget.KeyValuePanel
                     android:id="@+id/aliases"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

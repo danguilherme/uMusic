@@ -51,6 +51,8 @@ import com.koushikdutta.urlimageviewhelper.UrlImageViewCallback;
 import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
 import com.ventura.androidutils.exception.LazyInternetConnectionException;
 import com.ventura.androidutils.exception.NoInternetConnectionException;
+import com.ventura.androidutils.ui.widget.ButtonGroup;
+import com.ventura.androidutils.ui.widget.KeyValuePanel;
 import com.ventura.umusic.R;
 import com.ventura.umusic.business.ArtistService;
 import com.ventura.umusic.constants.GlobalConstants;
@@ -58,9 +60,6 @@ import com.ventura.umusic.entity.Image;
 import com.ventura.umusic.entity.artist.Artist;
 import com.ventura.umusic.ui.BaseActivity;
 import com.ventura.umusic.ui.release.ReleasesListActivity_;
-import com.ventura.umusic.ui.widget.ButtonGroup;
-import com.ventura.umusic.ui.widget.KeyValuePanel;
-import com.ventura.umusic.util.ImageDownloaderTask;
 
 @EActivity(R.layout.activity_artist_info)
 public class ArtistViewerActivity extends BaseActivity implements
@@ -96,8 +95,6 @@ public class ArtistViewerActivity extends BaseActivity implements
 	TextView mArtistBio;
 
 	ImageAdapter mArtistImagesAdapter;
-
-	ImageDownloaderTask imageDownloaderTask = new ImageDownloaderTask();
 
 	private Artist mCurrentArtist;
 
@@ -572,12 +569,15 @@ public class ArtistViewerActivity extends BaseActivity implements
 		if (this.mCurrentArtist.getImages().size() == 0)
 			return;
 
-		if (this.imageDownloaderTask.isDownloading()) {
-			Toast.makeText(ArtistViewerActivity.this,
-					getString(R.string.image_already_being_downloaded),
-					Toast.LENGTH_SHORT).show();
-			return;
-		}
+		// ImageLoader il = new ImageLoader(this);
+		// if (this.imageDownloaderTask.isDownloading()) {
+		// Toast.makeText(ArtistViewerActivity.this,
+		// getString(R.string.image_already_being_downloaded),
+		// Toast.LENGTH_SHORT).show();
+		// return;
+		// }
+		Toast.makeText(ArtistViewerActivity.this,
+				"Feature not implemented yet...", Toast.LENGTH_SHORT).show();
 
 		final String directory = Environment.getExternalStorageDirectory()
 				+ "/Artists Images/";
