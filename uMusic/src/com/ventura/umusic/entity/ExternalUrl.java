@@ -3,7 +3,7 @@ package com.ventura.umusic.entity;
 import java.io.Serializable;
 import java.net.URL;
 
-import com.ventura.umusic.discogs.entity.enumerator.ExternalUrlTypes;
+import com.ventura.umusic.entity.enumerator.ExternalUrlTypes;
 
 public class ExternalUrl implements Comparable<ExternalUrl>, Serializable {
 	private static final long serialVersionUID = 4059668315765780683L;

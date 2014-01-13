@@ -26,9 +26,6 @@ import com.actionbarsherlock.view.SubMenu;
 import com.ventura.androidutils.utils.ConnectionManager;
 import com.ventura.umusic.R;
 import com.ventura.umusic.constants.GlobalConstants;
-import com.ventura.umusic.discogs.DiscogsConstants;
-import com.ventura.umusic.discogs.entity.enumerator.QueryType;
-import com.ventura.umusic.musixmatch.ui.LyricsViewerActivity;
 import com.ventura.umusic.ui.artist.ArtistsListActivity_;
 
 public class MusicInfoActivity extends BaseActivity {
@@ -294,10 +291,7 @@ public class MusicInfoActivity extends BaseActivity {
 
 	private void findLyrics(String artistName, String musicTitle) {
 		if (!musicTitle.equals("") && !artistName.equals("")) {
-			Intent intent = new Intent(this, LyricsViewerActivity.class);
-			intent.putExtra(GlobalConstants.EXTRA_ARTIST_NAME, artistName);
-			intent.putExtra(GlobalConstants.EXTRA_TRACK_NAME, musicTitle);
-			startActivity(intent);
+			showToast("Coming soon", Toast.LENGTH_SHORT);
 		}
 	}
 
@@ -310,9 +304,7 @@ public class MusicInfoActivity extends BaseActivity {
 		} else if (artistName != null && !artistName.equals("")) {
 			Intent intent = new Intent(this, ArtistsListActivity_.class);
 			intent.setAction(Intent.ACTION_SEND);
-			intent.putExtra(DiscogsConstants.KEY_QUERY_TYPE,
-					QueryType.artist.toString().trim());
-			intent.putExtra(DiscogsConstants.KEY_QUERY_TEXT, artistName);
+			intent.putExtra(GlobalConstants.EXTRA_QUERY, artistName);
 			startActivity(intent);
 		}
 	}

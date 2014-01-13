@@ -10,7 +10,6 @@ import android.content.Context;
 import com.ventura.androidutils.exception.LazyInternetConnectionException;
 import com.ventura.androidutils.exception.NoInternetConnectionException;
 import com.ventura.umusic.entity.music.Lyrics;
-import com.ventura.umusic.lyrdb.entities.Lyric;
 
 public class LyricsService extends BaseService {
 
@@ -44,7 +43,7 @@ public class LyricsService extends BaseService {
 		return lyrics;
 	}
 
-	public Lyrics getLyrics(Lyric lyric) throws NoInternetConnectionException,
+	public Lyrics getLyrics(Lyrics lyric) throws NoInternetConnectionException,
 			LazyInternetConnectionException, HttpException {
 		if (lyric != null)
 			return getLyrics(lyric.getArtistName(), lyric.getMusicName());

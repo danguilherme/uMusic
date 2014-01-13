@@ -8,7 +8,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
-import oauth.signpost.OAuthConsumer;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -55,11 +54,9 @@ import com.ventura.androidutils.ui.widget.ButtonGroup;
 import com.ventura.androidutils.ui.widget.KeyValuePanel;
 import com.ventura.umusic.R;
 import com.ventura.umusic.business.ArtistService;
-import com.ventura.umusic.constants.GlobalConstants;
 import com.ventura.umusic.entity.Image;
 import com.ventura.umusic.entity.artist.Artist;
 import com.ventura.umusic.ui.BaseActivity;
-import com.ventura.umusic.ui.release.ReleasesListActivity_;
 
 @EActivity(R.layout.activity_artist_info)
 public class ArtistViewerActivity extends BaseActivity implements
@@ -108,8 +105,6 @@ public class ArtistViewerActivity extends BaseActivity implements
 
 		this.mCurrentArtist = this.decipherIntent();
 
-		OAuthConsumer consumer = this.getConsumer(this.sharedPreferences);
-
 		getSupportActionBar().setTitle(this.mCurrentArtist.getName());
 		getSupportActionBar()
 				.setSubtitle(R.string.title_activity_artist_viewer);
@@ -118,13 +113,6 @@ public class ArtistViewerActivity extends BaseActivity implements
 	private Artist decipherIntent() {
 		Intent intent = this.getIntent();
 		Artist artist = (Artist) intent.getSerializableExtra(Artist.KEY);
-		// Handling discogs diff
-		if (artist == null) {
-			artist = new Artist(
-					intent.getIntExtra(
-							com.ventura.umusic.discogs.entity.Artist.KEY_ID, 0),
-					intent.getStringExtra(com.ventura.umusic.discogs.entity.Artist.KEY_NAME));
-		}
 		return artist;
 	}
 
@@ -212,29 +200,7 @@ public class ArtistViewerActivity extends BaseActivity implements
 	}
 
 	private void openArtistReleases() {
-		if (this.isConnected()) {
-			// Intent releasesIntent = new Intent(this,
-			// ReleasesViewerActivity.class);
-			Intent releasesIntent = new Intent(this,
-					ReleasesListActivity_.class);
-
-			for (int i = 0; this.mCurrentArtist.getImages() != null
-					&& i < this.mCurrentArtist.getImages().size(); i++) {
-				// this.mCurrentArtist.getImages().get(0).setBitmap(null);
-			}
-
-			releasesIntent.putExtra(Artist.KEY, this.mCurrentArtist);
-
-			releasesIntent.putExtra(GlobalConstants.EXTRA_ARTIST_ID,
-					this.mCurrentArtist.getId());
-			releasesIntent.putExtra(GlobalConstants.EXTRA_ARTIST_NAME,
-					this.mCurrentArtist.getName());
-
-			this.startActivity(releasesIntent);
-		} else {
-			Toast.makeText(this, R.string.message_no_internet_connection,
-					Toast.LENGTH_LONG).show();
-		}
+		return; // coming soon...
 	}
 
 	private void buildAditionalInformationView() {

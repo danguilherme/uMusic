@@ -3,13 +3,9 @@ package com.ventura.umusic.ui;
 import java.io.File;
 import java.util.List;
 
-import oauth.signpost.OAuth;
-import oauth.signpost.OAuthConsumer;
-import oauth.signpost.commonshttp.CommonsHttpOAuthConsumer;
 import android.app.AlertDialog;
 import android.content.ContentResolver;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -21,7 +17,6 @@ import com.actionbarsherlock.app.SherlockActivity;
 import com.ventura.androidutils.utils.ConnectionManager;
 import com.ventura.umusic.BaseApplication;
 import com.ventura.umusic.R;
-import com.ventura.umusic.discogs.oauth.Constants;
 
 public abstract class BaseActivity extends SherlockActivity {
 	final String TAG = getClass().getName();
@@ -36,24 +31,6 @@ public abstract class BaseActivity extends SherlockActivity {
 	
 	public BaseApplication getBaseApplication() {
 		return (BaseApplication) this.getApplication();
-	}
-
-	protected void clearCredentials() {
-		SharedPreferences prefs = PreferenceManager
-				.getDefaultSharedPreferences(this);
-		final Editor edit = prefs.edit();
-		edit.remove(OAuth.OAUTH_TOKEN);
-		edit.remove(OAuth.OAUTH_TOKEN_SECRET);
-		edit.commit();
-	}
-
-	public OAuthConsumer getConsumer(SharedPreferences prefs) {
-		String token = prefs.getString(OAuth.OAUTH_TOKEN, "");
-		String secret = prefs.getString(OAuth.OAUTH_TOKEN_SECRET, "");
-		OAuthConsumer consumer = new CommonsHttpOAuthConsumer(
-				Constants.CONSUMER_KEY, Constants.CONSUMER_SECRET);
-		consumer.setTokenWithSecret(token, secret);
-		return consumer;
 	}
 
 	public String getFilePathFromContentUri(Uri fileUri,
