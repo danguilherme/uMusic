@@ -21,8 +21,8 @@
 
         <!-- System -->
         <activity
-            android:name=".ui.MusicInfoActivity"
-            android:exported="false"
+            android:name=".ui.MusicInfoActivity_"
+            android:exported="true"
             android:label="@string/title_activity_music_info" >
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />

@@ -32,9 +32,7 @@ import com.ventura.umusic.discogs.entity.ArtistRelease;
 import com.ventura.umusic.discogs.entity.Release;
 import com.ventura.umusic.discogs.entity.Track;
 import com.ventura.umusic.ui.BaseActivity;
-import com.ventura.umusic.ui.artist.ArtistViewerActivity_;
 import com.ventura.umusic.ui.music.LyricsViewerActivity;
-import com.ventura.umusic.ui.music.LyricsViewerActivity_;
 
 @EActivity(R.layout.release_info)
 public class ReleaseViewerActivity extends BaseActivity {
@@ -255,7 +253,8 @@ public class ReleaseViewerActivity extends BaseActivity {
 	private void openTrackLyrics(Track track) {
 		Artist firstArtist = this.release.getArtists().get(0);
 
-		Intent trackLyricsIntent = new Intent(this, LyricsViewerActivity_.class);
+		Intent trackLyricsIntent = new Intent(this,
+				com.ventura.umusic.ui.music.LyricsViewerActivity_.class);
 
 		trackLyricsIntent.putExtra(GlobalConstants.EXTRA_ARTIST_NAME,
 				firstArtist.getName());
@@ -267,7 +266,8 @@ public class ReleaseViewerActivity extends BaseActivity {
 
 	@UiThread
 	protected void openArtistInfo(Artist artist) {
-		Intent artistInfoIntent = new Intent(this, ArtistViewerActivity_.class);
+		Intent artistInfoIntent = new Intent(this,
+				com.ventura.umusic.ui.artist.ArtistViewerActivity_.class);
 
 		artistInfoIntent.putExtra(Artist.KEY_ID, artist.getId());
 		artistInfoIntent.putExtra(Artist.KEY_NAME, artist.getName());

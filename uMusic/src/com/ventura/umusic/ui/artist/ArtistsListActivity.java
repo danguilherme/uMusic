@@ -24,6 +24,7 @@ import com.ventura.androidutils.exception.NoInternetConnectionException;
 import com.ventura.androidutils.utils.ConnectionManager;
 import com.ventura.umusic.R;
 import com.ventura.umusic.business.ArtistService;
+import com.ventura.umusic.constants.GlobalConstants;
 import com.ventura.umusic.discogs.DiscogsConstants;
 import com.ventura.umusic.entity.artist.Artist;
 import com.ventura.umusic.entity.pagination.PaginatedList;
@@ -77,7 +78,7 @@ public class ArtistsListActivity extends InfiniteListActivity implements
 		}
 
 		String queryText = intent
-				.getStringExtra(DiscogsConstants.KEY_QUERY_TEXT);
+				.getStringExtra(GlobalConstants.EXTRA_SEARCH_TEXT);
 
 		if (queryText == null)
 			finish();

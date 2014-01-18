@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="gen"/>
 	<classpathentry kind="src" path=".apt_generated">
 		<attributes>
 			<attribute name="optional" value="true"/>
@@ -7,14 +9,12 @@
 	</classpathentry>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
-	<classpathentry exported="true" kind="lib" path="ref_lib/MyID3_for_Android.jar"/>
+	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
 	<classpathentry exported="true" kind="lib" path="ref_lib/signpost-core-1.2.1.2.jar"/>
 	<classpathentry exported="true" kind="lib" path="ref_lib/signpost-commonshttp4-1.2.1.2.jar"/>
-	<classpathentry exported="true" kind="lib" path="ref_lib/jid3lib-0.5.4.jar" sourcepath="C:/Documents and Settings/Guilherme/Meus documentos/Eclipse/bibliotecas/jid3lib-0.5.4.zip"/>
+	<classpathentry exported="true" kind="lib" path="ref_lib/jid3lib-0.5.4.jar" sourcepath="C:/Users/Guilherme/Downloads/jid3lib-0.5.4/jid3lib-0.5.4/src"/>
+	<classpathentry exported="true" kind="lib" path="ref_lib/MyID3_for_Android.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/gson-2.2.2.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/androidannotations-api-2.7.1.jar"/>
-	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
-	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="src" path="gen"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

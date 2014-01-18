@@ -3,20 +3,15 @@
     <string name="app_code_name">uMusic</string>
     
     <!-- Song Properties [START] -->
-    <string name="song_artist">Artista</string>
+    <string name="artist">Artista</string>
     <string name="song_title">Música</string>
-    <string name="song_album">Álbum</string>
+    <string name="album">Álbum</string>
     <string name="song_comment">Comentário</string>
-    <string name="song_compilation">Compilação</string>
     <string name="song_composer">Compositor</string>
-    <string name="song_composer2">Compositor 2</string>
-    <string name="song_duration">Duração</string>
-    <string name="song_featuring_list">Artistas Participantes</string>
     <string name="song_genre">Gênero</string>
-    <string name="song_producer">Produtor</string>
-    <string name="song_producer_artist">Artista Produtor</string>
     <string name="song_track_number">Número da Faixa</string>
     <string name="song_year">Ano</string>
+    <string name="lyrics">Letra</string>
     <!-- Song Properties [END] -->
 
 

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/Background"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical" >
@@ -10,7 +11,7 @@
         android:layout_height="wrap_content"
         android:onClick="onSaveButtonClicked"
         android:text="@string/btn_save_file"
-        android:visibility="gone" >
+        android:visibility="visible" >
     </Button>
 
     <ScrollView
@@ -39,7 +40,7 @@
 
                 <TextView
                     style="@style/MusicInfoTextView"
-                    android:text="@string/song_artist" />
+                    android:text="@string/artist" />
 
                 <EditText
                     android:id="@+id/artist_text_field"
@@ -49,11 +50,11 @@
 
             <TableRow
                 style="@style/MusicInfoLinearLayout"
-                android:visibility="gone" >
+                android:visibility="visible" >
 
                 <TextView
                     style="@style/MusicInfoTextView"
-                    android:text="@string/song_album" />
+                    android:text="@string/album" />
 
                 <EditText
                     android:id="@+id/album_text_field"
@@ -63,7 +64,7 @@
 
             <TableRow
                 style="@style/MusicInfoLinearLayout"
-                android:visibility="gone" >
+                android:visibility="visible" >
 
                 <TextView
                     style="@style/MusicInfoTextView"
@@ -78,22 +79,7 @@
 
             <TableRow
                 style="@style/MusicInfoLinearLayout"
-                android:visibility="gone" >
-
-                <TextView
-                    style="@style/MusicInfoTextView"
-                    android:text="@string/song_compilation" />
-
-                <EditText
-                    android:id="@+id/compilation_text_field"
-                    style="@style/MusicInfoTextField"
-                    android:inputType="textMultiLine" >
-                </EditText>
-            </TableRow>
-
-            <TableRow
-                style="@style/MusicInfoLinearLayout"
-                android:visibility="gone" >
+                android:visibility="visible" >
 
                 <TextView
                     style="@style/MusicInfoTextView"
@@ -107,50 +93,7 @@
 
             <TableRow
                 style="@style/MusicInfoLinearLayout"
-                android:visibility="gone" >
-
-                <TextView
-                    style="@style/MusicInfoTextView"
-                    android:text="@string/song_composer2" />
-
-                <EditText
-                    android:id="@+id/composer2_text_field"
-                    style="@style/MusicInfoTextField" >
-                </EditText>
-            </TableRow>
-
-            <TableRow
-                style="@style/MusicInfoLinearLayout"
-                android:visibility="gone" >
-
-                <TextView
-                    style="@style/MusicInfoTextView"
-                    android:text="@string/song_duration" />
-
-                <EditText
-                    android:id="@+id/duration_text_field"
-                    style="@style/MusicInfoTextField"
-                    android:inputType="numberSigned" >
-                </EditText>
-            </TableRow>
-
-            <TableRow
-                style="@style/MusicInfoLinearLayout"
-                android:visibility="gone" >
-
-                <TextView
-                    style="@style/MusicInfoTextView"
-                    android:text="@string/song_featuring_list" />
-
-                <EditText
-                    android:id="@+id/featuring_list_text_field"
-                    style="@style/MusicInfoTextField" >
-                </EditText>
-            </TableRow>
-
-            <TableRow
-                style="@style/MusicInfoLinearLayout"
-                android:visibility="gone" >
+                android:visibility="visible" >
 
                 <TextView
                     style="@style/MusicInfoTextView"
@@ -164,35 +107,7 @@
 
             <TableRow
                 style="@style/MusicInfoLinearLayout"
-                android:visibility="gone" >
-
-                <TextView
-                    style="@style/MusicInfoTextView"
-                    android:text="@string/song_producer" />
-
-                <EditText
-                    android:id="@+id/producer_text_field"
-                    style="@style/MusicInfoTextField" >
-                </EditText>
-            </TableRow>
-
-            <TableRow
-                style="@style/MusicInfoLinearLayout"
-                android:visibility="gone" >
-
-                <TextView
-                    style="@style/MusicInfoTextView"
-                    android:text="@string/song_producer_artist" />
-
-                <EditText
-                    android:id="@+id/producer_artist_text_field"
-                    style="@style/MusicInfoTextField" >
-                </EditText>
-            </TableRow>
-
-            <TableRow
-                style="@style/MusicInfoLinearLayout"
-                android:visibility="gone" >
+                android:visibility="visible" >
 
                 <TextView
                     style="@style/MusicInfoTextView"
@@ -207,7 +122,7 @@
 
             <TableRow
                 style="@style/MusicInfoLinearLayout"
-                android:visibility="gone" >
+                android:visibility="visible" >
 
                 <TextView
                     style="@style/MusicInfoTextView"
@@ -217,6 +132,22 @@
                     android:id="@+id/year_text_field"
                     style="@style/MusicInfoTextField"
                     android:inputType="number" >
+                </EditText>
+            </TableRow>
+
+            <TableRow
+                style="@style/MusicInfoLinearLayout"
+                android:visibility="visible" >
+
+                <TextView
+                    style="@style/MusicInfoTextView"
+                    android:text="@string/lyrics" />
+
+                <EditText
+                    android:id="@+id/lyrics_text_field"
+                    style="@style/MusicInfoTextField"
+                    android:inputType="textMultiLine"
+                    android:layout_height="wrap_content" >
                 </EditText>
             </TableRow>
         </TableLayout>

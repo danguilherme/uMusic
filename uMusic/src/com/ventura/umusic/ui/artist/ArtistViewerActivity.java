@@ -59,7 +59,6 @@ import com.ventura.umusic.constants.GlobalConstants;
 import com.ventura.umusic.entity.Image;
 import com.ventura.umusic.entity.artist.Artist;
 import com.ventura.umusic.ui.BaseActivity;
-import com.ventura.umusic.ui.release.ReleasesListActivity_;
 
 @EActivity(R.layout.activity_artist_info)
 public class ArtistViewerActivity extends BaseActivity implements
@@ -216,7 +215,7 @@ public class ArtistViewerActivity extends BaseActivity implements
 			// Intent releasesIntent = new Intent(this,
 			// ReleasesViewerActivity.class);
 			Intent releasesIntent = new Intent(this,
-					ReleasesListActivity_.class);
+					com.ventura.umusic.ui.release.ReleasesListActivity_.class);
 
 			for (int i = 0; this.mCurrentArtist.getImages() != null
 					&& i < this.mCurrentArtist.getImages().size(); i++) {
