@@ -1,16 +1,11 @@
 package com.ventura.umusic.ui;
 
-import java.io.File;
 import java.util.List;
 
 import android.app.AlertDialog;
-import android.content.ContentResolver;
 import android.content.SharedPreferences;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.provider.MediaStore;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockActivity;
@@ -31,36 +26,6 @@ public abstract class BaseActivity extends SherlockActivity {
 	
 	public BaseApplication getBaseApplication() {
 		return (BaseApplication) this.getApplication();
-	}
-
-	public String getFilePathFromContentUri(Uri fileUri,
-			ContentResolver contentResolver) {
-		// See http://stackoverflow.com/a/11603837
-		String filePath;
-		String[] filePathColumn = { MediaStore.MediaColumns.DATA };
-
-		Cursor cursor = contentResolver.query(fileUri, filePathColumn, null,
-				null, null);
-		cursor.moveToFirst();
-
-		int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-		filePath = cursor.getString(columnIndex);
-		cursor.close();
-		return filePath;
-	}
-
-	public File getSharedFile(Uri path) {
-		if (path == null)
-			return null;
-
-		String uri;
-		if (path.toString().startsWith("content")) {
-			uri = this.getFilePathFromContentUri(path, getContentResolver());
-		} else {
-			uri = path.getPath();
-		}
-
-		return new File(uri);
 	}
 
 	/**

@@ -32,17 +32,6 @@ public class Artist implements Comparable<Artist>, Serializable {
 	private List<Artist> members = new ArrayList<Artist>();
 	private String dataQuality;
 
-	public Artist(int id, String name, URL discogsUrl) {
-		this.id = id;
-		this.name = name;
-		this.discogsUrl = discogsUrl;
-	}
-	
-	public Artist(int id, String name) {
-		this.id = id;
-		this.name = name;
-	}
-
 	/**
 	 * Constructor to create a band member
 	 * 
@@ -60,6 +49,22 @@ public class Artist implements Comparable<Artist>, Serializable {
 		this.isActive = isActive;
 		this.name = name;
 		this.profileUrl = profileUrl;
+	}
+
+	@Deprecated //Remove discogsUrl
+	public Artist(int id, String name, URL discogsUrl) {
+		this.id = id;
+		this.name = name;
+		this.discogsUrl = discogsUrl;
+	}
+	
+	public Artist(int id, String name) {
+		this.id = id;
+		this.name = name;
+	}
+	
+	public Artist(String name) {
+		this.name = name;
 	}
 
 	public Artist() {

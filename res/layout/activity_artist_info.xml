@@ -52,7 +52,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal|center_vertical"
-                        android:contentDescription="@string/song_artist"
+                        android:contentDescription="@string/artist"
                         android:scaleType="fitXY"
                         android:src="@drawable/no_image" />
 

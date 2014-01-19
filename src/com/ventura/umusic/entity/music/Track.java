@@ -115,7 +115,11 @@ public class Track implements Serializable {
 
 	@Override
 	public String toString() {
-		return String.format("%1$s. %2$s (%3$s)", this.position, this.title,
-				this.duration);
+		if (this.position != null && this.duration != null)
+			return String.format("%1$s. %2$s (%3$s)", this.position,
+					this.title, this.duration);
+		else
+			return String.format(title
+					+ (getArtist() != null ? getArtist().getName() : ""));
 	}
 }

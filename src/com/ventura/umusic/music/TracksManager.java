@@ -1,10 +1,12 @@
 package com.ventura.umusic.music;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Environment;
@@ -14,14 +16,55 @@ import android.util.Log;
 import com.ventura.umusic.entity.artist.Artist;
 import com.ventura.umusic.entity.music.Track;
 
+/**
+ * Class to handle music data info on the device.
+ * 
+ * @author Guilherme
+ * 
+ */
 public class TracksManager {
 	final String TAG = getClass().getName();
-	private ArrayList<Track> songsList = new ArrayList<Track>();
+	private ArrayList<Track> songsList;
 	private Context context;
 
 	// Constructor
 	public TracksManager(Context ctx) {
+		this.songsList = new ArrayList<Track>();
 		this.context = ctx;
+	}
+
+	/**
+	 * Runs media scanner for <b>all</b> files in sd card.
+	 */
+	public void scanMedia() {
+		scanMedia("file://" + Environment.getExternalStorageDirectory());
+	}
+
+	/**
+	 * Runs media scanner to find a specific file
+	 * 
+	 * @param path
+	 *            the file:// path
+	 */
+	public void scanMedia(String path) {
+		Intent scanFileIntent = new Intent(
+				Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse(path));
+		context.sendBroadcast(scanFileIntent);
+	}
+
+	/**
+	 * Gets all tracks in the device. If the tracks were already loaded, return
+	 * the already loaded list.
+	 * 
+	 * @param force
+	 *            forces the tracks to be retrieved again, even if a cached list
+	 *            is already owned.
+	 */
+	public List<Track> getTracks(boolean force) {
+		if (songsList != null && !force)
+			return songsList;
+		scanMedia();
+		return getAllTracks();
 	}
 
 	/**
@@ -29,7 +72,8 @@ public class TracksManager {
 	 * 
 	 * @return A list with the found mp3 tracks.
 	 */
-	public List<Track> refreshPlayList() {
+	public List<Track> getAllTracks() {
+		Log.i(TAG, "START: getAllTracks");
 		ContentResolver contentResolver = this.context.getContentResolver();
 
 		String[] columns = new String[] { MediaStore.Audio.Media.DATA };
@@ -54,7 +98,6 @@ public class TracksManager {
 						.getString(pathColumnIndex));
 				if (track != null) {
 					songsList.add(track);
-					Log.d(TAG, "Loaded song from device: " + track.toString());
 				}
 			}
 		} catch (Exception e) {
@@ -65,6 +108,7 @@ public class TracksManager {
 			}
 		}
 
+		Log.i(TAG, "END: getAllTracks - " + songsList.size() + " songs loaded");
 		return songsList;
 	}
 
@@ -104,7 +148,6 @@ public class TracksManager {
 		String whereSentence = String.format("%1$s = \"%2$s\"",
 				MediaStore.Audio.AudioColumns.DATA, uri,
 				MediaStore.Audio.AudioColumns.MIME_TYPE);
-		Log.d(TAG, "Searching for: " + whereSentence);
 
 		Track track = null;
 		Cursor cursor = null;
@@ -129,6 +172,13 @@ public class TracksManager {
 		return track;
 	}
 
+	/**
+	 * Gets the {@code file://} path of a {@code content://} one.
+	 * 
+	 * @param uri
+	 *            The {@code content://} path uri
+	 * @return
+	 */
 	public String getPath(Uri uri) {
 		String[] projection = { MediaStore.Audio.Media.DATA };
 		Cursor cursor = context.getContentResolver().query(uri, projection,
@@ -203,8 +253,8 @@ public class TracksManager {
 	 * </ul>
 	 * 
 	 * @param cursor
-	 *            The database cursor, pointed in the line from where it will
-	 *            load the track
+	 *            A database cursor, pointed in the line from where it will load
+	 *            the track
 	 * @return A {@link com.ventura.umusic.entity.music.Track track} object
 	 */
 	private Track loadSong(Cursor cursor) {
