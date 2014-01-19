@@ -25,8 +25,6 @@ import com.ventura.androidutils.utils.ConnectionManager;
 import com.ventura.androidutils.utils.Utils;
 import com.ventura.umusic.R;
 import com.ventura.umusic.constants.GlobalConstants;
-import com.ventura.umusic.discogs.DiscogsConstants;
-import com.ventura.umusic.discogs.entity.enumerator.QueryType;
 import com.ventura.umusic.entity.artist.Artist;
 import com.ventura.umusic.entity.music.MP3File;
 import com.ventura.umusic.music.TracksManager;

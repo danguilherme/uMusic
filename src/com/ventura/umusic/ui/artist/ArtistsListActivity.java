@@ -77,7 +77,7 @@ public class ArtistsListActivity extends InfiniteListActivity implements
 		}
 
 		String queryText = intent
-				.getStringExtra(GlobalConstants.EXTRA_QUERY);
+				.getStringExtra(GlobalConstants.EXTRA_SEARCH_TEXT);
 
 		if (queryText == null)
 			finish();
