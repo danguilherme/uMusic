@@ -13,7 +13,6 @@
 	<classpathentry exported="true" kind="lib" path="ref_lib/signpost-core-1.2.1.2.jar"/>
 	<classpathentry exported="true" kind="lib" path="ref_lib/signpost-commonshttp4-1.2.1.2.jar"/>
 	<classpathentry exported="true" kind="lib" path="ref_lib/jid3lib-0.5.4.jar" sourcepath="C:/Users/Guilherme/Downloads/jid3lib-0.5.4/jid3lib-0.5.4/src"/>
-	<classpathentry exported="true" kind="lib" path="ref_lib/MyID3_for_Android.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/gson-2.2.2.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/androidannotations-api-2.7.1.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
