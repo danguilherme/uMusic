@@ -1,3 +1,5 @@
-/uMusic/.apt_generated
-/uMusic/gen
-/uMusic/res/drawable/Thumbs.db
+.apt_generated
+gen
+bin
+.metadata
+res/drawable/Thumbs.db
