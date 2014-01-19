@@ -102,58 +102,6 @@
             android:label="@string/title_activity_artist_viewer"
             android:parentActivityName=".ui.artist.ListArtistsActivity" >
         </activity>
-
-        <!-- Release/Master -->
-        <activity
-            android:name=".ui.release.ReleasesViewerActivity"
-            android:configChanges="orientation"
-            android:label="@string/title_activity_releases_viewer" >
-        </activity>
-        <activity
-            android:name=".ui.release.ReleasesListActivity_"
-            android:label="@string/title_activity_releases_viewer" >
-        </activity>
-        <activity
-            android:name=".ui.release.ReleaseViewerActivity_"
-            android:configChanges="orientation"
-            android:label="@string/title_activity_releases_viewer" >
-        </activity>
-        <activity
-            android:name=".ui.release.MasterViewerActivity_"
-            android:configChanges="orientation"
-            android:label="@string/title_activity_releases_viewer" >
-        </activity>
-
-        <!-- Discogs -->
-        <activity
-            android:name=".discogs.oauth.PrepareRequestTokenActivity"
-            android:exported="false"
-            android:launchMode="singleTask" >
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data
-                    android:host="callback"
-                    android:scheme="lyricsfinder-app" />
-            </intent-filter>
-        </activity>
-
-        <!-- LyrDB-related activities -->
-        <activity
-            android:name=".lyrdb.ui.ListLyricsActivity"
-            android:configChanges="orientation" >
-        </activity>
-        <activity
-            android:name=".lyrdb.ui.LyricsViewerActivity"
-            android:configChanges="orientation" >
-        </activity>
-        <activity
-            android:name=".musixmatch.ui.LyricsViewerActivity"
-            android:configChanges="orientation" >
-        </activity>
     </application>
 
 </manifest>

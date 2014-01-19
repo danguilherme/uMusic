@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.Window;
 
 import com.ventura.umusic.R;
+import com.ventura.umusic.ui.music.MusicPlayerActivity_;
 
 public class DashboardActivity extends BaseActivity {
 	@Override
@@ -17,7 +18,7 @@ public class DashboardActivity extends BaseActivity {
 	}
 
 	public void onMusicPlayerButtonClick(View button) {
-		alert(R.string.message_coming_soon);
+		this.startActivity(new Intent(this, MusicPlayerActivity_.class));
 	}
 
 	public void onSearchArtistButtonClick(View button) {

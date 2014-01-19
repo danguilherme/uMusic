@@ -2,14 +2,20 @@ package com.ventura.umusic.music;
 
 import java.io.IOException;
 
-import com.ventura.umusic.entity.music.Track;
-
 import android.content.Context;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.util.Log;
 
-public class Music implements OnCompletionListener {
+import com.ventura.umusic.entity.music.Track;
+
+/**
+ * Facilitates the work with music playlists
+ * 
+ * @author Guilherme
+ * 
+ */
+public class MusicPlayer implements OnCompletionListener {
 	final String TAG = getClass().getName();
 
 	private MediaPlayer mediaPlayer;
@@ -18,27 +24,47 @@ public class Music implements OnCompletionListener {
 
 	private OnCompletionListener onCompletionListener;
 
+	/**
+	 * The song that is playing at the moment
+	 */
 	private Track currentPlaying;
 	private Context context;
+	/**
+	 * List of the uris of the songs that will play.
+	 */
+	private String[] playlist;
+	/**
+	 * The index inside {@link playlist} of the music that is played.
+	 */
+	private int nowPlaying;
 
-	public Music(Context context) {
+	public MusicPlayer(Context context) {
 		this.context = context;
 		this.initializeMediaPlayer();
 	}
 
+	public MusicPlayer(Context context, String[] playlist) {
+		this.context = context;
+		this.initializeMediaPlayer();
+		this.playlist = playlist;
+	}
+
 	private void initializeMediaPlayer() {
 		mediaPlayer = new MediaPlayer();
+		mediaPlayer.reset();
 		mediaPlayer.setOnCompletionListener(this);
 		currentPlaying = null;
 	}
 
 	public void onCompletion(MediaPlayer mediaPlayer) {
 		synchronized (this) {
+			mediaPlayer.reset();
 			isPrepared = false;
 		}
-		if (onCompletionListener != null) {
+		if (onCompletionListener != null)
 			onCompletionListener.onCompletion(mediaPlayer);
-		}
+
+		next();
 	}
 
 	private void prepare() {
@@ -53,7 +79,8 @@ public class Music implements OnCompletionListener {
 	}
 
 	/**
-	 * Plays a song. Of this song is already playing, ignores it.
+	 * Plays a song. If this song is already playing, stop it and plays from the
+	 * start.
 	 * 
 	 * @param song
 	 *            The song to play.
@@ -64,13 +91,15 @@ public class Music implements OnCompletionListener {
 				if (currentPlaying != null && currentPlaying.equals(song)) {
 					if (isPaused)
 						mediaPlayer.start();
+					else {
+						this.stop();
+						this.play(song);
+					}
 				} else {
 					stop();
 					mediaPlayer.reset();
 					mediaPlayer.setDataSource(context, song.getPathUri());
-					if (!isPrepared) {
-						prepare();
-					}
+					prepare();
 					mediaPlayer.start();
 					currentPlaying = song;
 				}
@@ -84,9 +113,15 @@ public class Music implements OnCompletionListener {
 
 	public void stop() {
 		mediaPlayer.stop();
+		isPaused = true;
 		synchronized (this) {
 			isPrepared = false;
 		}
+	}
+
+	private void next() {
+		// TODO Auto-generated method stub
+
 	}
 
 	public void switchTracks() {
@@ -116,7 +151,7 @@ public class Music implements OnCompletionListener {
 	}
 
 	public void dispose() {
-		if (mediaPlayer.isPlaying()) {
+		if (isPlaying()) {
 			stop();
 		}
 		mediaPlayer.release();

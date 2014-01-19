@@ -122,7 +122,7 @@ public class LyricsViewerActivity extends BaseListActivity implements
 			Track track = tracksManager.getTrackByUri(uri.toString());
 
 			if (track != null) {
-				setArtistName(track.getArtist().getName());
+				setArtistName(track.getArtistName());
 				setSongName(track.getTitle());
 			}
 		} else {

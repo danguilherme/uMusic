@@ -1,6 +1,5 @@
 package com.ventura.umusic.music;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,7 +60,7 @@ public class TracksManager {
 	 *            is already owned.
 	 */
 	public List<Track> getTracks(boolean force) {
-		if (songsList != null && !force)
+		if ((songsList != null && songsList.size() > 0) && !force)
 			return songsList;
 		scanMedia();
 		return getAllTracks();
@@ -261,7 +260,8 @@ public class TracksManager {
 		Track track = new Track(cursor.getInt(0), cursor.getString(3),
 				Uri.parse(cursor.getString(1)), cursor.getString(5));
 
-		track.setArtist(new Artist(cursor.getInt(6), cursor.getString(7)));
+		track.setArtistName(cursor.getString(7));
+		track.setAlbumTitle(cursor.getString(9));
 
 		return track;
 	}

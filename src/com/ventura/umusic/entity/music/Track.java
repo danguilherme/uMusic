@@ -2,8 +2,6 @@ package com.ventura.umusic.entity.music;
 
 import java.io.Serializable;
 
-import com.ventura.umusic.entity.artist.Artist;
-
 import android.net.Uri;
 
 public class Track implements Serializable {
@@ -11,14 +9,16 @@ public class Track implements Serializable {
 
 	private int id;
 	private String title;
-	private Uri pathUri;
 	private String mimeType;
+	private Uri pathUri;
 
 	private String duration;
 	private String position;
 
-	private Artist artist;
-	private Lyrics lyrics;
+	private String artistName;
+	private String albumTitle;
+
+	private String lyrics;
 
 	public Track(int id, String title, Uri path, String mimeType) {
 		this.id = id;
@@ -81,26 +81,28 @@ public class Track implements Serializable {
 		this.position = position;
 	}
 
-	public Artist getArtist() {
-		return artist;
+	public String getArtistName() {
+		return artistName;
 	}
 
-	public void setArtist(Artist artist) {
-		this.artist = artist;
+	public void setArtistName(String artistName) {
+		this.artistName = artistName;
 	}
 
-	public Lyrics getLyrics() {
+	public String getAlbumTitle() {
+		return albumTitle;
+	}
+
+	public void setAlbumTitle(String albumTitle) {
+		this.albumTitle = albumTitle;
+	}
+
+	public String getLyrics() {
 		return lyrics;
 	}
 
-	public void setLyrics(Lyrics lyrics) {
+	public void setLyrics(String lyrics) {
 		this.lyrics = lyrics;
-		if (lyrics != null) {
-			lyrics.setMusicName(this.getTitle());
-			if (this.getArtist() != null) {
-				lyrics.setArtistName(this.getArtist().getName());
-			}
-		}
 	}
 
 	@Override
@@ -115,11 +117,7 @@ public class Track implements Serializable {
 
 	@Override
 	public String toString() {
-		if (this.position != null && this.duration != null)
-			return String.format("%1$s. %2$s (%3$s)", this.position,
-					this.title, this.duration);
-		else
-			return String.format(title
-					+ (getArtist() != null ? getArtist().getName() : ""));
+		return String.format("%1$s. %2$s (%3$s)", this.position, this.title,
+				this.duration);
 	}
 }

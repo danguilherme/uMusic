@@ -126,47 +126,25 @@
     <string name="error_bringing_release_info">There was an error when bringing the release\'s info.</string>
     <!-- Commons -->
     <string name="set_search_params">Set Params</string>
-    
-    <!-- Lyrics providers -->
-    <string name="provider_terra_name">Terra Letras</string>
-    <string name="provider_terra_url">http://letras.mus.br/winamp.php?artista=%1$s%26musica=%2$s</string>
-    <string name="provider_lyrster_name">Lyrster</string>
-    <string name="provider_lyrster_url">http://www.lyrster.com/lyrics/%2$s-lyrics-%1$s.html</string>
-    <string name="provider_azlyrics_name">A-Z Lyrics Universe</string>
-    <string name="provider_azlyrics_url">http://www.azlyrics.com/lyrics/%1$s/%2$s.html</string>
-
-    <!-- Releases Viewer [START] -->
-    <string name="message_fetching_releases_title">Fetching artist\'s releases…</string>
-    <string name="message_fetching_releases_body">Searching for the artist\'s release, please wait.</string>
-    <!-- Releases Viewer [END] -->
-
 
     <!-- Lyrics Viewer [START] -->
     <string name="title_activity_lyrics_viewer">Lyrics List</string>
     <string name="btn_select_lyric">Select</string>
     <string name="menu_set_music_tags">Set file tags</string>
-
     <string name="action_share_lyrics">Share Lyrics</string>
     <!-- Lyrics Viewer [END] -->
-
-
-    <!-- Discogs [START] -->
-    <string name="discogs_url_search" formatted="false">/database/search?q=%2$s%26type=%1$s</string>
-    <string name="discogs_url_artists" formatted="false">/artists/%1$s</string>
-    <string name="discogs_url_releases" formatted="false">/artists/%1$s/releases</string>
-    <string name="discogs_url_tracks_releases" formatted="false">/releases/%1$s</string>
-    <string name="discogs_url_tracks_masters" formatted="false">/masters/%1$s</string>
-    <!-- Discogs [END] -->
-
-
-    <!-- LyrDB [START] -->
-    <string name="lyrdb_url_base" formatted="false">http://webservices.lyrdb.com</string>
-    <string name="lyrdb_url_search" formatted="false">/lookup.php?q=%1$s%26for=%2$s</string>
-    <string name="lyrdb_url_lyrics" formatted="false">/getlyr.php?q=%1$s</string>
-    <!-- LyrDB [END] -->
 
     <string-array name="external_urls_context_menu_items">
         <item name="copy">@android:string/copyUrl</item>
     </string-array>
+
+    <!-- Music PLayer [START] -->
+    <string name="title_activity_music_player">Music Player</string>
+    <string name="play">Play</string>
+    <string name="pause">Pause</string>
+    <string name="stop">Stop</string>
+    <string name="forward">>></string>
+    <string name="backward">&lt;&lt;</string>
+    <!-- Music PLayer [END] -->
 
 </resources>

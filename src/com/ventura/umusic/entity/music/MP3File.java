@@ -9,8 +9,6 @@ import org.farng.mp3.id3.FrameBodyUSLT;
 
 import android.util.Log;
 
-import com.ventura.umusic.entity.artist.Artist;
-
 public class MP3File implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private final String TAG = getClass().getName();
@@ -52,10 +50,9 @@ public class MP3File implements Serializable {
 		track.setTitle(getSongTitle());
 		track.setPosition(getTrackPosition());
 
-		String artistName = getArtist();
-		track.setArtist(new Artist(getArtist()));
-		track.setLyrics(new Lyrics(artistName, getSongTitle()));
-		track.getLyrics().setLyricsText(getLyrics());
+		track.setArtistName(getArtist());
+		track.setAlbumTitle(getAlbumTitle());
+		track.setLyrics(getLyrics());
 
 		originalTrack = track;
 	}
