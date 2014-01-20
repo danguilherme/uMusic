@@ -52,6 +52,49 @@ public class TracksManager {
 	}
 
 	/**
+	 * Read all mp3 files from sdcard and returns theirs uri path
+	 * 
+	 * @return A list with the found audio uris.
+	 */
+	public List<String> getAllTracksSimplified() {
+		Log.i(TAG, "START: getAllTracksSimplified");
+		List<String> songPathsList = new ArrayList<String>();
+		ContentResolver contentResolver = this.context.getContentResolver();
+
+		String[] columns = new String[] { MediaStore.Audio.Media.DATA };
+
+		Uri filesUri = MediaStore.Audio.Media.getContentUriForPath(Environment
+				.getExternalStorageDirectory().getPath());
+
+		String whereSentence = String.format(
+				"%1$s = \"audio/mpeg\" OR %1$s = \"audio/mp4\"",
+				MediaStore.Audio.Media.MIME_TYPE);
+
+		Cursor cursor = null;
+		try {
+			cursor = contentResolver.query(filesUri, columns, whereSentence,
+					null, null);
+
+			int pathColumnIndex = cursor
+					.getColumnIndex(MediaStore.Audio.Media.DATA);
+
+			while (cursor.moveToNext()) {
+				songPathsList.add(cursor.getString(pathColumnIndex));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (cursor != null) {
+				cursor.close();
+			}
+		}
+
+		Log.i(TAG, "END: getAllTracksSimplified - " + songPathsList.size()
+				+ " songs loaded");
+		return songPathsList;
+	}
+
+	/**
 	 * Gets all tracks in the device. If the tracks were already loaded, return
 	 * the already loaded list.
 	 * 
@@ -119,6 +162,8 @@ public class TracksManager {
 	 * @return The track object, or null, if it was not found.
 	 */
 	public Track getTrackByUri(String uri) {
+		if (uri == null)
+			return null;
 		ContentResolver contentResolver = this.context.getContentResolver();
 
 		String[] columns = new String[] {
