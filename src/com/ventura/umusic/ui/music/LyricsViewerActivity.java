@@ -33,7 +33,7 @@ import com.ventura.umusic.R;
 import com.ventura.umusic.business.LyricsService;
 import com.ventura.umusic.constants.GlobalConstants;
 import com.ventura.umusic.entity.music.Lyrics;
-import com.ventura.umusic.entity.music.Track;
+import com.ventura.umusic.entity.music.Audio;
 import com.ventura.umusic.music.TracksManager;
 import com.ventura.umusic.ui.BaseListActivity;
 
@@ -119,7 +119,7 @@ public class LyricsViewerActivity extends BaseListActivity implements
 			Uri uri = (Uri) extras.getParcelable(Intent.EXTRA_STREAM);
 
 			TracksManager tracksManager = new TracksManager(this);
-			Track track = tracksManager.getTrackByUri(uri.toString());
+			Audio track = tracksManager.getTrackByUri(uri.toString());
 
 			if (track != null) {
 				setArtistName(track.getArtistName());

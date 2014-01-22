@@ -21,15 +21,15 @@ public class MP3File implements Serializable {
 	/**
 	 * Saves the state of the track when it was first loaded
 	 */
-	private Track originalTrack;
-	private Track track;
+	private Audio originalTrack;
+	private Audio track;
 
 	public MP3File(org.farng.mp3.MP3File file) {
 		this.mp3File = file;
 		loadFileTags();
 	}
 
-	public MP3File(org.farng.mp3.MP3File mp3File, Track fileTrack) {
+	public MP3File(org.farng.mp3.MP3File mp3File, Audio fileTrack) {
 		this(mp3File);
 
 		this.track = fileTrack;
@@ -46,7 +46,7 @@ public class MP3File implements Serializable {
 
 	private void loadTrack() {
 		if (track == null)
-			track = new Track(getSongTitle(), getTrackPosition(), "0");
+			track = new Audio(getSongTitle(), getTrackPosition(), "0");
 		track.setTitle(getSongTitle());
 		track.setPosition(getTrackPosition());
 
@@ -57,7 +57,7 @@ public class MP3File implements Serializable {
 		originalTrack = track;
 	}
 
-	public Track getTrack() {
+	public Audio getTrack() {
 		return track;
 	}
 

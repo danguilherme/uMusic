@@ -8,7 +8,7 @@ import java.util.List;
 import com.ventura.umusic.entity.Image;
 import com.ventura.umusic.entity.artist.Artist;
 import com.ventura.umusic.entity.enumerator.ReleaseType;
-import com.ventura.umusic.entity.music.Track;
+import com.ventura.umusic.entity.music.Audio;
 
 public class ArtistRelease implements Comparable<ArtistRelease>, Serializable {
 	private static final long serialVersionUID = 4281097578238872681L;
@@ -25,7 +25,7 @@ public class ArtistRelease implements Comparable<ArtistRelease>, Serializable {
 	private List<String> styles = new ArrayList<String>();
 	private List<String> genres = new ArrayList<String>();
 	private List<Artist> artists = new ArrayList<Artist>();
-	private List<Track> trackList = new ArrayList<Track>();
+	private List<Audio> trackList = new ArrayList<Audio>();
 	private String trackInfo;
 
 	private String dataQuality;
@@ -112,11 +112,11 @@ public class ArtistRelease implements Comparable<ArtistRelease>, Serializable {
 		this.artists = artists;
 	}
 
-	public List<Track> getTrackList() {
+	public List<Audio> getTrackList() {
 		return trackList;
 	}
 
-	public void setTrackList(List<Track> trackList) {
+	public void setTrackList(List<Audio> trackList) {
 		this.trackList = trackList;
 	}
 

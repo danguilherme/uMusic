@@ -1,19 +1,22 @@
 package com.ventura.umusic.music;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 
-import com.ventura.umusic.entity.artist.Artist;
-import com.ventura.umusic.entity.music.Track;
+import com.ventura.umusic.entity.music.Audio;
 
 /**
  * Class to handle music data info on the device.
@@ -23,12 +26,12 @@ import com.ventura.umusic.entity.music.Track;
  */
 public class TracksManager {
 	final String TAG = getClass().getName();
-	private ArrayList<Track> songsList;
+	private ArrayList<Audio> songsList;
 	private Context context;
 
 	// Constructor
 	public TracksManager(Context ctx) {
-		this.songsList = new ArrayList<Track>();
+		this.songsList = new ArrayList<Audio>();
 		this.context = ctx;
 	}
 
@@ -102,7 +105,7 @@ public class TracksManager {
 	 *            forces the tracks to be retrieved again, even if a cached list
 	 *            is already owned.
 	 */
-	public List<Track> getTracks(boolean force) {
+	public List<Audio> getTracks(boolean force) {
 		if ((songsList != null && songsList.size() > 0) && !force)
 			return songsList;
 		scanMedia();
@@ -114,7 +117,7 @@ public class TracksManager {
 	 * 
 	 * @return A list with the found mp3 tracks.
 	 */
-	public List<Track> getAllTracks() {
+	public List<Audio> getAllTracks() {
 		Log.i(TAG, "START: getAllTracks");
 		ContentResolver contentResolver = this.context.getContentResolver();
 
@@ -136,7 +139,7 @@ public class TracksManager {
 					.getColumnIndex(MediaStore.Audio.Media.DATA);
 
 			while (cursor.moveToNext()) {
-				Track track = this.getTrackByUri(cursor
+				Audio track = this.getTrackByUri(cursor
 						.getString(pathColumnIndex));
 				if (track != null) {
 					songsList.add(track);
@@ -161,27 +164,10 @@ public class TracksManager {
 	 *            The uri of the track
 	 * @return The track object, or null, if it was not found.
 	 */
-	public Track getTrackByUri(String uri) {
+	public Audio getTrackByUri(String uri) {
 		if (uri == null)
 			return null;
 		ContentResolver contentResolver = this.context.getContentResolver();
-
-		String[] columns = new String[] {
-				// Track Info
-				MediaStore.Audio.AudioColumns._ID, // The id
-				MediaStore.Audio.AudioColumns.DATA, // The uri
-				MediaStore.Audio.AudioColumns.TRACK, // The position in the
-														// album
-				MediaStore.Audio.AudioColumns.TITLE, // The song title
-				MediaStore.Audio.AudioColumns.DURATION, // The song duration
-				MediaStore.Audio.AudioColumns.MIME_TYPE, // The file type
-				// Artist Info
-				MediaStore.Audio.AudioColumns.ARTIST_ID, // The album id
-				MediaStore.Audio.AudioColumns.ARTIST, // The artist name
-				// Album Info
-				MediaStore.Audio.AudioColumns.ALBUM_ID, // The album id
-				MediaStore.Audio.AudioColumns.ALBUM // The album name
-		};
 
 		Uri filesUri = MediaStore.Audio.Media.getContentUriForPath(Environment
 				.getExternalStorageDirectory().getPath());
@@ -190,15 +176,14 @@ public class TracksManager {
 			uri = getPath(Uri.parse(uri));
 
 		String whereSentence = String.format("%1$s = \"%2$s\"",
-				MediaStore.Audio.AudioColumns.DATA, uri,
-				MediaStore.Audio.AudioColumns.MIME_TYPE);
+				MediaStore.Audio.AudioColumns.DATA, uri);
 
-		Track track = null;
+		Audio track = null;
 		Cursor cursor = null;
 
 		try {
-			cursor = contentResolver.query(filesUri, columns, whereSentence,
-					null, null);
+			cursor = contentResolver.query(filesUri,
+					Constants.MUSIC_INFO_COLUMNS, whereSentence, null, null);
 
 			// cursor.moveToFirst();
 			if (cursor.moveToNext())
@@ -233,57 +218,6 @@ public class TracksManager {
 		return cursor.getString(column_index);
 	}
 
-	@Deprecated
-	/**
-	 * Gets an artist by his/her id and then use the loadArtist method to
-	 * populate it.
-	 * 
-	 * @param id
-	 * @return
-	 */
-	private Artist getArtistById(int id) {
-		ContentResolver contentResolver = this.context.getContentResolver();
-
-		String[] columns = new String[] {
-				// Artist Info
-				MediaStore.Audio.Artists._ID, // The id
-				MediaStore.Audio.Artists.ARTIST, // The artist name
-				MediaStore.Audio.Artists.NUMBER_OF_ALBUMS, // The number of
-															// albums this
-															// artist has
-				MediaStore.Audio.Artists.NUMBER_OF_TRACKS // The number of
-															// tracks this
-															// artist have
-		};
-
-		Uri filesUri = MediaStore.Audio.Artists.getContentUri(Environment
-				.getExternalStorageDirectory().getName());
-
-		String whereSentence = String.format("%1$s = \"%2$s\"",
-				MediaStore.Audio.Artists._ID, id);
-
-		Artist artist = null;
-		Cursor cursor = null;
-
-		try {
-			cursor = contentResolver.query(filesUri, columns, whereSentence,
-					null, null);
-
-			if (cursor != null && cursor.moveToNext())
-				artist = this.loadArtist(cursor);
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			// Some providers return null if an error occurs, others throw an
-			// exception
-			if (cursor != null) {
-				cursor.close();
-			}
-		}
-
-		return artist;
-	}
-
 	/**
 	 * Load a track by a database cursor.
 	 * 
@@ -299,20 +233,91 @@ public class TracksManager {
 	 * @param cursor
 	 *            A database cursor, pointed in the line from where it will load
 	 *            the track
-	 * @return A {@link com.ventura.umusic.entity.music.Track track} object
+	 * @return A {@link com.ventura.umusic.entity.music.Audio track} object
 	 */
-	private Track loadSong(Cursor cursor) {
-		Track track = new Track(cursor.getInt(0), cursor.getString(3),
-				Uri.parse(cursor.getString(1)), cursor.getString(5));
+	private Audio loadSong(Cursor cursor) {
+		Audio track = new Audio(cursor.getInt(Constants.MusicInfoColumns.ID
+				.getIndex()), cursor.getString(Constants.MusicInfoColumns.TITLE
+				.getIndex()), Uri.parse(cursor
+				.getString(Constants.MusicInfoColumns.DATA.getIndex())),
+				cursor.getString(Constants.MusicInfoColumns.MIME_TYPE
+						.getIndex()));
 
-		track.setArtistName(cursor.getString(7));
-		track.setAlbumTitle(cursor.getString(9));
+		track.setArtistName(cursor.getString(Constants.MusicInfoColumns.ARTIST
+				.getIndex()));
+		track.setAlbumId(cursor.getLong(Constants.MusicInfoColumns.ALBUM_ID
+				.getIndex()));
+		track.setAlbumTitle(cursor.getString(Constants.MusicInfoColumns.ALBUM
+				.getIndex()));
 
 		return track;
 	}
 
-	private Artist loadArtist(Cursor cursor) {
-		Artist artist = new Artist(cursor.getInt(0), cursor.getString(1));
-		return artist;
+	/**
+	 * Loads the audio inside the track's album image property
+	 * 
+	 * @param track
+	 */
+	public void loadAlbum(Audio track) {
+		Uri sArtworkUri = Uri.parse("content://media/external/audio/albumart");
+		Uri albumArtUri = ContentUris.withAppendedId(sArtworkUri,
+				track.getAlbumId());
+
+		Log.d(TAG, albumArtUri.toString());
+		Bitmap bitmap = null;
+		try {
+			bitmap = MediaStore.Images.Media.getBitmap(
+					context.getContentResolver(), albumArtUri);
+		} catch (FileNotFoundException exception) {
+			exception.printStackTrace();
+			bitmap = null;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		track.setAlbumImage(bitmap);
+	}
+
+	private static class Constants {
+
+		public enum MusicInfoColumns {
+			ID(MediaStore.Audio.AudioColumns._ID, 0), DATA(
+					MediaStore.Audio.AudioColumns.DATA, 1), TRACK(
+					MediaStore.Audio.AudioColumns.TRACK, 2), TITLE(
+					MediaStore.Audio.AudioColumns.TITLE, 3), DURATION(
+					MediaStore.Audio.AudioColumns.DURATION, 4), MIME_TYPE(
+					MediaStore.Audio.AudioColumns.MIME_TYPE, 5), ARTIST_ID(
+					MediaStore.Audio.AudioColumns.ARTIST_ID, 6), ARTIST(
+					MediaStore.Audio.AudioColumns.ARTIST, 7), ALBUM_ID(
+					MediaStore.Audio.AudioColumns.ALBUM_ID, 8), ALBUM(
+					MediaStore.Audio.AudioColumns.ALBUM, 9);
+
+			private final String name;
+			private final int index;
+
+			MusicInfoColumns(String columnName, int columnIndex) {
+				this.name = columnName;
+				this.index = columnIndex;
+			}
+
+			public String getName() {
+				return name;
+			}
+
+			public int getIndex() {
+				return index;
+			}
+		}
+
+		public static String[] MUSIC_INFO_COLUMNS = new String[] {
+				MusicInfoColumns.ID.getName(), MusicInfoColumns.DATA.getName(),
+				MusicInfoColumns.TRACK.getName(),
+				MusicInfoColumns.TITLE.getName(),
+				MusicInfoColumns.DURATION.getName(),
+				MusicInfoColumns.MIME_TYPE.getName(),
+				MusicInfoColumns.ARTIST_ID.getName(),
+				MusicInfoColumns.ARTIST.getName(),
+				MusicInfoColumns.ALBUM_ID.getName(),
+				MusicInfoColumns.ALBUM.getName() };
 	}
 }

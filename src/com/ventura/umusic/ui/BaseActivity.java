@@ -21,13 +21,17 @@ public abstract class BaseActivity extends SherlockActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		this.sharedPreferences = PreferenceManager
-				.getDefaultSharedPreferences(this);
+				.getDefaultSharedPreferences(getApplicationContext());
+	}
+	
+	protected SharedPreferences getApplicationPreferences() {
+		return this.sharedPreferences;
 	}
 	
 	public BaseApplication getBaseApplication() {
 		return (BaseApplication) this.getApplication();
 	}
-
+	
 	/**
 	 * This method creates a list of strings, one bellow another, separated by a
 	 * semicomma and finalized with a dot. The output is like this:
@@ -97,13 +101,13 @@ public abstract class BaseActivity extends SherlockActivity {
 	 * @param message
 	 *            The message to show
 	 */
-	public void alert(String title, String message) {
-		final AlertDialog dialog = new AlertDialog.Builder(this).create();
-		dialog.setTitle(title);
-		dialog.setMessage(message);
+	public void alert(final String title, final String message) {
 		runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
+				AlertDialog dialog = new AlertDialog.Builder(BaseActivity.this).create();
+				dialog.setTitle(title);
+				dialog.setMessage(message);
 				dialog.show();
 			}
 		});

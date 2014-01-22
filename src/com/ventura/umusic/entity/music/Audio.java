@@ -2,9 +2,16 @@ package com.ventura.umusic.entity.music;
 
 import java.io.Serializable;
 
+import android.graphics.Bitmap;
 import android.net.Uri;
 
-public class Track implements Serializable {
+/**
+ * Logical representation of an audio media
+ * 
+ * @author Guilherme
+ * 
+ */
+public class Audio implements Serializable {
 	private static final long serialVersionUID = 6928769397990780287L;
 
 	private int id;
@@ -20,14 +27,17 @@ public class Track implements Serializable {
 
 	private String lyrics;
 
-	public Track(int id, String title, Uri path, String mimeType) {
+	private long albumId;
+	private Bitmap albumImage;
+
+	public Audio(int id, String title, Uri path, String mimeType) {
 		this.id = id;
 		this.title = title;
 		this.pathUri = path;
 		this.setMimeType(mimeType);
 	}
 
-	public Track(String title, String position, String duration) {
+	public Audio(String title, String position, String duration) {
 		this.title = title;
 		this.position = position;
 		this.duration = duration;
@@ -105,12 +115,28 @@ public class Track implements Serializable {
 		this.lyrics = lyrics;
 	}
 
+	public long getAlbumId() {
+		return albumId;
+	}
+
+	public void setAlbumId(long albumId) {
+		this.albumId = albumId;
+	}
+
+	public Bitmap getAlbumImage() {
+		return albumImage;
+	}
+
+	public void setAlbumImage(Bitmap album) {
+		this.albumImage = album;
+	}
+
 	@Override
 	public boolean equals(Object o) {
-		if (!(o instanceof Track)) {
+		if (!(o instanceof Audio)) {
 			return super.equals(o);
 		}
-		Track anotherSong = (Track) o;
+		Audio anotherSong = (Audio) o;
 		return this.id == anotherSong.id
 				&& this.getTitle().equals(anotherSong.getTitle());
 	}

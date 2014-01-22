@@ -5,16 +5,17 @@ import java.util.List;
 import org.apache.http.HttpException;
 
 import android.content.Intent;
+import android.content.SharedPreferences.Editor;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.googlecode.androidannotations.annotations.AfterViews;
@@ -26,10 +27,11 @@ import com.googlecode.androidannotations.annotations.ViewById;
 import com.ventura.androidutils.exception.LazyInternetConnectionException;
 import com.ventura.androidutils.exception.NoInternetConnectionException;
 import com.ventura.androidutils.utils.TimerUtils;
+import com.ventura.umusic.BaseApplication;
 import com.ventura.umusic.R;
 import com.ventura.umusic.business.LyricsService;
+import com.ventura.umusic.entity.music.Audio;
 import com.ventura.umusic.entity.music.Lyrics;
-import com.ventura.umusic.entity.music.Track;
 import com.ventura.umusic.music.TracksManager;
 import com.ventura.umusic.music.player.MusicPlayer;
 import com.ventura.umusic.music.player.MusicPlayerListener;
@@ -39,6 +41,13 @@ import com.ventura.umusic.ui.BaseActivity;
 public class MusicPlayerActivity extends BaseActivity implements
 		MusicPlayerListener, OnSeekBarChangeListener {
 	private final String TAG = getClass().getName();
+
+	public final String PREF_IS_SHUFFLE = getClass().getName()
+			+ ".PREF_IS_SHUFFLE";
+	public final String PREF_IS_REPEAT = getClass().getName()
+			+ ".PREF_IS_REPEAT";
+	public final String PREF_AUTOLOAD_LYRICS = getClass().getName()
+			+ ".PREF_AUTOLOAD_LYRICS";
 
 	@ViewById(R.id.btn_play)
 	protected Button btnPlay;
@@ -61,6 +70,9 @@ public class MusicPlayerActivity extends BaseActivity implements
 	@ViewById(R.id.btn_repeat)
 	protected ToggleButton btnRepeat;
 
+	@ViewById(R.id.btn_autoload_lyrics)
+	protected ToggleButton btnAutoLoadLyrics;
+
 	@ViewById(R.id.lbl_music_title)
 	protected TextView lblSongTitle;
 
@@ -82,6 +94,15 @@ public class MusicPlayerActivity extends BaseActivity implements
 	@ViewById(R.id.lbl_lyrics)
 	protected TextView lblLyrics;
 
+	@ViewById(R.id.album_image)
+	protected ImageView imgAlbumImage;
+
+	@ViewById(R.id.album_mask)
+	protected ImageView imgAlbumMask;
+
+	@ViewById(R.id.loading_lyrics_progress_bar)
+	ProgressBar pgbLyricsLoadingIndicator;
+
 	private MusicPlayer musicPlayer;
 	private TracksManager tracksManager;
 	// Handler to update UI timer, progress bar etc,.
@@ -90,9 +111,6 @@ public class MusicPlayerActivity extends BaseActivity implements
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-		musicPlayer = new MusicPlayer(getApplicationContext());
-		musicPlayer.setListener(this);
 		tracksManager = new TracksManager(this);
 		decipherIntent();
 	}
@@ -100,15 +118,8 @@ public class MusicPlayerActivity extends BaseActivity implements
 	@AfterViews
 	protected void afterViews() {
 		skbSongProgress.setOnSeekBarChangeListener(this);
-		lblLyrics.setOnClickListener(new OnClickListener() {
 
-			@Override
-			public void onClick(View v) {
-				if (lblLyrics.getText() == "")
-					findLyrics(lblArtist.getText().toString(), lblSongTitle
-							.getText().toString());
-			}
-		});
+		loadPlayer();
 	}
 
 	private void decipherIntent() {
@@ -119,15 +130,65 @@ public class MusicPlayerActivity extends BaseActivity implements
 			return;
 	}
 
+	private void loadPlayer() {
+		musicPlayer = new MusicPlayer(this);
+		musicPlayer.setListener(this);
+
+		boolean isRepeat = getApplicationPreferences().getBoolean(
+				BaseApplication.Preferences.MP_IS_REPEAT, false);
+		boolean isShuffle = getApplicationPreferences().getBoolean(
+				BaseApplication.Preferences.MP_IS_SHUFFLE, false);
+		boolean autoLoadLyrics = getApplicationPreferences().getBoolean(
+				BaseApplication.Preferences.MP_AUTOLOAD_LYRICS, false);
+
+		setRepeat(isRepeat);
+		setShuffle(isShuffle);
+		setAutoLoadLyrics(autoLoadLyrics);
+
+		TimerUtils timerUtils = new TimerUtils();
+		lblCurrentPosition.setText(timerUtils.milliSecondsToTimer(0));
+		lblTotalDuration.setText(timerUtils.milliSecondsToTimer(0));
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		musicPlayer.dispose();
+	}
+
 	/**
 	 * Refreshes track name, album, etc
 	 */
 	private void refreshTrackInfoView() {
-		Track currentPlaying = musicPlayer.getCurrentPlaying();
+		Audio currentPlaying = musicPlayer.getCurrentPlaying();
 		if (currentPlaying != null) {
 			lblSongTitle.setText(currentPlaying.getTitle());
 			lblAlbum.setText(currentPlaying.getAlbumTitle());
 			lblArtist.setText(currentPlaying.getArtistName());
+
+			tracksManager.loadAlbum(currentPlaying);
+
+			if (currentPlaying.getAlbumImage() == null) {
+				// if null, the album art is hidden
+				imgAlbumImage.setImageBitmap(null);
+			} else {
+				imgAlbumImage.setImageBitmap(currentPlaying.getAlbumImage());
+			}
+
+			// if user asked to auto load lyrics, do it
+			if (getApplicationPreferences().getBoolean(
+					BaseApplication.Preferences.MP_AUTOLOAD_LYRICS, false)) {
+				getCurrentPlayingLyrics();
+			}
+		}
+	}
+	
+	void getCurrentPlayingLyrics(){
+		Audio currentPlaying = musicPlayer.getCurrentPlaying();
+		if (currentPlaying != null && lblLyrics.getText().equals("")) {
+			pgbLyricsLoadingIndicator.setVisibility(View.VISIBLE);
+			findLyrics(currentPlaying.getArtistName(),
+					currentPlaying.getTitle());
 		}
 	}
 
@@ -138,21 +199,38 @@ public class MusicPlayerActivity extends BaseActivity implements
 			l = new LyricsService(this).getLyrics(artist, song);
 		} catch (NoInternetConnectionException e) {
 			e.printStackTrace();
+			alert(R.string.message_no_internet_connection);
 		} catch (LazyInternetConnectionException e) {
 			e.printStackTrace();
+			alert(R.string.message_lazy_internet_connection);
 		} catch (HttpException e) {
 			e.printStackTrace();
+			alert("ERROR!", e.getMessage());
 		}
 
-		setLyrics(l);
+		setLyrics(artist, song, l);
 	}
 
 	@UiThread
-	void setLyrics(Lyrics l) {
+	void setLyrics(String searchedArtist, String searchedSong, Lyrics l) {
+		boolean isFromCurrentTrack = searchedArtist.equals(lblArtist.getText())
+				&& searchedSong.equals(lblSongTitle.getText());
+		boolean isAutoLoadingLyrics = getApplicationPreferences().getBoolean(
+				BaseApplication.Preferences.MP_AUTOLOAD_LYRICS, false);
+
 		if (l == null) {
 			lblLyrics.setText(null);
-		} else
+			if (isFromCurrentTrack && !isAutoLoadingLyrics)
+				alert(R.string.message_lyric_not_found);
+		} else if (isFromCurrentTrack)
 			lblLyrics.setText(l.getLyricsText());
+
+		if (isFromCurrentTrack)
+			pgbLyricsLoadingIndicator.setVisibility(View.INVISIBLE);
+	}
+
+	private void clearLyrics() {
+		lblLyrics.setText(null);
 	}
 
 	@Click(R.id.btn_play)
@@ -182,13 +260,11 @@ public class MusicPlayerActivity extends BaseActivity implements
 	@Click(R.id.btn_forward)
 	public void next() {
 		musicPlayer.next();
-		refreshTrackInfoView();
 	}
 
 	@Click(R.id.btn_backward)
 	public void prev() {
 		musicPlayer.prev();
-		refreshTrackInfoView();
 	}
 
 	@Click(R.id.btn_stop)
@@ -200,15 +276,48 @@ public class MusicPlayerActivity extends BaseActivity implements
 	@Click(R.id.btn_shuffle)
 	public void toggleShuffle() {
 		musicPlayer.toggleShuffle();
+
+		Editor editor = getApplicationPreferences().edit();
+		editor.putBoolean(BaseApplication.Preferences.MP_IS_SHUFFLE,
+				musicPlayer.isShuffle());
+		editor.apply();
+	}
+
+	protected void setShuffle(boolean shuffle) {
+		musicPlayer.setShuffle(shuffle);
 		btnShuffle.setChecked(musicPlayer.isShuffle());
-		btnRepeat.setChecked(musicPlayer.isRepeat());
 	}
 
 	@Click(R.id.btn_repeat)
 	public void toggleRepeat() {
 		musicPlayer.toggleRepeat();
+
+		Editor editor = getApplicationPreferences().edit();
+		editor.putBoolean(BaseApplication.Preferences.MP_IS_REPEAT,
+				musicPlayer.isRepeat());
+		editor.apply();
+
+	}
+
+	protected void setRepeat(boolean repeat) {
+		musicPlayer.setRepeat(repeat);
 		btnRepeat.setChecked(musicPlayer.isRepeat());
-		btnShuffle.setChecked(musicPlayer.isShuffle());
+	}
+
+	@Click(R.id.btn_autoload_lyrics)
+	public void toggleAutoLoadLyrics() {
+		boolean autoLoad = getApplicationPreferences().getBoolean(
+				BaseApplication.Preferences.MP_AUTOLOAD_LYRICS, false);
+		Editor editor = getApplicationPreferences().edit();
+		editor.putBoolean(BaseApplication.Preferences.MP_AUTOLOAD_LYRICS,
+				!autoLoad);
+		editor.apply();
+
+		setAutoLoadLyrics(!autoLoad);
+	}
+
+	private void setAutoLoadLyrics(boolean autoLoad) {
+		btnAutoLoadLyrics.setChecked(autoLoad);
 	}
 
 	/**
@@ -247,9 +356,9 @@ public class MusicPlayerActivity extends BaseActivity implements
 
 	// Music player listeners
 	@Override
-	public void onMusicChanged(Track oldSong, Track newSong) {
+	public void onMusicChanged(Audio oldSong, Audio newSong) {
+		clearLyrics();
 		refreshTrackInfoView();
-		setLyrics(null);
 	}
 
 	@Override

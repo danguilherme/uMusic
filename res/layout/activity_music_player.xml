@@ -34,17 +34,41 @@
         android:layout_height="2dip"
         android:background="@color/black" />
 
-    <ScrollView
-        android:layout_width="match_parent"
+    <FrameLayout
+        android:layout_width="fill_parent"
         android:layout_height="0dip"
         android:layout_weight="1" >
 
-        <TextView
-            android:id="@+id/lbl_lyrics"
+        <ImageView
+            android:id="@+id/album_image"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/lyrics" />
-    </ScrollView>
+            android:layout_height="fill_parent"
+            android:contentDescription="@string/album" />
+
+        <ImageView
+            android:id="@+id/album_mask"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:src="@color/lyrics_mask" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent" >
+
+            <TextView
+                android:id="@+id/lbl_lyrics"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/lyrics"
+                android:textColor="@color/white" />
+        </ScrollView>
+
+        <include
+            android:id="@+id/loading_lyrics_progress_bar"
+            layout="@layout/loading"
+            android:visibility="invisible" />
+    </FrameLayout>
 
     <TextView
         android:layout_width="fill_parent"
@@ -101,6 +125,13 @@
                 android:layout_height="wrap_content"
                 android:textOff="Repeat"
                 android:textOn="Repeating" />
+
+            <ToggleButton
+                android:id="@+id/btn_autoload_lyrics"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textOff="Auto load lyrics"
+                android:textOn="Auto loading lyrics" />
         </LinearLayout>
 
         <LinearLayout

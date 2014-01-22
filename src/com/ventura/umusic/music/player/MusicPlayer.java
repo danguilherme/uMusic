@@ -10,7 +10,7 @@ import android.media.MediaPlayer.OnCompletionListener;
 import android.net.Uri;
 import android.util.Log;
 
-import com.ventura.umusic.entity.music.Track;
+import com.ventura.umusic.entity.music.Audio;
 import com.ventura.umusic.music.TracksManager;
 
 /**
@@ -151,7 +151,7 @@ public class MusicPlayer implements OnCompletionListener {
 	 * @param song
 	 *            The song to play.
 	 */
-	public void play(Track song) {
+	public void play(Audio song) {
 		play(song.getPathUri());
 	}
 
@@ -177,26 +177,26 @@ public class MusicPlayer implements OnCompletionListener {
 	}
 
 	public void next() {
-		Track currentPlaying = getCurrentPlaying();
+		Audio currentPlaying = getCurrentPlaying();
 		if (nowPlayingIdx < (getPlaylist().size() - 1)) {
 			this.play(getPlaylist().get(nowPlayingIdx + 1));
 		} else {
 			this.play(getPlaylist().get(0));
 		}
-		Track musicChanged = getCurrentPlaying();
+		Audio musicChanged = getCurrentPlaying();
 
 		if (musicPlayerListener != null)
 			musicPlayerListener.onMusicChanged(currentPlaying, musicChanged);
 	}
 
 	public void prev() {
-		Track currentPlaying = getCurrentPlaying();
+		Audio currentPlaying = getCurrentPlaying();
 		if (nowPlayingIdx > 0) {
 			this.play(getPlaylist().get(nowPlayingIdx - 1));
 		} else {
 			this.play(getPlaylist().get(getPlaylist().size() - 1));
 		}
-		Track musicChanged = getCurrentPlaying();
+		Audio musicChanged = getCurrentPlaying();
 
 		if (musicPlayerListener != null)
 			musicPlayerListener.onMusicChanged(currentPlaying, musicChanged);
@@ -231,13 +231,7 @@ public class MusicPlayer implements OnCompletionListener {
 	}
 
 	public void toggleShuffle() {
-		if (isShuffle) {
-			this.setShuffle(false);
-		} else {
-			this.setShuffle(true);
-			// make repeat to false
-			this.setRepeat(false);
-		}
+		this.setShuffle(!isShuffle);
 	}
 
 	public void setRepeat(boolean isRepeat) {
@@ -250,13 +244,7 @@ public class MusicPlayer implements OnCompletionListener {
 	}
 
 	public void toggleRepeat() {
-		if (isRepeat) {
-			this.setRepeat(false);
-		} else {
-			this.setRepeat(true);
-			// make shuffle to false
-			this.setShuffle(false);
-		}
+		this.setRepeat(!isRepeat);
 	}
 
 	public void dispose() {
@@ -266,7 +254,7 @@ public class MusicPlayer implements OnCompletionListener {
 		mediaPlayer.release();
 	}
 
-	public Track getCurrentPlaying() {
+	public Audio getCurrentPlaying() {
 		return new TracksManager(context).getTrackByUri(getNowPlaying());
 	}
 
