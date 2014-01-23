@@ -1,9 +1,17 @@
 package com.ventura.umusic;
 
+import com.squareup.picasso.Picasso;
+
 import android.app.Application;
+import android.widget.ImageView;
 
 public class BaseApplication extends Application {
 	public static String APP_VERSION = "0.1";
+	
+	@Override
+	public void onCreate() {
+		super.onCreate();
+	}
 	
 	public class Preferences {
 		// Music player

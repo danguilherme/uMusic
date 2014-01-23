@@ -13,6 +13,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -46,8 +48,10 @@ import com.googlecode.androidannotations.annotations.EActivity;
 import com.googlecode.androidannotations.annotations.UiThread;
 import com.googlecode.androidannotations.annotations.ViewById;
 import com.googlecode.androidannotations.annotations.res.AnimationRes;
-import com.koushikdutta.urlimageviewhelper.UrlImageViewCallback;
-import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Picasso.LoadedFrom;
+import com.squareup.picasso.Target;
 import com.ventura.androidutils.exception.LazyInternetConnectionException;
 import com.ventura.androidutils.exception.NoInternetConnectionException;
 import com.ventura.androidutils.ui.widget.ButtonGroup;
@@ -554,15 +558,20 @@ public class ArtistViewerActivity extends BaseActivity implements
 		final String fileName = mCurrentArtist.getName()
 				+ (selImagePos == 0 ? "" : "-" + (selImagePos + 1)) + ".jpg";
 
-		UrlImageViewHelper.setUrlDrawable(mArtistImageView, selectedImage
-				.getUrl().toString(), R.drawable.no_image,
-				new UrlImageViewCallback() {
+		Picasso.with(this).load(selectedImage.getUrl().toString())
+				.placeholder(R.drawable.no_image).into(new Target() {
 					@Override
-					public void onLoaded(ImageView imageView,
-							Bitmap loadedBitmap, String url,
-							boolean loadedFromCache) {
+					public void onPrepareLoad(Drawable arg0) {
+					}
+
+					@Override
+					public void onBitmapLoaded(Bitmap loadedBitmap,
+							LoadedFrom loadedFrom) {
 						saveImage(loadedBitmap, directory, fileName);
-						return;
+					}
+
+					@Override
+					public void onBitmapFailed(Drawable arg0) {
 					}
 				});
 	}
@@ -651,15 +660,23 @@ public class ArtistViewerActivity extends BaseActivity implements
 		try {
 			mArtistImageDownloadProgressBar.setVisibility(View.VISIBLE);
 
-			UrlImageViewHelper.setUrlDrawable(mArtistImageView, image.getUrl()
-					.toString(), R.drawable.no_image,
-					new UrlImageViewCallback() {
+			Picasso.with(this).load(image.getUrl().toString())
+					.placeholder(R.drawable.no_image).into(new Target() {
+
 						@Override
-						public void onLoaded(ImageView imageView,
-								Bitmap loadedBitmap, String url,
-								boolean loadedFromCache) {
-							afterDownloadArtistMainImage(imageView, image,
-									loadedBitmap);
+						public void onPrepareLoad(Drawable arg0) {
+						}
+
+						@Override
+						public void onBitmapLoaded(Bitmap bmp, LoadedFrom arg1) {
+							mArtistImageView.setImageBitmap(bmp);
+							afterDownloadArtistMainImage(mArtistImageView,
+									image, ((BitmapDrawable) mArtistImageView
+											.getDrawable()).getBitmap());
+						}
+
+						@Override
+						public void onBitmapFailed(Drawable arg0) {
 						}
 					});
 		} catch (Exception e) {

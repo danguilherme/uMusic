@@ -55,7 +55,7 @@
 
         <!-- Music Player -->
         <activity
-            android:name=".ui.music.MusicPlayerActivity_"
+            android:name=".ui.music.player.MusicPlayerActivity_"
             android:clearTaskOnLaunch="true"
             android:configChanges="orientation"
             android:excludeFromRecents="true"
@@ -69,6 +69,18 @@
                 <category android:name="android.intent.category.DEFAULT" />
 
                 <data android:mimeType="audio/*" />
+            </intent-filter>
+        </activity>
+        
+        <activity
+            android:name=".ui.music.player.PlaylistActivity_"
+            android:clearTaskOnLaunch="true"
+            android:exported="false"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="com.ventura.umusic.ui.music.player.PlaylistActivity.ACTION_CHOOSE_SONG" />
+
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
 

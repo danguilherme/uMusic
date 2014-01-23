@@ -11,8 +11,7 @@ import android.widget.BaseAdapter;
 import android.widget.Gallery;
 import android.widget.ImageView;
 
-import com.koushikdutta.urlimageviewhelper.UrlImageViewCallback;
-import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
+import com.squareup.picasso.Picasso;
 import com.ventura.umusic.R;
 import com.ventura.umusic.entity.Image;
 
@@ -27,7 +26,7 @@ public class ImageAdapter extends BaseAdapter {
 	// placeholder bitmap for empty spaces in gallery
 	Bitmap placeholder;
 
-	//List<Bitmap> cache;
+	// List<Bitmap> cache;
 
 	public ImageAdapter(Context context, List<Image> images) {
 		// instantiate context
@@ -36,7 +35,7 @@ public class ImageAdapter extends BaseAdapter {
 		// decode the placeholder image
 		placeholder = BitmapFactory.decodeResource(
 				galleryContext.getResources(), R.drawable.no_image);
-		//cache = new ArrayList<Bitmap>();
+		// cache = new ArrayList<Bitmap>();
 	}
 
 	@Override
@@ -68,15 +67,9 @@ public class ImageAdapter extends BaseAdapter {
 		imageView.setBackgroundResource(defaultItemBackground);
 
 		final int pos = position;
-		UrlImageViewHelper.setUrlDrawable(imageView, images.get(position)
-				.getUrl().toString(), R.drawable.no_image, 2 * 60 * 100,
-				new UrlImageViewCallback() {
-					@Override
-					public void onLoaded(ImageView imgView, Bitmap bitmap,
-							String url, boolean loadedFromCache) {
-						//cache.add(pos, bitmap);
-					}
-				});
+		Picasso.with(galleryContext)
+				.load(images.get(position).getUrl().toString())
+				.placeholder(R.drawable.no_image).into(imageView);
 		// return the view
 		return imageView;
 	}
