@@ -2,6 +2,7 @@ package com.ventura.umusic.entity.music;
 
 import java.io.Serializable;
 
+import android.content.ContentUris;
 import android.graphics.Bitmap;
 import android.net.Uri;
 
@@ -13,6 +14,9 @@ import android.net.Uri;
  */
 public class Audio implements Serializable {
 	private static final long serialVersionUID = 6928769397990780287L;
+
+	public static final String KEY = "com.ventura.umusic.entity.music.Audio.KEY";
+	public static final String KEY_URI = "com.ventura.umusic.entity.music.Audio.KEY_URI";
 
 	private int id;
 	private String title;
@@ -121,6 +125,14 @@ public class Audio implements Serializable {
 
 	public void setAlbumId(long albumId) {
 		this.albumId = albumId;
+	}
+
+	public Uri getAlbumArtUri() {
+		if (getAlbumId() > 0)
+			return ContentUris.withAppendedId(
+					Uri.parse("content://media/external/audio/albumart"),
+					getAlbumId());
+		return null;
 	}
 
 	public Bitmap getAlbumImage() {

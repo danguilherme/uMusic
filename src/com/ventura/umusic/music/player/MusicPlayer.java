@@ -120,6 +120,8 @@ public class MusicPlayer implements OnCompletionListener {
 					prepare();
 					mediaPlayer.start();
 					nowPlayingIdx = getSongIdx(song.toString());
+					
+					onMusicChanged(nowPlayingMusic, song.toString());
 				}
 				mediaPlayer.setLooping(isRepeat);
 				isPaused = false;
@@ -137,7 +139,7 @@ public class MusicPlayer implements OnCompletionListener {
 	 * @param song
 	 *            The song path to play.
 	 */
-	private void play(String song) {
+	public void play(String song) {
 		if (song == null)
 			play(Uri.EMPTY);
 		else
@@ -177,29 +179,35 @@ public class MusicPlayer implements OnCompletionListener {
 	}
 
 	public void next() {
-		Audio currentPlaying = getCurrentPlaying();
+		boolean mustBePaused = isPaused;
+		String currentPlaying = getNowPlaying();
 		if (nowPlayingIdx < (getPlaylist().size() - 1)) {
 			this.play(getPlaylist().get(nowPlayingIdx + 1));
 		} else {
 			this.play(getPlaylist().get(0));
 		}
-		Audio musicChanged = getCurrentPlaying();
+		String musicChanged = getNowPlaying();
 
-		if (musicPlayerListener != null)
-			musicPlayerListener.onMusicChanged(currentPlaying, musicChanged);
+		onMusicChanged(currentPlaying, musicChanged);
+		
+		if (mustBePaused)
+			pause();
 	}
 
 	public void prev() {
-		Audio currentPlaying = getCurrentPlaying();
+		boolean mustBePaused = isPaused;
+		String currentPlaying = getNowPlaying();
 		if (nowPlayingIdx > 0) {
 			this.play(getPlaylist().get(nowPlayingIdx - 1));
 		} else {
 			this.play(getPlaylist().get(getPlaylist().size() - 1));
 		}
-		Audio musicChanged = getCurrentPlaying();
+		String musicChanged = getNowPlaying();
 
-		if (musicPlayerListener != null)
-			musicPlayerListener.onMusicChanged(currentPlaying, musicChanged);
+		onMusicChanged(currentPlaying, musicChanged);
+		
+		if (mustBePaused)
+			pause();
 	}
 
 	public void pause() {
@@ -255,7 +263,11 @@ public class MusicPlayer implements OnCompletionListener {
 	}
 
 	public Audio getCurrentPlaying() {
-		return new TracksManager(context).getTrackByUri(getNowPlaying());
+		return getAudioInfo(getNowPlaying());
+	}
+
+	private Audio getAudioInfo(String audio) {
+		return new TracksManager(context).getTrackByUri(audio);
 	}
 
 	/**
@@ -305,8 +317,14 @@ public class MusicPlayer implements OnCompletionListener {
 	public MediaPlayer getMediaPlayer() {
 		return mediaPlayer;
 	}
-	
+
 	public void seekTo(int msec) {
 		mediaPlayer.seekTo(msec);
+	}
+
+	private void onMusicChanged(String currentPlaying, String musicChanged) {
+		if (musicPlayerListener != null)
+			musicPlayerListener.onMusicChanged(getAudioInfo(currentPlaying),
+					getAudioInfo(musicChanged));
 	}
 }

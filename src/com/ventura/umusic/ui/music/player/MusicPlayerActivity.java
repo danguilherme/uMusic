@@ -1,5 +1,6 @@
-package com.ventura.umusic.ui.music;
+package com.ventura.umusic.ui.music.player;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.http.HttpException;
@@ -11,6 +12,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.SeekBar;
@@ -103,6 +105,9 @@ public class MusicPlayerActivity extends BaseActivity implements
 	@ViewById(R.id.loading_lyrics_progress_bar)
 	ProgressBar pgbLyricsLoadingIndicator;
 
+	@ViewById(R.id.btn_open_playlist)
+	ImageButton btnOpenPlaylist;
+
 	private MusicPlayer musicPlayer;
 	private TracksManager tracksManager;
 	// Handler to update UI timer, progress bar etc,.
@@ -181,9 +186,11 @@ public class MusicPlayerActivity extends BaseActivity implements
 				getCurrentPlayingLyrics();
 			}
 		}
+
+		updateProgressBarViews(); // make sure the progress bar is refreshed too
 	}
-	
-	void getCurrentPlayingLyrics(){
+
+	void getCurrentPlayingLyrics() {
 		Audio currentPlaying = musicPlayer.getCurrentPlaying();
 		if (currentPlaying != null && lblLyrics.getText().equals("")) {
 			pgbLyricsLoadingIndicator.setVisibility(View.VISIBLE);
@@ -319,6 +326,28 @@ public class MusicPlayerActivity extends BaseActivity implements
 	private void setAutoLoadLyrics(boolean autoLoad) {
 		btnAutoLoadLyrics.setChecked(autoLoad);
 	}
+
+	@Click(R.id.btn_open_playlist)
+	protected void openPlaylist() {
+		Intent intent = new Intent(PlaylistActivity.ACTION_CHOOSE_SONG);
+		intent.putStringArrayListExtra(PlaylistActivity.EXTRA_PLAYLIST_ARRAY,
+				new ArrayList<String>(musicPlayer.getPlaylist()));
+		intent.putExtra(PlaylistActivity.EXTRA_PLAYING, musicPlayer
+				.getCurrentPlaying().getPathUri().toString());
+		startActivityForResult(intent, PlaylistActivity.REQUEST_SONG_CHOOSE);
+	}
+
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+		if (requestCode == PlaylistActivity.REQUEST_SONG_CHOOSE) {
+			if (resultCode == RESULT_OK) {
+				musicPlayer.play(data.getStringExtra(Audio.KEY_URI));
+			}
+			if (resultCode == RESULT_CANCELED) {
+				// Write your code if there's no result
+			}
+		}
+	}// onActivityResult
 
 	/**
 	 * Runs at background to update progress bar view.

@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.Window;
 
 import com.ventura.umusic.R;
-import com.ventura.umusic.ui.music.MusicPlayerActivity_;
+import com.ventura.umusic.ui.music.player.MusicPlayerActivity_;
 
 public class DashboardActivity extends BaseActivity {
 	@Override

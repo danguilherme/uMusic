@@ -259,15 +259,10 @@ public class TracksManager {
 	 * @param track
 	 */
 	public void loadAlbum(Audio track) {
-		Uri sArtworkUri = Uri.parse("content://media/external/audio/albumart");
-		Uri albumArtUri = ContentUris.withAppendedId(sArtworkUri,
-				track.getAlbumId());
-
-		Log.d(TAG, albumArtUri.toString());
 		Bitmap bitmap = null;
 		try {
 			bitmap = MediaStore.Images.Media.getBitmap(
-					context.getContentResolver(), albumArtUri);
+					context.getContentResolver(), track.getAlbumArtUri());
 		} catch (FileNotFoundException exception) {
 			exception.printStackTrace();
 			bitmap = null;
