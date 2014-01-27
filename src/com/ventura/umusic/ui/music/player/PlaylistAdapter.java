@@ -18,12 +18,23 @@ import com.ventura.umusic.music.TracksManager;
 public class PlaylistAdapter extends BaseAdapter<String> {
 
 	HashMap<String, Audio> cache;
+	String nowPlaying;
 	TracksManager tm;
 
 	public PlaylistAdapter(Context context, List<String> data) {
 		super(context, data);
 		tm = new TracksManager(context);
 		cache = new HashMap<String, Audio>(data.size());
+	}
+
+	@Override
+	public String getId(int position) {
+		return data.get(position);
+	}
+	
+	public void setNowPlaying(String nowPlaying) {
+		this.nowPlaying = nowPlaying;
+		this.notifyDataSetChanged();
 	}
 
 	@Override
@@ -54,13 +65,11 @@ public class PlaylistAdapter extends BaseAdapter<String> {
 
 		viewHolder.songTitle.setText(song.getTitle());
 		viewHolder.artistName.setText(song.getArtistName());
+		if (song.getPathUri().toString().equals(nowPlaying)) {
+			viewHolder.artistName.setText(viewHolder.artistName.getText() + " (Playing)");
+		}
 
 		return convertView;
-	}
-
-	@Override
-	public String getId(int position) {
-		return data.get(position);
 	}
 
 	private static class ViewHolder {

@@ -71,7 +71,6 @@
                 <data android:mimeType="audio/*" />
             </intent-filter>
         </activity>
-        
         <activity
             android:name=".ui.music.player.PlaylistActivity_"
             android:clearTaskOnLaunch="true"
@@ -84,6 +83,20 @@
             </intent-filter>
         </activity>
 
+        <service
+            android:name=".music.player.MusicPlayerService"
+            android:exported="false" >
+        </service>
+
+        <receiver android:name=".music.player.MusicPlayerBroadcastReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.MEDIA_BUTTON" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.media.AUDIO_BECOMING_NOISY" />
+            </intent-filter>
+        </receiver>
+
         <!-- Lyrics -->
         <activity
             android:name=".ui.music.LyricsViewerActivity_"
@@ -94,7 +107,9 @@
 
                 <category android:name="android.intent.category.DEFAULT" />
 
-                <data android:pathPattern=".*mp3" android:mimeType="audio/*" />
+                <data
+                    android:mimeType="audio/*"
+                    android:pathPattern=".*mp3" />
             </intent-filter>
         </activity>
 

@@ -5,11 +5,17 @@ import java.util.List;
 
 import org.apache.http.HttpException;
 
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences.Editor;
-import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
+import android.os.RemoteException;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -35,13 +41,13 @@ import com.ventura.umusic.business.LyricsService;
 import com.ventura.umusic.entity.music.Audio;
 import com.ventura.umusic.entity.music.Lyrics;
 import com.ventura.umusic.music.TracksManager;
-import com.ventura.umusic.music.player.MusicPlayer;
-import com.ventura.umusic.music.player.MusicPlayerListener;
+import com.ventura.umusic.music.player.MusicPlayerService;
+import com.ventura.umusic.music.player.MusicPlayerServiceInterface;
 import com.ventura.umusic.ui.BaseActivity;
 
 @EActivity(R.layout.activity_music_player)
 public class MusicPlayerActivity extends BaseActivity implements
-		MusicPlayerListener, OnSeekBarChangeListener {
+		OnSeekBarChangeListener {
 	private final String TAG = getClass().getName();
 
 	public final String PREF_IS_SHUFFLE = getClass().getName()
@@ -108,23 +114,88 @@ public class MusicPlayerActivity extends BaseActivity implements
 	@ViewById(R.id.btn_open_playlist)
 	ImageButton btnOpenPlaylist;
 
-	private MusicPlayer musicPlayer;
+	// private MusicPlayer musicPlayer;
 	private TracksManager tracksManager;
+	private Audio mCurrentPlaying;
 	// Handler to update UI timer, progress bar etc,.
 	private Handler mHandler = new Handler();
+
+	private MusicPlayerServiceInterface mpInterface;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		tracksManager = new TracksManager(this);
 		decipherIntent();
+
+		if (MusicPlayerService.isRunnning()) {
+			MusicPlayerActivity.this.bindService(new Intent(
+					MusicPlayerActivity.this, MusicPlayerService.class),
+					mConnection, Context.BIND_AUTO_CREATE);
+		} else {
+			registerReceiver(new BroadcastReceiver() {
+				@Override
+				public void onReceive(Context context, Intent intent) {
+					MusicPlayerActivity.this.bindService(
+							new Intent(MusicPlayerActivity.this,
+									MusicPlayerService.class), mConnection,
+							Context.BIND_AUTO_CREATE);
+
+					MusicPlayerActivity.this.unregisterReceiver(this);
+				}
+			}, new IntentFilter(MusicPlayerService.ACTION_STARTED));
+
+			startService(new Intent(MusicPlayerActivity.this,
+					MusicPlayerService.class));
+		}
+
+		IntentFilter filter = new IntentFilter();
+		filter.addAction(MusicPlayerService.ACTION_MUSIC_CHANGED);
+		registerReceiver(musicPlayerReceiver, filter);
 	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		unregisterReceiver(musicPlayerReceiver);
+		unbindService(mConnection);
+	}
+
+	BroadcastReceiver musicPlayerReceiver = new BroadcastReceiver() {
+		@Override
+		public void onReceive(Context context, Intent intent) {	
+			if (MusicPlayerService.ACTION_MUSIC_CHANGED.equals(intent
+					.getAction())) {
+				onMusicChanged(intent.getStringExtra(Audio.KEY_URI));
+			}
+		}
+	};
+
+	private ServiceConnection mConnection = new ServiceConnection() {
+		public void onServiceConnected(ComponentName className, IBinder service) {
+			mpInterface = MusicPlayerServiceInterface.Stub
+					.asInterface((IBinder) service);
+			try {
+				List<String> actualPlaylist = mpInterface.getPlaylist();
+				if (actualPlaylist == null)
+					mpInterface.setPlaylist(tracksManager
+							.getAllTracksSimplified());
+			} catch (RemoteException e) {
+				e.printStackTrace();
+			}
+
+			loadPlayer();
+			updateTrackInfoView();
+		}
+
+		public void onServiceDisconnected(ComponentName className) {
+			mpInterface = null;
+		}
+	};
 
 	@AfterViews
 	protected void afterViews() {
 		skbSongProgress.setOnSeekBarChangeListener(this);
-
-		loadPlayer();
 	}
 
 	private void decipherIntent() {
@@ -136,9 +207,6 @@ public class MusicPlayerActivity extends BaseActivity implements
 	}
 
 	private void loadPlayer() {
-		musicPlayer = new MusicPlayer(this);
-		musicPlayer.setListener(this);
-
 		boolean isRepeat = getApplicationPreferences().getBoolean(
 				BaseApplication.Preferences.MP_IS_REPEAT, false);
 		boolean isShuffle = getApplicationPreferences().getBoolean(
@@ -155,29 +223,28 @@ public class MusicPlayerActivity extends BaseActivity implements
 		lblTotalDuration.setText(timerUtils.milliSecondsToTimer(0));
 	}
 
-	@Override
-	protected void onDestroy() {
-		super.onDestroy();
-		musicPlayer.dispose();
-	}
-
 	/**
 	 * Refreshes track name, album, etc
 	 */
-	private void refreshTrackInfoView() {
-		Audio currentPlaying = musicPlayer.getCurrentPlaying();
-		if (currentPlaying != null) {
-			lblSongTitle.setText(currentPlaying.getTitle());
-			lblAlbum.setText(currentPlaying.getAlbumTitle());
-			lblArtist.setText(currentPlaying.getArtistName());
+	private void updateTrackInfoView() {
+		try {
+			mCurrentPlaying = tracksManager.getTrackByUri(mpInterface
+					.getCurrentPlaying());
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}
+		if (mCurrentPlaying != null) {
+			lblSongTitle.setText(mCurrentPlaying.getTitle());
+			lblAlbum.setText(mCurrentPlaying.getAlbumTitle());
+			lblArtist.setText(mCurrentPlaying.getArtistName());
 
-			tracksManager.loadAlbum(currentPlaying);
+			tracksManager.loadAlbum(mCurrentPlaying);
 
-			if (currentPlaying.getAlbumImage() == null) {
+			if (mCurrentPlaying.getAlbumImage() == null) {
 				// if null, the album art is hidden
 				imgAlbumImage.setImageBitmap(null);
 			} else {
-				imgAlbumImage.setImageBitmap(currentPlaying.getAlbumImage());
+				imgAlbumImage.setImageBitmap(mCurrentPlaying.getAlbumImage());
 			}
 
 			// if user asked to auto load lyrics, do it
@@ -191,11 +258,10 @@ public class MusicPlayerActivity extends BaseActivity implements
 	}
 
 	void getCurrentPlayingLyrics() {
-		Audio currentPlaying = musicPlayer.getCurrentPlaying();
-		if (currentPlaying != null && lblLyrics.getText().equals("")) {
+		if (mCurrentPlaying != null && lblLyrics.getText().equals("")) {
 			pgbLyricsLoadingIndicator.setVisibility(View.VISIBLE);
-			findLyrics(currentPlaying.getArtistName(),
-					currentPlaying.getTitle());
+			findLyrics(mCurrentPlaying.getArtistName(),
+					mCurrentPlaying.getTitle());
 		}
 	}
 
@@ -229,8 +295,10 @@ public class MusicPlayerActivity extends BaseActivity implements
 			lblLyrics.setText(null);
 			if (isFromCurrentTrack && !isAutoLoadingLyrics)
 				alert(R.string.message_lyric_not_found);
-		} else if (isFromCurrentTrack)
+		} else if (isFromCurrentTrack) {
 			lblLyrics.setText(l.getLyricsText());
+			mCurrentPlaying.setLyrics(l.getLyricsText());
+		}
 
 		if (isFromCurrentTrack)
 			pgbLyricsLoadingIndicator.setVisibility(View.INVISIBLE);
@@ -242,73 +310,113 @@ public class MusicPlayerActivity extends BaseActivity implements
 
 	@Click(R.id.btn_play)
 	public void play() {
-		List<String> pl = musicPlayer.getPlaylist();
+		try {
+			if (mpInterface.isPaused())
+				mpInterface.play(null);
 
-		if (pl == null) {
-			musicPlayer.setPlaylist(tracksManager.getAllTracksSimplified());
+			mHandler.postDelayed(mUpdateTimerRunnable, 100);
+
+			updateTrackInfoView();
+
+		} catch (RemoteException e) {
+			e.printStackTrace();
 		}
+	}
 
-		if (musicPlayer.isPaused())
-			musicPlayer.play();
+	public void play(String song) {
+		try {
+			mpInterface.play(song);
 
-		mHandler.postDelayed(mUpdateTimerRunnable, 100);
-
-		refreshTrackInfoView();
+			updateTrackInfoView();
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Click(R.id.btn_pause)
 	public void pause() {
-		if (musicPlayer.isPaused())
-			musicPlayer.play();
-		else
-			musicPlayer.pause();
+		try {
+			if (mpInterface.isPaused())
+				mpInterface.play(null);
+			else
+				mpInterface.pause();
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Click(R.id.btn_forward)
 	public void next() {
-		musicPlayer.next();
+		try {
+			mpInterface.next();
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Click(R.id.btn_backward)
 	public void prev() {
-		musicPlayer.prev();
+		try {
+			mpInterface.prev();
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Click(R.id.btn_stop)
 	public void stop() {
-		musicPlayer.stop();
-		refreshTrackInfoView();
+		try {
+			mpInterface.stop();
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}
+		updateTrackInfoView();
 	}
 
 	@Click(R.id.btn_shuffle)
 	public void toggleShuffle() {
-		musicPlayer.toggleShuffle();
+		try {
+			boolean isShuffle = mpInterface.toggleShuffle();
 
-		Editor editor = getApplicationPreferences().edit();
-		editor.putBoolean(BaseApplication.Preferences.MP_IS_SHUFFLE,
-				musicPlayer.isShuffle());
-		editor.apply();
+			Editor editor = getApplicationPreferences().edit();
+			editor.putBoolean(BaseApplication.Preferences.MP_IS_SHUFFLE,
+					isShuffle);
+			editor.apply();
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}
 	}
 
 	protected void setShuffle(boolean shuffle) {
-		musicPlayer.setShuffle(shuffle);
-		btnShuffle.setChecked(musicPlayer.isShuffle());
+		try {
+			mpInterface.setShuffle(shuffle);
+			btnShuffle.setChecked(mpInterface.isShuffle());
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Click(R.id.btn_repeat)
 	public void toggleRepeat() {
-		musicPlayer.toggleRepeat();
+		try {
+			boolean isRepeat = mpInterface.toggleRepeat();
 
-		Editor editor = getApplicationPreferences().edit();
-		editor.putBoolean(BaseApplication.Preferences.MP_IS_REPEAT,
-				musicPlayer.isRepeat());
-		editor.apply();
-
+			Editor editor = getApplicationPreferences().edit();
+			editor.putBoolean(BaseApplication.Preferences.MP_IS_REPEAT,
+					isRepeat);
+			editor.apply();
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}
 	}
 
 	protected void setRepeat(boolean repeat) {
-		musicPlayer.setRepeat(repeat);
-		btnRepeat.setChecked(musicPlayer.isRepeat());
+		try {
+			mpInterface.setRepeat(repeat);
+			btnRepeat.setChecked(mpInterface.isRepeat());
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Click(R.id.btn_autoload_lyrics)
@@ -329,25 +437,21 @@ public class MusicPlayerActivity extends BaseActivity implements
 
 	@Click(R.id.btn_open_playlist)
 	protected void openPlaylist() {
-		Intent intent = new Intent(PlaylistActivity.ACTION_CHOOSE_SONG);
-		intent.putStringArrayListExtra(PlaylistActivity.EXTRA_PLAYLIST_ARRAY,
-				new ArrayList<String>(musicPlayer.getPlaylist()));
-		intent.putExtra(PlaylistActivity.EXTRA_PLAYING, musicPlayer
-				.getCurrentPlaying().getPathUri().toString());
-		startActivityForResult(intent, PlaylistActivity.REQUEST_SONG_CHOOSE);
-	}
-
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-		if (requestCode == PlaylistActivity.REQUEST_SONG_CHOOSE) {
-			if (resultCode == RESULT_OK) {
-				musicPlayer.play(data.getStringExtra(Audio.KEY_URI));
-			}
-			if (resultCode == RESULT_CANCELED) {
-				// Write your code if there's no result
-			}
+		try {
+			Intent intent = new Intent(PlaylistActivity.ACTION_CHOOSE_SONG);
+			intent.putStringArrayListExtra(
+					PlaylistActivity.EXTRA_PLAYLIST_ARRAY,
+					new ArrayList<String>(mpInterface.getPlaylist()));
+			intent.putExtra(PlaylistActivity.EXTRA_PLAYING, tracksManager
+					.getTrackByUri(mpInterface.getCurrentPlaying())
+					.getPathUri().toString());
+			startActivity(intent);
+			overridePendingTransition(android.R.anim.slide_in_left,
+					android.R.anim.slide_out_right);
+		} catch (RemoteException e) {
+			e.printStackTrace();
 		}
-	}// onActivityResult
+	}
 
 	/**
 	 * Runs at background to update progress bar view.
@@ -366,8 +470,14 @@ public class MusicPlayerActivity extends BaseActivity implements
 	@UiThread
 	public void updateProgressBarViews() {
 		TimerUtils timerUtils = new TimerUtils();
-		int currentPosition = musicPlayer.getMediaPlayer().getCurrentPosition();
-		int duration = musicPlayer.getMediaPlayer().getDuration();
+		int currentPosition = 0;
+		int duration = 0;
+		try {
+			currentPosition = mpInterface.getCurrentDuration();
+			duration = mpInterface.getDuration();
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}
 
 		int progress = timerUtils.getProgressPercentage(currentPosition,
 				duration);
@@ -384,14 +494,9 @@ public class MusicPlayerActivity extends BaseActivity implements
 	// LISTENERS
 
 	// Music player listeners
-	@Override
-	public void onMusicChanged(Audio oldSong, Audio newSong) {
+	public void onMusicChanged(String newSong) {
 		clearLyrics();
-		refreshTrackInfoView();
-	}
-
-	@Override
-	public void onCompletion(MediaPlayer mp) {
+		updateTrackInfoView();
 	}
 
 	// Seekbar listeners
@@ -399,11 +504,15 @@ public class MusicPlayerActivity extends BaseActivity implements
 	public void onProgressChanged(SeekBar seekBar, int progress,
 			boolean fromTouch) {
 		if (fromTouch) {
-			int totalDuration = musicPlayer.getMediaPlayer().getDuration();
-			int changedPosition = new TimerUtils().progressToTimer(
-					skbSongProgress.getProgress(), totalDuration);
+			try {
+				int totalDuration = mpInterface.getDuration();
+				int changedPosition = new TimerUtils().progressToTimer(
+						skbSongProgress.getProgress(), totalDuration);
 
-			musicPlayer.seekTo(changedPosition);
+				mpInterface.seekTo(changedPosition);
+			} catch (RemoteException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 

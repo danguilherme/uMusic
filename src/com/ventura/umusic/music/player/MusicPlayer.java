@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 import android.content.Context;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.net.Uri;
@@ -59,6 +60,7 @@ public class MusicPlayer implements OnCompletionListener {
 	private void initializeMediaPlayer() {
 		mediaPlayer = new MediaPlayer();
 		mediaPlayer.reset();
+		mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 		mediaPlayer.setOnCompletionListener(this);
 	}
 
@@ -69,7 +71,8 @@ public class MusicPlayer implements OnCompletionListener {
 		if (musicPlayerListener != null)
 			musicPlayerListener.onCompletion(mediaPlayer);
 
-		next();
+		if (getPlaylist().size() > 0)
+			next();
 	}
 
 	private void prepare() {
@@ -219,10 +222,6 @@ public class MusicPlayer implements OnCompletionListener {
 		return isPaused;
 	}
 
-	public boolean isLooping() {
-		return mediaPlayer.isLooping();
-	}
-
 	public void setShuffle(boolean isShuffle) {
 		String currentlyPlaying = getNowPlaying();
 		this.isShuffle = isShuffle;
@@ -287,9 +286,6 @@ public class MusicPlayer implements OnCompletionListener {
 		stop();
 		this.playlist = playlist;
 		this.setShuffle(isShuffle); // reshuffle, if applied
-		if (playlist != null) {
-			this.play(getPlaylist().get(0));
-		}
 	}
 
 	/**
@@ -304,7 +300,7 @@ public class MusicPlayer implements OnCompletionListener {
 			return playlist;
 	}
 
-	private String getNowPlaying() {
+	public String getNowPlaying() {
 		if (getPlaylist() != null && nowPlayingIdx > -1)
 			return getPlaylist().get(nowPlayingIdx);
 		return null;
@@ -327,4 +323,13 @@ public class MusicPlayer implements OnCompletionListener {
 			musicPlayerListener.onMusicChanged(getAudioInfo(currentPlaying),
 					getAudioInfo(musicChanged));
 	}
+	
+	public interface MusicPlayerListener extends OnCompletionListener {
+
+		void onMusicChanged(Audio oldSong, Audio newSong);
+		
+		@Override
+		public void onCompletion(MediaPlayer mp);
+	}
+
 }
