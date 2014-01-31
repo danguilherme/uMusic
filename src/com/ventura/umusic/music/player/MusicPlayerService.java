@@ -46,10 +46,10 @@ public class MusicPlayerService extends Service implements
 	private AudioManager mAudioManager;
 	private ComponentName mediaButtonReceiver;
 
-	public static boolean isRunnning(){
+	public static boolean isRunnning() {
 		return isRunning;
 	}
-	
+
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		if (!isRunning) {
@@ -105,14 +105,18 @@ public class MusicPlayerService extends Service implements
 	OnAudioFocusChangeListener audioFocusChangeListener = new OnAudioFocusChangeListener() {
 		public void onAudioFocusChange(int focusChange) {
 			if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT) {
+				Log.d(TAG, "AUDIOFOCUS_LOSS_TRANSIENT (pause)");
 				pause();
 			} else if (focusChange == AudioManager.AUDIOFOCUS_GAIN) {
-				play();
+				Log.d(TAG, "AUDIOFOCUS_GAIN (play)");
+				if (mp.isPaused())
+					play();
 			} else if (focusChange == AudioManager.AUDIOFOCUS_LOSS) {
+				Log.d(TAG, "AUDIOFOCUS_LOSS (stop)");
 				mAudioManager
 						.unregisterMediaButtonEventReceiver(mediaButtonReceiver);
 				mAudioManager.abandonAudioFocus(audioFocusChangeListener);
-				// Stop playback
+				mp.stop();
 			}
 		}
 	};
@@ -261,7 +265,7 @@ public class MusicPlayerService extends Service implements
 			mp.play(song);
 		else
 			mp.play();
-		
+
 		requestAudioFocus();
 	}
 
