@@ -16,12 +16,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.RemoteException;
-import android.util.Log;
-import android.view.KeyEvent;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnKeyListener;
-import android.view.View.OnTouchListener;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -182,9 +177,15 @@ public class MusicPlayerActivity extends BaseActivity implements
 					.asInterface((IBinder) service);
 			try {
 				List<String> actualPlaylist = mpInterface.getPlaylist();
-				if (actualPlaylist == null)
-					mpInterface.setPlaylist(tracksManager
-							.getAllTracksSimplified());
+				if (actualPlaylist == null) {
+					List<String> playlist = tracksManager
+							.getAllTracksSimplified();
+					if (playlist.size() == 0) {
+						alert("No music found");
+						finish();
+					} else
+						mpInterface.setPlaylist(playlist);
+				}
 			} catch (RemoteException e) {
 				e.printStackTrace();
 			}

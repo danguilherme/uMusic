@@ -22,7 +22,8 @@ public class DashboardActivity extends BaseActivity {
 	}
 
 	public void onSearchArtistButtonClick(View button) {
-		this.startActivity(new Intent(this, MusicInfoActivity_.class));
+		//this.startActivity(new Intent(this, MusicInfoActivity_.class));
+		alert(R.string.message_coming_soon);
 	}
 
 	public void onSearchLyricsButtonClick(View button) {

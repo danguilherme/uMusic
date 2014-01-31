@@ -1,45 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res/com.ventura.umusic"
+    xmlns:tools="http://schemas.android.com/tools"
     style="@style/Background"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    tools:context=".ui.BaseListActivity" >
+
+    <com.ventura.androidutils.ui.widget.ButtonGroup
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <Button
+            android:id="@+id/btn_rate_app"
+            style="@style/text"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical|center_horizontal"
+            android:text="@string/rate_app" />
+
+        <Button
+            android:id="@+id/btn_send_email"
+            style="@style/text"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical|center_horizontal"
+            android:text="@string/send_email" />
+    </com.ventura.androidutils.ui.widget.ButtonGroup>
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="match_parent" >
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
-
-            <com.ventura.androidutils.ui.widget.ButtonGroup
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical" >
-
-                <Button
-                    android:id="@+id/btn_rate_app"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical|center_horizontal"
-                    android:text="@string/rate_app" />
-
-                <Button
-                    android:id="@+id/btn_send_email"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical|center_horizontal"
-                    android:text="@string/send_email" />
-            </com.ventura.androidutils.ui.widget.ButtonGroup>
+            android:orientation="vertical"
+            android:padding="5dp" >
 
             <TextView
                 android:id="@+id/about_app"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="5dp"
                 android:text="@string/app_description" />
 
             <com.ventura.androidutils.ui.widget.KeyValuePanel

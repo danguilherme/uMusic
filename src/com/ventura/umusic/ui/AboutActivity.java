@@ -3,6 +3,7 @@ package com.ventura.umusic.ui;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.googlecode.androidannotations.annotations.AfterViews;
 import com.googlecode.androidannotations.annotations.Click;
@@ -33,9 +34,14 @@ public class AboutActivity extends BaseActivity {
 
 	@Click(R.id.btn_rate_app)
 	void openGooglePlayPage() {
-		Intent i = new Intent(Intent.ACTION_VIEW);
-		i.setData(Uri.parse("market://details?id=" + getPackageName()));
-		startActivity(i);
+		try {
+			Intent i = new Intent(Intent.ACTION_VIEW);
+			i.setData(Uri.parse("market://details?id=" + getPackageName()));
+			startActivity(i);
+		} catch (Exception e) {
+			Log.e(TAG, "Error opening Google Play", e);
+			alert("Error opening Google Play");
+		}
 	}
 
 	@Click(R.id.btn_send_email)
