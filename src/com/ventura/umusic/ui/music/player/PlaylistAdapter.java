@@ -42,13 +42,15 @@ public class PlaylistAdapter extends BaseAdapter<String> {
 		final ViewHolder viewHolder;
 		if (convertView == null) {
 			viewHolder = new ViewHolder();
-			convertView = inflater.inflate(R.layout.list_item_multiline, null);
+			convertView = inflater.inflate(R.layout.list_item_playlist, null);
 			viewHolder.albumImage = (ImageView) convertView
 					.findViewById(R.id.thumbnail);
 			viewHolder.songTitle = (TextView) convertView
-					.findViewById(R.id.main_text);
+					.findViewById(R.id.song_name);
 			viewHolder.artistName = (TextView) convertView
-					.findViewById(R.id.secondary_text);
+					.findViewById(R.id.artist_name);
+			viewHolder.playingSymbol = (View) convertView
+					.findViewById(R.id.playing_symbol);
 			convertView.setTag(viewHolder);
 		} else
 			viewHolder = (ViewHolder) convertView.getTag();
@@ -65,9 +67,10 @@ public class PlaylistAdapter extends BaseAdapter<String> {
 
 		viewHolder.songTitle.setText(song.getTitle());
 		viewHolder.artistName.setText(song.getArtistName());
-		if (song.getPathUri().toString().equals(nowPlaying)) {
-			viewHolder.artistName.setText(viewHolder.artistName.getText() + " (Playing)");
-		}
+		if (song.getPathUri().toString().equals(nowPlaying))
+			viewHolder.playingSymbol.setVisibility(View.VISIBLE);
+		else
+			viewHolder.playingSymbol.setVisibility(View.GONE);
 
 		return convertView;
 	}
@@ -76,5 +79,6 @@ public class PlaylistAdapter extends BaseAdapter<String> {
 		ImageView albumImage;
 		TextView songTitle;
 		TextView artistName;
+		View playingSymbol;
 	}
 }

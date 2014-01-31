@@ -16,7 +16,12 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.RemoteException;
+import android.util.Log;
+import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnKeyListener;
+import android.view.View.OnTouchListener;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -163,7 +168,7 @@ public class MusicPlayerActivity extends BaseActivity implements
 
 	BroadcastReceiver musicPlayerReceiver = new BroadcastReceiver() {
 		@Override
-		public void onReceive(Context context, Intent intent) {	
+		public void onReceive(Context context, Intent intent) {
 			if (MusicPlayerService.ACTION_MUSIC_CHANGED.equals(intent
 					.getAction())) {
 				onMusicChanged(intent.getStringExtra(Audio.KEY_URI));
@@ -318,16 +323,8 @@ public class MusicPlayerActivity extends BaseActivity implements
 
 			updateTrackInfoView();
 
-		} catch (RemoteException e) {
-			e.printStackTrace();
-		}
-	}
-
-	public void play(String song) {
-		try {
-			mpInterface.play(song);
-
-			updateTrackInfoView();
+			btnPause.setVisibility(View.VISIBLE);
+			btnPlay.setVisibility(View.GONE);
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
@@ -336,10 +333,10 @@ public class MusicPlayerActivity extends BaseActivity implements
 	@Click(R.id.btn_pause)
 	public void pause() {
 		try {
-			if (mpInterface.isPaused())
-				mpInterface.play(null);
-			else
-				mpInterface.pause();
+			mpInterface.pause();
+
+			btnPlay.setVisibility(View.VISIBLE);
+			btnPause.setVisibility(View.GONE);
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}

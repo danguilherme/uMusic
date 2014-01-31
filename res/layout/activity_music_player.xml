@@ -41,7 +41,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal|center_vertical"
-            android:padding="0dip"
             android:src="@drawable/music_library" />
     </LinearLayout>
 
@@ -144,8 +143,9 @@
 
             <ToggleButton
                 android:id="@+id/btn_autoload_lyrics"
-                android:layout_width="wrap_content"
+                android:layout_width="0dip"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:textOff="Auto load lyrics"
                 android:textOn="Auto loading lyrics" />
         </LinearLayout>
@@ -166,12 +166,15 @@
                 android:id="@+id/btn_play"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_weight="1" 
                 android:text="@string/play" />
 
             <Button
                 android:id="@+id/btn_pause"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_weight="1" 
+                android:visibility="gone"
                 android:text="@string/pause" />
 
             <Button
